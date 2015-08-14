@@ -1,0 +1,603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{183361E3-84A2-41D3-82E1-586AD05117C4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Network_Manager</RootNamespace>
+    <AssemblyName>Network_Manager</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Network_Manager.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\logo-nm-green-ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>156571DD2E9C62CC01A12B423B17A007A2C2E6C5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestTimestampUrl>http://timestamp.verisign.com/scripts/timstamp.dll</ManifestTimestampUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;X64</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;X86</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="PcapDotNet.Base">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\packages\Pcap.Net.x86.1.0.3\lib\net40\PcapDotNet.Base.dll</HintPath>
+      <HintPath Condition="'$(Platform)' == 'x64'">..\packages\Pcap.Net.x64.1.0.3\lib\net40\PcapDotNet.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="PcapDotNet.Core">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\packages\Pcap.Net.x86.1.0.3\lib\net40\PcapDotNet.Core.dll</HintPath>
+      <HintPath Condition="'$(Platform)' == 'x64'">..\packages\Pcap.Net.x64.1.0.3\lib\net40\PcapDotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PcapDotNet.Core.Extensions">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\packages\Pcap.Net.x86.1.0.3\lib\net40\PcapDotNet.Core.Extensions.dll</HintPath>
+      <HintPath Condition="'$(Platform)' == 'x64'">..\packages\Pcap.Net.x64.1.0.3\lib\net40\PcapDotNet.Core.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PcapDotNet.Packets">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\packages\Pcap.Net.x86.1.0.3\lib\net40\PcapDotNet.Packets.dll</HintPath>
+      <HintPath Condition="'$(Platform)' == 'x64'">..\packages\Pcap.Net.x64.1.0.3\lib\net40\PcapDotNet.Packets.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="Gadget\About\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\About\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\About\LicenseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\About\LicenseForm.Designer.cs">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\ConfigureInterfaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\ConfigureInterfaceForm.Designer.cs">
+      <DependentUpon>ConfigureInterfaceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\LoadProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\LoadProfileForm.Designer.cs">
+      <DependentUpon>LoadProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\SaveProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ConfigureInterface\SaveProfileForm.Designer.cs">
+      <DependentUpon>SaveProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\IPSessions\IPSessionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\IPSessions\IPSessionsForm.Designer.cs">
+      <DependentUpon>IPSessionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ControlPanelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\ControlPanelForm.Designer.cs">
+      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\IPSessions\RouteIPForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\IPSessions\RouteIPForm.Designer.cs">
+      <DependentUpon>RouteIPForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\AdvancedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\AdvancedForm.Designer.cs">
+      <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\LoadBalancingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\LoadBalancingForm.Designer.cs">
+      <DependentUpon>LoadBalancingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\RoutingTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\LoadBalancing\RoutingTableForm.Designer.cs">
+      <DependentUpon>RoutingTableForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\AddRouteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\AddRouteForm.Designer.cs">
+      <DependentUpon>AddRouteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\EditRouteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\EditRouteForm.Designer.cs">
+      <DependentUpon>EditRouteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\RoutesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\RoutesForm.Designer.cs">
+      <DependentUpon>RoutesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\EditGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\EditGroupForm.Designer.cs">
+      <DependentUpon>EditGroupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\AddNodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\AddNodeForm.Designer.cs">
+      <DependentUpon>AddNodeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\EditItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\EditItemForm.Designer.cs">
+      <DependentUpon>EditItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\LoadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\LoadForm.Designer.cs">
+      <DependentUpon>LoadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\UnloadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SavedRoutes\UnloadForm.Designer.cs">
+      <DependentUpon>UnloadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SaveRouteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\Routes\SaveRouteForm.Designer.cs">
+      <DependentUpon>SaveRouteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\GadgetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\GadgetForm.Designer.cs">
+      <DependentUpon>GadgetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gadget\Settings\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\Settings\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="Jobs\CheckUpdates.cs" />
+    <Compile Include="Jobs\Extensions\ByteCounter\ByteCounter.cs" />
+    <Compile Include="Jobs\Extensions\ByteCounter\ByteTable.cs" />
+    <Compile Include="Jobs\Extensions\ByteCounter\InterfaceWorker.cs" />
+    <Compile Include="Jobs\Extensions\Dependencies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Jobs\Extensions\Dependencies.Designer.cs">
+      <DependentUpon>Dependencies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Jobs\Extensions\LoadBalancer\LoadBalancer.cs" />
+    <Compile Include="Jobs\Extensions\LoadBalancer\PhysicalWorker.cs" />
+    <Compile Include="Jobs\Extensions\LoadBalancer\RoutingTable.cs" />
+    <Compile Include="Jobs\Extensions\LoadBalancer\TapInterface.cs" />
+    <Compile Include="Jobs\Extensions\LoadBalancer\TapWorker.cs" />
+    <Compile Include="Jobs\Extensions\UdpDetector\InterfaceWorker.cs" />
+    <Compile Include="Jobs\Extensions\UdpDetector\UdpDetector.cs" />
+    <Compile Include="Jobs\Extensions\UdpDetector\UdpTable.cs" />
+    <Compile Include="Jobs\TrafficMonitor.cs" />
+    <Compile Include="Version\UpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Version\UpdateForm.Designer.cs">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Splash\StartupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash\StartupForm.Designer.cs">
+      <DependentUpon>StartupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Version\VersionInfo.cs" />
+    <EmbeddedResource Include="Gadget\About\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\About\LicenseForm.resx">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\ConfigureInterface\ConfigureInterfaceForm.resx">
+      <DependentUpon>ConfigureInterfaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\ConfigureInterface\LoadProfileForm.resx">
+      <DependentUpon>LoadProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\ConfigureInterface\SaveProfileForm.resx">
+      <DependentUpon>SaveProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\IPSessions\IPSessionsForm.resx">
+      <DependentUpon>IPSessionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\ControlPanelForm.resx">
+      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\IPSessions\RouteIPForm.resx">
+      <DependentUpon>RouteIPForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\LoadBalancing\AdvancedForm.resx">
+      <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\LoadBalancing\LoadBalancingForm.resx">
+      <DependentUpon>LoadBalancingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\LoadBalancing\RoutingTableForm.resx">
+      <DependentUpon>RoutingTableForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\AddRouteForm.resx">
+      <DependentUpon>AddRouteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\EditRouteForm.resx">
+      <DependentUpon>EditRouteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\RoutesForm.resx">
+      <DependentUpon>RoutesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SavedRoutes\EditGroupForm.resx">
+      <DependentUpon>EditGroupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SavedRoutes\AddNodeForm.resx">
+      <DependentUpon>AddNodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SavedRoutes\EditItemForm.resx">
+      <DependentUpon>EditItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SavedRoutes\LoadForm.resx">
+      <DependentUpon>LoadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SavedRoutes\UnloadForm.resx">
+      <DependentUpon>UnloadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\Routes\SaveRouteForm.resx">
+      <DependentUpon>SaveRouteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\GadgetForm.resx">
+      <DependentUpon>GadgetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\Settings\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Jobs\Extensions\Dependencies.resx">
+      <DependentUpon>Dependencies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Version\UpdateForm.resx">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Splash\StartupForm.resx">
+      <DependentUpon>StartupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-nm-blue-ico.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-nm-green-ico.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-nm-red-ico.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-bottom.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-bottom-wide.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-middle.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-middle-wide.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-top.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background-top-wide.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-close-off.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-close-on.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-control-panel.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-refresh.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-settings.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button-update.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\splash.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TAP Driver.zip" />
+    <None Include="Resources\titlebar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\titlebar-wide.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="License.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lib\Lib.csproj">
+      <Project>{0f24aad4-64b4-4efc-9ac6-dde32543211f}</Project>
+      <Name>Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
+    <ParameterGroup>
+      <Config Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem" />
+      <Files Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+    </ParameterGroup>
+    <Task Evaluate="true">
+      <Reference xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Include="System.Xml" />
+      <Reference xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Include="System.Xml.Linq" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.IO" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.Xml.Linq" />
+      <Code xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Type="Fragment" Language="cs"><![CDATA[
+var config = XElement.Load(Config.ItemSpec).Elements("Costura").FirstOrDefault();
+
+if (config == null) return true;
+
+var excludedAssemblies = new List<string>();
+var attribute = config.Attribute("ExcludeAssemblies");
+if (attribute != null)
+    foreach (var item in attribute.Value.Split('|').Select(x => x.Trim()).Where(x => x != string.Empty))
+        excludedAssemblies.Add(item);
+var element = config.Element("ExcludeAssemblies");
+if (element != null)
+    foreach (var item in element.Value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).Where(x => x != string.Empty))
+        excludedAssemblies.Add(item);
+
+var filesToCleanup = Files.Select(f => f.ItemSpec).Where(f => !excludedAssemblies.Contains(Path.GetFileNameWithoutExtension(f), StringComparer.InvariantCultureIgnoreCase));
+
+foreach (var item in filesToCleanup)
+  File.Delete(item);
+]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="CleanReferenceCopyLocalPaths" AfterTargets="AfterBuild;NonWinFodyTarget">
+    <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>if $(ConfigurationName)==Release (
+"$(OutDir)UpdateVersion.exe" "$(ProjectDir)Properties\AssemblyInfo.cs"
+)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(OutDir)Network_Manager.exe" "$(OutDir)Network_Manager_$(PlatformName).exe" /Y
+rem if $(ConfigurationName)==Release "$(TargetDir)UpdateVersion.exe"
+
+</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
