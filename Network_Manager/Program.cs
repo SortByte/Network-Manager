@@ -69,13 +69,13 @@ namespace Network_Manager
                             "del /f /q Downloads\\Network_Manager_x86.exe & " +
                             "start Launcher.exe & exit ) " +
                             "else ( ping -n 2 127.0.0.1>nul ) )";
-                System.Diagnostics.ProcessStartInfo si = new System.Diagnostics.ProcessStartInfo();
+                ProcessStartInfo si = new ProcessStartInfo();
                 si.FileName = "cmd.exe";
                 si.Arguments = param;
                 si.CreateNoWindow = true;
-                si.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                System.Diagnostics.Process.Start(si);
-                System.Environment.Exit(0);
+                si.WindowStyle = ProcessWindowStyle.Hidden;
+                Process.Start(si);
+                Environment.Exit(0);
             }
             if (File.Exists("Downloads\\Network_Manager_x64.exe"))
             {
@@ -88,13 +88,13 @@ namespace Network_Manager
                             "del /f /q Downloads\\Network_Manager_x64.exe & " +
                             "start Launcher.exe & exit ) " +
                             "else ( ping -n 2 127.0.0.1>nul ) )";
-                System.Diagnostics.ProcessStartInfo si = new System.Diagnostics.ProcessStartInfo();
+                ProcessStartInfo si = new ProcessStartInfo();
                 si.FileName = "cmd.exe";
                 si.Arguments = param;
                 si.CreateNoWindow = true;
-                si.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                System.Diagnostics.Process.Start(si);
-                System.Environment.Exit(0);
+                si.WindowStyle = ProcessWindowStyle.Hidden;
+                Process.Start(si);
+                Environment.Exit(0);
             }
             
             if (File.Exists("Network_Manager.log"))
@@ -128,12 +128,15 @@ namespace Network_Manager
         }
 
         // TODO: fix Refresh() deadlock on closing gadget form when Windows is resuming
+        /// <summary>
+        /// Needs to be executed on the UI thread
+        /// </summary>
         public static void Refresh()
         {
             if (!requestRefresh.Wait(0))
                 return;
             //closing
-            Global.TrayIcon.Icon = global::Network_Manager.Properties.Resources.logo_nm_blue_ico;
+            Global.TrayIcon.Icon = Properties.Resources.logo_nm_blue_ico;
             Global.TrayMenu.MenuItems[0].Enabled = false;
             Global.TrayMenu.MenuItems[1].Enabled = false;
             Global.TrayMenu.MenuItems[2].Enabled = false;
@@ -147,9 +150,8 @@ namespace Network_Manager
                     !Application.OpenForms[i].IsDisposed)
                 {
                     string name = Application.OpenForms[i].Text;
-                    Global.WriteLog("Form closing: " + name);
+                    splashForm.UpdateStatus("Closing " + name + " form ...");
                     Application.OpenForms[i].Close();
-                    Global.WriteLog("Form closed: " + name);
                 }
             splashForm.UpdateStatus("Stopping jobs ...");
             Jobs.TrafficMonitor.Stop();
@@ -160,10 +162,10 @@ namespace Network_Manager
             Global.Load();
             Global.NetworkInterfaces = Lib.Network.NetworkInterface.GetAll(splashForm.UpdateStatus);
             splashForm.Stop();
-            new Network_Manager.Gadget.GadgetForm();
+            new Gadget.GadgetForm();
             new Thread(new ThreadStart(Jobs.TrafficMonitor.Start)).Start();
             new Thread(new ThreadStart(Jobs.CheckUpdates.Start)).Start();
-            Global.TrayIcon.Icon = global::Network_Manager.Properties.Resources.logo_nm_green_ico;
+            Global.TrayIcon.Icon = Properties.Resources.logo_nm_green_ico;
             Global.TrayMenu.MenuItems[0].Enabled = true;
             Global.TrayMenu.MenuItems[1].Enabled = true;
             Global.TrayMenu.MenuItems[2].Enabled = true;
