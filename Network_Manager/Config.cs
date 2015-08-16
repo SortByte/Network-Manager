@@ -27,7 +27,7 @@ namespace Network_Manager
         {
             public bool Debug = false;
             public bool CheckForUpdates = true;
-            public bool AutoDetectInterfaces = true;
+            public bool AutoDetectInterfaces = false;
             public bool AlwaysOnTop = false;
             public int MaxVerticalSlots = 3;
             public int MaxHorizontalSlots = 1;

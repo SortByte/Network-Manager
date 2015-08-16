@@ -68,20 +68,20 @@ namespace Network_Manager.Gadget
             if ((requiredSlots > maxVerticalSlots) && (maxHorizontalSlots > 1))
             {
                 this.Width = 372;
-                AddImage(global::Network_Manager.Properties.Resources.button_close_on, "closeButtonHover", 351, 2);
-                AddImage(global::Network_Manager.Properties.Resources.titlebar_wide, "titlebar", 0, 0);
-                AddImage(global::Network_Manager.Properties.Resources.background_top_wide, "topBkg", 0, 25);
-                midBkgImage = global::Network_Manager.Properties.Resources.background_middle_wide;
-                botBkgImage = global::Network_Manager.Properties.Resources.background_bottom_wide;
+                AddImage(Properties.Resources.button_close_on, "closeButtonHover", 351, 2);
+                AddImage(Properties.Resources.titlebar_wide, "titlebar", 0, 0);
+                AddImage(Properties.Resources.background_top_wide, "topBkg", 0, 25);
+                midBkgImage = Properties.Resources.background_middle_wide;
+                botBkgImage = Properties.Resources.background_bottom_wide;
             }
             else
             {
                 this.Width = 186;
-                AddImage(global::Network_Manager.Properties.Resources.button_close_on, "closeButtonHover", 165, 2);
-                AddImage(global::Network_Manager.Properties.Resources.titlebar, "titlebar", 0, 0);
-                AddImage(global::Network_Manager.Properties.Resources.background_top, "topBkg", 0, 25);
-                midBkgImage = global::Network_Manager.Properties.Resources.background_middle;
-                botBkgImage = global::Network_Manager.Properties.Resources.background_bottom;
+                AddImage(Properties.Resources.button_close_on, "closeButtonHover", 165, 2);
+                AddImage(Properties.Resources.titlebar, "titlebar", 0, 0);
+                AddImage(Properties.Resources.background_top, "topBkg", 0, 25);
+                midBkgImage = Properties.Resources.background_middle;
+                botBkgImage = Properties.Resources.background_bottom;
             }
             Controls["closeButtonHover"].Visible = false;
             Controls["closeButtonHover"].Click += new EventHandler((s, e) => { Global.Exit(); });
@@ -210,10 +210,10 @@ namespace Network_Manager.Gadget
             Controls["titleBar"].ContextMenuStrip = MainContextMenu;
             Controls["topBkg"].ContextMenuStrip = MainContextMenu;
             Controls["botBkg"].ContextMenuStrip = MainContextMenu;
-            AddImage(global::Network_Manager.Properties.Resources.button_control_panel, "controlPanel", 15, this.Height - 40);
-            AddImage(global::Network_Manager.Properties.Resources.button_refresh, "refresh", 45, this.Height - 40);
-            AddImage(global::Network_Manager.Properties.Resources.button_settings, "settings", 75, this.Height - 40);
-            AddImage(global::Network_Manager.Properties.Resources.button_update, "update", 145, this.Height - 40);
+            AddImage(Properties.Resources.button_control_panel, "controlPanel", 15, this.Height - 40);
+            AddImage(Properties.Resources.button_refresh, "refresh", 45, this.Height - 40);
+            AddImage(Properties.Resources.button_settings, "settings", 75, this.Height - 40);
+            AddImage(Properties.Resources.button_update, "update", 145, this.Height - 40);
             Controls["controlPanel"].BringToFront();
             Controls["controlPanel"].MouseEnter += new EventHandler((s, e) => { this.Cursor = Cursors.Hand; });
             Controls["controlPanel"].MouseLeave += new EventHandler((s, e) => { this.Cursor = Cursors.Default; });
