@@ -50,7 +50,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Network Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GadgetForm_FormClosing);
-            this.Load += new System.EventHandler(this.GadgetForm_Load);
+            this.Shown += new System.EventHandler(this.GadgetForm_Shown);
             this.ResumeLayout(false);
 
         }

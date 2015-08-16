@@ -49,8 +49,6 @@ namespace Network_Manager.Gadget
                 return;
             }
             GadgetForm.Instance = this;
-            GadgetForm.AutoRefreshAllowed = true;
-            GadgetForm.RefreshInProgress = false;
             InitializeComponent();
             SuspendLayout();
             CheckLocation(Global.Config.Gadget.Location);
@@ -598,11 +596,13 @@ namespace Network_Manager.Gadget
         //    }
         //}
 
-        private void GadgetForm_Load(object sender, EventArgs e)
+        private void GadgetForm_Shown(object sender, EventArgs e)
         {
             UpdateTraffic(cts.Token);
             Global.GetInternetInterface();
             Global.GetPublicIPs();
+            AutoRefreshAllowed = true;
+            RefreshInProgress = false;
         }
     }
 }
