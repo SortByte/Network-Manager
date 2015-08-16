@@ -382,19 +382,20 @@ namespace Network_Manager
                 try
                 {
                     XmlSerializer reader = new XmlSerializer(typeof(Config));
-                    StreamReader file = new StreamReader("Network_Manager.xml");
-                    currentConfig = (Config)reader.Deserialize(file);
-                    Config defaultConfig = new Config();
-                    file.Close();
-                    //currentConfig = (Config)CheckIfNull(typeof(Config), currentConfig, defaultConfig); // not needed, XML does a nice job
-                    
+                    using (StreamReader file = new StreamReader("Network_Manager.xml"))
+                    {
+                        currentConfig = (Config)reader.Deserialize(file);
+                        //Config defaultConfig = new Config();
+                        //currentConfig = (Config)CheckIfNull(typeof(Config), currentConfig, defaultConfig); // not needed, XML does a nice job
+                    }
                 }
                 catch
                 {
                     DialogResult result = MessageBox.Show("Configuration file was corrupted.\n\nDo you want to reset it to default and lose all configurations?", "Config File Corrupted", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, MessageBoxOptions.ServiceNotification);
                     if (result == DialogResult.No)
-                        Environment.Exit(0);
+                        Global.Exit();
                     currentConfig = new Config();
+                    File.Delete("Network_Manager.xml");
                 }
             }
             else

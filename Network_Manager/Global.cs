@@ -148,7 +148,6 @@ namespace Network_Manager
         public static void Exit(object sender = null, EventArgs e = null)
         {
             TrayIcon.Visible = false;
-            Global.Config.Save();
             Environment.Exit(0);
         }
 

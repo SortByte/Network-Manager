@@ -108,6 +108,7 @@
     <Compile Include="..\Network_Manager\Version\VersionInfo.cs">
       <Link>Version\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Global.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

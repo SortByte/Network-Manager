@@ -342,7 +342,7 @@ namespace Network_Manager.Jobs.Extensions
                 {
                     Global.WriteLog("Callbacks deadlock! (" + numOfCallbacks + ")");
                     Global.ShowTrayTip("Load Balancer", "Load Balancer has crashed", ToolTipIcon.Error);
-                    Environment.Exit(0);
+                    Global.Exit();
                 }
                 connToRemove.Clear();
                 foreach (KeyValuePair<ConnId, Guid> entry in guidList)

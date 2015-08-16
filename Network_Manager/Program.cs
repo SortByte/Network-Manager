@@ -24,7 +24,7 @@ namespace Network_Manager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Process.GetCurrentProcess().Exited += Program_Exited;
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
             //Advapi32.SetDebugPrivilege();
             // Check if Network Manager is already running
@@ -55,7 +55,6 @@ namespace Network_Manager
             }
             if (!IsUserAdmin())
                 MessageBox.Show("The current logged in Windows user is not an administrator. This program can only be run as an administrator.\nThe program won't work properly.", "User Permissions", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            Global.ShowTrayIcon();
             if (Environment.OSVersion.Version.CompareTo(new Version("5.1.2600.196608")) < 0)
                 Global.TrayIcon.ShowBalloonTip(5000, "Unsupported OS", "This program is incompatible with versions of Windows older than Windows XP Service Pack 3.\nProgram might not work properly.", ToolTipIcon.Warning);
             if (File.Exists("Downloads\\Network_Manager_x86.exe"))
@@ -96,7 +95,7 @@ namespace Network_Manager
                 Process.Start(si);
                 Environment.Exit(0);
             }
-            
+            Global.ShowTrayIcon();
             if (File.Exists("Network_Manager.log"))
                 File.SetAttributes("Network_Manager.log", (new FileInfo("Network_Manager.log")).Attributes & ~FileAttributes.ReadOnly);
             try { File.Delete("Network_Manager.log"); }
@@ -107,7 +106,7 @@ namespace Network_Manager
             Trace.WriteLine(Process.GetCurrentProcess().MainModule.FileVersionInfo.ProductName + " has started");
             Trace.Unindent();
             Refresh();
-           Application.Run();
+            Application.Run();
             //try
             //{
                 
@@ -118,10 +117,10 @@ namespace Network_Manager
             //}
         }
 
-        static void Program_Exited(object sender, EventArgs e)
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
-            try 
-            { 
+            try
+            {
                 Global.TrayIcon.Visible = false;
             }
             catch { }

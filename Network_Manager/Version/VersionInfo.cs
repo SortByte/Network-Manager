@@ -134,10 +134,10 @@ namespace Network_Manager
                         File.Delete("License.txt");
                     File.Move(@"Downloads\License.txt", "License.txt");
                     System.Diagnostics.Process.Start("Launcher.exe");
-                    System.Environment.Exit(0);
+                    Global.Exit();
                 }
                 else
-                    System.Windows.Forms.MessageBox.Show("Extraction was corrupted or interrupted !", "Extraction", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Extraction was corrupted or interrupted !", "Extraction", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
