@@ -565,11 +565,11 @@ namespace Lib.Network
                 PublicIPv4Changed(this, new TextEventArgs(PublicIPv4));
 
             // IPv6
-            if (IPv6Gateway.Count == 0)
-            {
-                PublicIPv6 = "No gateway";
-                return;
-            }
+            //if (IPv6Gateway.Count == 0)
+            //{
+            //    PublicIPv6 = "No gateway";
+            //    return;
+            //}
             if (IPv6Address.Global.Count == 0)
             {
                 PublicIPv6 = "No global IP";
