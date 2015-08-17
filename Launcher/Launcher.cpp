@@ -354,7 +354,7 @@ void DownloadDependency(int idc)
 		Download(link, file, crc32, size, DependecyDownloaded);
 	}
 	else
-		MessageBox(NULL, _T("Failed to download the update.\nBroken link or blocked internet access !"), _T("Download"), MB_OK);
+		MessageBox(NULL, _T("Failed to download the update.\nBroken link or no internet access !"), _T("Download"), MB_OK);
 
 }
 

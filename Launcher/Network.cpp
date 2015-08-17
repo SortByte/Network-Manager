@@ -179,10 +179,6 @@ void CALLBACK DownloadProgress(
 			do
 			{
 				context->received += context->size;
-				/*if (context->size > 0)
-				{
-				context->lastCrc32 = ComputeCrc32(context->lastCrc32, (BYTE*)&context->buffer, context->size);
-				}*/
 				fwrite(context->buffer, 1, context->size, context->file);
 				res = InternetReadFile(context->hUrl, context->buffer, 512, &context->size);
 

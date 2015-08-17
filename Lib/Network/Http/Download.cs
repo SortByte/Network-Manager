@@ -14,7 +14,7 @@ using Lib.WinAPI;
 namespace Lib.Network.Http
 {
     /// <summary>
-    /// TODO: Implement pause/resume download
+    /// TODO: Implement pause/resume download (C++ too)
     /// </summary>
     public partial class Download : Form
     {
@@ -57,7 +57,7 @@ namespace Lib.Network.Http
             textBox2.Text = Path.GetFullPath(fileName);
             label6.Text = "0B out of " + Unit.AutoScale(length, "B");
             request = (HttpWebRequest)HttpWebRequest.Create(url);
-            request.UserAgent = "SB Mozilla/4.0 (compatible; MSIE 6.0; Windows NT " + Environment.OSVersion.Version.MajorRevision + "." + Environment.OSVersion.Version.Minor + "; .NET CLR 1.0.3705;)";
+            request.UserAgent = "SB Mozilla/4.0 (compatible; MSIE 6.0; Windows NT " + Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor + "; .NET CLR 1.0.3705;)";
             try
             {
                 response = (HttpWebResponse)request.GetResponse();

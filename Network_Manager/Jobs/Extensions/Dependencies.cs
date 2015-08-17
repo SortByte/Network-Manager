@@ -111,7 +111,7 @@ namespace Network_Manager.Jobs.Extensions
                     new Download(link, @"Downloads\" + filePath, crc32, length, DownloadCompleted);
                 }
                 else
-                    MessageBox.Show("Failed to download the update.\nBroken link or blocked internet access !", "Download", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to download the update.\nBroken link or no internet access !", "Download", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
