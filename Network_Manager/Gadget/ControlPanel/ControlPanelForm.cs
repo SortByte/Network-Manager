@@ -20,6 +20,7 @@ using Lib.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel
 {
+    // TODO: add disable/enable Teredo option
     public partial class ControlPanelForm : Form
     {
         public static Form Instance = null;

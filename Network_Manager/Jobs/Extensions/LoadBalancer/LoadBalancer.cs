@@ -124,13 +124,13 @@ namespace Network_Manager.Jobs.Extensions
 
         private static void CheckUp()
         {
-            int nadCleanUpDelay = 60;
-            while(Status.State == State.Running)
+            int natCleanUpDelay = 60;
+            while (Status.State == State.Running)
             {
-                if (nadCleanUpDelay < 1)
+                if (natCleanUpDelay < 1)
                 {
                     RoutingTable.CleanUp();
-                    nadCleanUpDelay = 60;
+                    natCleanUpDelay = 60;
                 }
                 if (physicalWorkers.Any(i => !i.ThreadActive.IsSet) ||
                     !tapWorker.ThreadActive.IsSet)
@@ -138,7 +138,20 @@ namespace Network_Manager.Jobs.Extensions
                     Stop();
                     break;
                 }
-                nadCleanUpDelay--;
+                double lowestTrafficRate = -1;
+                int currentRoutingInterface = 0;
+                for (int i = 0; i < physicalWorkers.Count; i++)
+                {
+                    double currentTrafficRate = Global.NetworkInterfaces[physicalWorkers[i].Guid].IPv4InSpeedAvg10 +
+                        Global.NetworkInterfaces[physicalWorkers[i].Guid].IPv4OutSpeedAvg10;
+                    if (currentTrafficRate < lowestTrafficRate || lowestTrafficRate == -1)
+                    {
+                        lowestTrafficRate = currentTrafficRate;
+                        currentRoutingInterface = i;
+                    }
+                }
+                routingInterface = currentRoutingInterface;
+                natCleanUpDelay--;
                 Thread.Sleep(1000);
             }
         }

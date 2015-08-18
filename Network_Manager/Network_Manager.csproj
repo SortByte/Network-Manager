@@ -581,7 +581,8 @@ foreach (var item in filesToCleanup)
 )</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(OutDir)Network_Manager.exe" "$(OutDir)Network_Manager_$(PlatformName).exe" /Y
+    <PostBuildEvent>taskkill /F /IM Network_Manager_$(PlatformName).exe 2&gt;nul
+copy "$(OutDir)Network_Manager.exe" "$(OutDir)Network_Manager_$(PlatformName).exe" /Y
 rem if $(ConfigurationName)==Release "$(TargetDir)UpdateVersion.exe"
 
 </PostBuildEvent>
