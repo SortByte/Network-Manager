@@ -53,6 +53,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.windowsInterfaces = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -73,6 +74,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.advanced);
             this.tabPage1.Controls.Add(this.uninstallTapDriver);
             this.tabPage1.Controls.Add(this.installTapDriver);
@@ -93,7 +95,7 @@
             // advanced
             // 
             this.advanced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.advanced.Location = new System.Drawing.Point(279, 142);
+            this.advanced.Location = new System.Drawing.Point(279, 155);
             this.advanced.Name = "advanced";
             this.advanced.Size = new System.Drawing.Size(75, 23);
             this.advanced.TabIndex = 7;
@@ -105,7 +107,7 @@
             // 
             this.uninstallTapDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.uninstallTapDriver.Enabled = false;
-            this.uninstallTapDriver.Location = new System.Drawing.Point(158, 142);
+            this.uninstallTapDriver.Location = new System.Drawing.Point(158, 155);
             this.uninstallTapDriver.Name = "uninstallTapDriver";
             this.uninstallTapDriver.Size = new System.Drawing.Size(115, 23);
             this.uninstallTapDriver.TabIndex = 6;
@@ -117,7 +119,7 @@
             // 
             this.installTapDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.installTapDriver.Enabled = false;
-            this.installTapDriver.Location = new System.Drawing.Point(54, 142);
+            this.installTapDriver.Location = new System.Drawing.Point(54, 155);
             this.installTapDriver.Name = "installTapDriver";
             this.installTapDriver.Size = new System.Drawing.Size(98, 23);
             this.installTapDriver.TabIndex = 5;
@@ -129,7 +131,7 @@
             // 
             this.startLoadBalancer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.startLoadBalancer.Enabled = false;
-            this.startLoadBalancer.Location = new System.Drawing.Point(9, 142);
+            this.startLoadBalancer.Location = new System.Drawing.Point(9, 155);
             this.startLoadBalancer.Name = "startLoadBalancer";
             this.startLoadBalancer.Size = new System.Drawing.Size(39, 23);
             this.startLoadBalancer.TabIndex = 4;
@@ -142,7 +144,7 @@
             this.status.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.status.AutoSize = true;
             this.status.ForeColor = System.Drawing.Color.Red;
-            this.status.Location = new System.Drawing.Point(89, 126);
+            this.status.Location = new System.Drawing.Point(89, 139);
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(47, 13);
             this.status.TabIndex = 3;
@@ -152,7 +154,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 126);
+            this.label2.Location = new System.Drawing.Point(6, 139);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 2;
@@ -162,7 +164,7 @@
             // 
             this.groupBox1.AutoSize = true;
             this.groupBox1.Controls.Add(this.tapInterfaces);
-            this.groupBox1.Location = new System.Drawing.Point(9, 75);
+            this.groupBox1.Location = new System.Drawing.Point(9, 88);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(355, 48);
             this.groupBox1.TabIndex = 1;
@@ -181,7 +183,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(6, 59);
+            this.linkLabel1.Location = new System.Drawing.Point(6, 72);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(210, 13);
             this.linkLabel1.TabIndex = 1;
@@ -193,7 +195,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(6, 3);
+            this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(358, 56);
             this.label1.TabIndex = 0;
@@ -330,7 +332,17 @@
             this.label4.TabIndex = 0;
             this.label4.Text = resources.GetString("label4.Text");
             // 
-            // LoadBalancerForm
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Orange;
+            this.label3.Location = new System.Drawing.Point(6, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "[Experimental]";
+            // 
+            // LoadBalancingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -340,7 +352,7 @@
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "LoadBalancerForm";
+            this.Name = "LoadBalancingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Balancing";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadBalancerForm_FormClosing);
@@ -384,5 +396,6 @@
         private System.Windows.Forms.FlowLayoutPanel windowsInterfaces;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.Label label3;
     }
 }
