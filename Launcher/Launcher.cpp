@@ -103,7 +103,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	userAgent.append(".");
 	userAgent.append(std::to_string(osVersionInfo.wServicePackMajor << 16 | osVersionInfo.wServicePackMinor));
 	userAgent.append((systemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ? " 32-bit)" : " 64-bit)");
-	
+	delete[] buffer;
+
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
