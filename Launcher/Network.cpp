@@ -11,6 +11,7 @@
 #include <iomanip> 
 #include <winternl.h>
 #include <stdio.h>
+#include <atlstr.h>
 #pragma comment (lib, "wininet.lib")
 #pragma comment (lib, "Kernel32.lib")
 using namespace std;
@@ -19,7 +20,6 @@ INT_PTR CALLBACK	DownloadDlg(HWND, UINT, WPARAM, LPARAM);
 void CALLBACK DownloadProgress(_In_  HINTERNET hInternet, _In_  DWORD_PTR dwContext, _In_  DWORD dwInternetStatus, _In_  LPVOID lpvStatusInformation, _In_  DWORD dwStatusInformationLength);
 VOID CALLBACK UpdateSpeed(_In_  HWND hwnd, _In_  UINT uMsg, _In_  UINT_PTR idEvent, _In_  DWORD dwTime);
 string AutoScale(double amount, string unit);
-
 
 typedef struct{
 	HWND		hDialog;      // Window handle
@@ -64,7 +64,7 @@ void Download(TCHAR *url, wstring filePath, unsigned int crc32, unsigned long lo
 	if (context.file != NULL)
 		fclose(context.file);
 	context.hDialog = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hMainWindow, DownloadDlg);
-	context.hInternet = InternetOpen(_T("SB"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, INTERNET_FLAG_ASYNC);
+	context.hInternet = InternetOpen(CA2T(userAgent.c_str()), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, INTERNET_FLAG_ASYNC);
 	context.filePath = filePath;
 	context.length = length;
 	context.crc32 = crc32;
@@ -89,7 +89,7 @@ void Download(TCHAR *url, wstring filePath, unsigned int crc32, unsigned long lo
 string DownloadToVar(TCHAR *url, bool followRedirect)
 {
 	string response("");
-	HINTERNET hInternet = InternetOpen(_T("SB"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+	HINTERNET hInternet = InternetOpen(CA2T(userAgent.c_str()), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
 	HINTERNET hUrl = InternetOpenUrl(hInternet, url, _T(""), 0, INTERNET_FLAG_RELOAD | (followRedirect ? 0 : INTERNET_FLAG_NO_AUTO_REDIRECT), NULL);
 	if (hInternet != 0 && hUrl != 0)
 	{

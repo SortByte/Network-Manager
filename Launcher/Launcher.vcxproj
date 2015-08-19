@@ -93,7 +93,7 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>VisualStyles.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>Manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <PreBuildEvent>
       <Command>if $(ConfigurationName)==Release (
@@ -210,6 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\network_manager\lib\io\compression.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Manifest.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

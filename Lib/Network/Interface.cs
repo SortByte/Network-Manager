@@ -19,6 +19,7 @@ using Microsoft.Win32;
 using Lib.WinAPI;
 using Lib.Sync;
 using Lib.Extensions;
+using Lib.Network.Http;
 
 namespace Lib.Network
 {
@@ -531,7 +532,7 @@ namespace Lib.Network
                 socket.Bind(new IPEndPoint(IPAddress.Parse(LocalIPv4Exit), 0));
                 socket.Connect(hostIP, 80);
                 string HTTPGet = "GET / HTTP/1.1\r\n";
-                HTTPGet += "User-Agent: SB " + Environment.OSVersion.Version.ToString() + "#" + Index + "#" + Type + "\r\n";
+                HTTPGet += "User-Agent: " + Headers.DefaultUserAgent + "\r\n";
                 HTTPGet += "Host: " + host + "\r\n";
                 HTTPGet += "Cache-Control: no-cache\r\n\r\n";
                 socket.SendTimeout = 5000;
@@ -612,7 +613,7 @@ namespace Lib.Network
                     socket.Bind(new IPEndPoint(IPAddress.Parse(localAddress.Address), 0));
                     socket.Connect(hostIP, 80);
                     string HTTPGet = "GET / HTTP/1.1\r\n";
-                    HTTPGet += "User-Agent: SB " + Environment.OSVersion.Version.ToString() + "#" + Index + "#" + Type + "\r\n";
+                    HTTPGet += "User-Agent: " + Headers.DefaultUserAgent + "\r\n";
                     HTTPGet += "Host: " + host + "\r\n";
                     HTTPGet += "Cache-Control: no-cache\r\n\r\n";
                     socket.SendTimeout = 5000;

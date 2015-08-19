@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Forms;
 using Lib.WinAPI;
+using Lib.Network.Http;
 
 namespace Lib.Network.Http
 {
@@ -57,7 +58,7 @@ namespace Lib.Network.Http
             textBox2.Text = Path.GetFullPath(fileName);
             label6.Text = "0B out of " + Unit.AutoScale(length, "B");
             request = (HttpWebRequest)HttpWebRequest.Create(url);
-            request.UserAgent = "SB Mozilla/4.0 (compatible; MSIE 6.0; Windows NT " + Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor + "; .NET CLR 1.0.3705;)";
+            request.UserAgent = Headers.DefaultUserAgent;
             try
             {
                 response = (HttpWebResponse)request.GetResponse();

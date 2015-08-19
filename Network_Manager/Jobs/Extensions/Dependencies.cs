@@ -94,7 +94,7 @@ namespace Network_Manager.Jobs.Extensions
         {
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(link);
             request.AllowAutoRedirect = false;
-            request.UserAgent = "SB";
+            request.UserAgent = Headers.DefaultUserAgent;
             try
             {
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();

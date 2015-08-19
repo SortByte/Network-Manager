@@ -13,6 +13,7 @@
 #include <Commctrl.h>
 #pragma comment (lib, "Comctl32.lib")
 #pragma comment (lib, "Shell32.lib")
+#pragma comment (lib, "Version.lib")
 
 #define MAIN 1
 #define MAX_LOADSTRING 100
@@ -36,6 +37,7 @@ HWND hVC2010Button;
 HWND hMainWindow;
 wstring ownPath;
 SYSTEM_INFO systemInfo;							// OS bitness version
+string userAgent;								// HTTP User-Agent
 //HMODULE hNtdll = GetModuleHandle(_T("ntdll.dll"));
 //Crc32 ComputeCrc32; // = (Crc32)GetProcAddress(hNtdll, "RtlComputeCrc32");
 
@@ -65,10 +67,43 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	if (net4Installed && kb2468871Installed) // && vc2010Installed)
 	{
 		RunNM();
-		return false;
+		return FALSE;
 	}
 	if (!IsUserAdmin())
+	{
 		MessageBoxA(NULL, "The current logged in Windows user is not an administrator. This program can only be run as an administrator.\nThe program won't work properly.", "User Permissions", MB_OK);
+		return FALSE;
+	}
+
+	OSVERSIONINFOEX osVersionInfo;
+	osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((LPOSVERSIONINFO)&osVersionInfo);
+	TCHAR szExeFileName[MAX_PATH];
+	GetModuleFileName(NULL, szExeFileName, MAX_PATH);
+	int versionInfoSize = GetFileVersionInfoSize(szExeFileName, nullptr);
+	char* buffer = new char[versionInfoSize];
+	GetFileVersionInfo(szExeFileName, NULL, versionInfoSize, buffer);
+	VS_FIXEDFILEINFO* pFixedInfo;
+	UINT pLen;
+	VerQueryValue(buffer, _T("\\"), (LPVOID*)&pFixedInfo, &pLen);
+	userAgent = "SB Network Manager Launcher ";
+	userAgent.append(std::to_string(pFixedInfo->dwFileVersionMS >> 16));
+	userAgent.append(".");
+	userAgent.append(std::to_string(pFixedInfo->dwFileVersionMS & 0xffff));
+	userAgent.append(".");
+	userAgent.append(std::to_string(pFixedInfo->dwFileVersionLS >> 16));
+	userAgent.append(".");
+	userAgent.append(std::to_string(pFixedInfo->dwFileVersionLS & 0xffff));
+	userAgent.append(" (Windows NT ");
+	userAgent.append(std::to_string(osVersionInfo.dwMajorVersion));
+	userAgent.append(".");
+	userAgent.append(std::to_string(osVersionInfo.dwMinorVersion));
+	userAgent.append(".");
+	userAgent.append(std::to_string(osVersionInfo.dwBuildNumber));
+	userAgent.append(".");
+	userAgent.append(std::to_string(osVersionInfo.wServicePackMajor << 16 | osVersionInfo.wServicePackMinor));
+	userAgent.append((systemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) ? " 32-bit)" : " 64-bit)");
+	
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 

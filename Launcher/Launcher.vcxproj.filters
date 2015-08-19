@@ -75,4 +75,7 @@
       <Filter>Source Files\IO</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Manifest.xml" />
+  </ItemGroup>
 </Project>
