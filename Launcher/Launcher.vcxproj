@@ -143,7 +143,7 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>VisualStyles.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>Manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <PreBuildEvent>
       <Command>if $(ConfigurationName)==Release (
