@@ -2,6 +2,7 @@
 Portable Windows network monitorinig and configuration tool
 
 Made with Microsoft Visual Studio 2015
+
 The solution has 4 projects in it:
 - Launcher - C++ appliction used to check dependencies (.NET Framework)
 - Lib - C# library containing various network, forms, WinAPI, IO, etc functions
