@@ -7,6 +7,6 @@ The solution has 4 projects in it:
 - Launcher - C++ appliction used to check dependencies (.NET Framework)
 - Lib - C# library containing various network, forms, WinAPI, IO, etc functions
 - Network_Manager - C# main program
-- UpdateVersion - C# application used when building releases to updated their assembly info and to generate XML version file
+- UpdateVersion - C# application used when building releases to updated their assembly info and to generate the XML version file
 
 For other info check the [main website](http://www.sortbyte.com/software-programs/networking/network-manager)
