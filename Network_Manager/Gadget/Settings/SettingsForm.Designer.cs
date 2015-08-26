@@ -47,6 +47,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.graphTimeSpan = new System.Windows.Forms.ComboBox();
             this.apply = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.visibleInterfaces.SuspendLayout();
             this.SuspendLayout();
@@ -233,6 +234,15 @@
             this.apply.UseVisualStyleBackColor = true;
             this.apply.Click += new System.EventHandler(this.apply_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(161, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(47, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "seconds";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,6 +250,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(263, 322);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.apply);
             this.Controls.Add(this.visibleInterfaces);
             this.Controls.Add(this.groupBox1);
@@ -282,5 +293,6 @@
         private System.Windows.Forms.GroupBox visibleInterfaces;
         private System.Windows.Forms.Button apply;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label label5;
     }
 }
