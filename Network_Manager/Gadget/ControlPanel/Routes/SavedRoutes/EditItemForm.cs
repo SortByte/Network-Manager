@@ -26,7 +26,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
         {
             InitializeComponent();
             this.treeView = treeView;
-            route = (Config.SavedRouteItem)Global.Config.SavedRoutes.GetNode(treeView);
+            route = (Config.SavedRouteItem)Global.Config.SavedRoutes.GetSelectedNode(treeView);
             IPAddress ipAddress = new IPAddress(0);
             IPAddress.TryParse(route.Destination, out ipAddress);
             if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)

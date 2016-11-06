@@ -37,6 +37,7 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.defaultInterfaceMode = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.defaultIPv4Configurations = new System.Windows.Forms.GroupBox();
@@ -54,7 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.updateSavedRoutesCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultIPv4Configurations.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -78,7 +79,7 @@
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(636, 188);
+            this.listView1.Size = new System.Drawing.Size(636, 172);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -111,6 +112,10 @@
             this.columnHeader6.Text = "Route Name";
             this.columnHeader6.Width = 80;
             // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Status";
+            // 
             // defaultInterfaceMode
             // 
             this.defaultInterfaceMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -119,7 +124,7 @@
             this.defaultInterfaceMode.Items.AddRange(new object[] {
             "If loaded interface is not connected, use:",
             "Override all loaded routes with:"});
-            this.defaultInterfaceMode.Location = new System.Drawing.Point(12, 206);
+            this.defaultInterfaceMode.Location = new System.Drawing.Point(12, 190);
             this.defaultInterfaceMode.Name = "defaultInterfaceMode";
             this.defaultInterfaceMode.Size = new System.Drawing.Size(269, 21);
             this.defaultInterfaceMode.TabIndex = 1;
@@ -128,7 +133,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(309, 390);
+            this.button1.Location = new System.Drawing.Point(309, 393);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -140,17 +145,18 @@
             // 
             this.defaultIPv4Configurations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultIPv4Configurations.Controls.Add(this.updateSavedRoutesCheckBox);
             this.defaultIPv4Configurations.Controls.Add(this.tabControl1);
-            this.defaultIPv4Configurations.Location = new System.Drawing.Point(12, 233);
+            this.defaultIPv4Configurations.Location = new System.Drawing.Point(12, 217);
             this.defaultIPv4Configurations.Name = "defaultIPv4Configurations";
-            this.defaultIPv4Configurations.Size = new System.Drawing.Size(636, 151);
+            this.defaultIPv4Configurations.Size = new System.Drawing.Size(636, 170);
             this.defaultIPv4Configurations.TabIndex = 5;
             this.defaultIPv4Configurations.TabStop = false;
             this.defaultIPv4Configurations.Text = "Default Configurations";
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -304,15 +310,22 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "Interface:";
             // 
-            // columnHeader7
+            // updateSavedRoutesCheckBox
             // 
-            this.columnHeader7.Text = "Status";
+            this.updateSavedRoutesCheckBox.AutoSize = true;
+            this.updateSavedRoutesCheckBox.Enabled = false;
+            this.updateSavedRoutesCheckBox.Location = new System.Drawing.Point(6, 146);
+            this.updateSavedRoutesCheckBox.Name = "updateSavedRoutesCheckBox";
+            this.updateSavedRoutesCheckBox.Size = new System.Drawing.Size(222, 17);
+            this.updateSavedRoutesCheckBox.TabIndex = 7;
+            this.updateSavedRoutesCheckBox.Text = "Update saved routes with the new values";
+            this.updateSavedRoutesCheckBox.UseVisualStyleBackColor = true;
             // 
             // LoadForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 418);
+            this.ClientSize = new System.Drawing.Size(660, 421);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.defaultInterfaceMode);
             this.Controls.Add(this.listView1);
@@ -322,6 +335,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Routes";
             this.defaultIPv4Configurations.ResumeLayout(false);
+            this.defaultIPv4Configurations.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -358,5 +372,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.CheckBox updateSavedRoutesCheckBox;
     }
 }

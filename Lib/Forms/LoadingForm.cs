@@ -37,6 +37,21 @@ namespace Lib.Forms
             Invoke(new Action(() => { label1.Text = status; }));
         }
 
+        public void UpdateProgress(int percent)
+        {
+            while (!IsHandleCreated)
+                Thread.Sleep(100);
+            if (percent < 0)
+                Invoke(new Action(() => {
+                    progressBar1.Style = ProgressBarStyle.Marquee;
+                    progressBar1.Value = 33;
+                }));
+            else
+                Invoke(new Action(() => {
+                    progressBar1.Style = ProgressBarStyle.Continuous;
+                    progressBar1.Value = percent; }));
+        }
+
         public void Stop()
         {
             while (!IsHandleCreated)

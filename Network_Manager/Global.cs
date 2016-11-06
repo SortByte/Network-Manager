@@ -148,7 +148,11 @@ namespace Network_Manager
         public static void Exit(object sender = null, EventArgs e = null)
         {
             TrayIcon.Visible = false;
-            Environment.Exit(0);
+            new Thread(new ThreadStart(delegate
+            {
+                Thread.Sleep(200);
+                Environment.Exit(0);
+            })).Start();   
         }
 
         public class BusyForm

@@ -20,6 +20,7 @@ namespace Lib.WinAPI
                 hProcess = Kernel32.OpenProcess(Advapi32.PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
             char[] buffer = new char[2000];
             uint length = GetProcessImageFileName(hProcess, buffer, 2000);
+            Kernel32.CloseHandle(hProcess);
             return Kernel32.DevicePathToDrivePath(new string (buffer, 0, (int)length));
         }
     }

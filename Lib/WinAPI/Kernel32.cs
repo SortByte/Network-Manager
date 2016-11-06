@@ -19,6 +19,8 @@ namespace Lib.WinAPI
         public static extern uint FormatMessage(uint dwFlags, IntPtr lpSource, uint dwMessageId, uint dwLanguageId, ref IntPtr lpBuffer, uint nSize, IntPtr Arguments);
         [DllImportAttribute("Kernel32.dll")]
         public static extern IntPtr LocalFree(IntPtr hMem);
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool FreeLibrary(IntPtr hModule);
         [DllImportAttribute("Kernel32.dll")]
         public static extern bool CloseHandle(IntPtr hObject);
         [DllImport("Kernel32.dll")]

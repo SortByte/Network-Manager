@@ -24,6 +24,8 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
         private string prefix;
         private string gateway;
         private string interfaceIndex;
+        private TreeView treeView;
+        private Config.SavedRouteItem route;
 
         public EditRouteForm(int ipVersion, string destination, string prefix, string gateway, string interfaceIndex, string metric)
         {
@@ -33,9 +35,23 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             this.prefix = prefix;
             this.gateway = gateway;
             this.interfaceIndex = interfaceIndex;
+            // Check if route is saved
+            route = new Config.SavedRouteItem();
+            route.IPVersion = ipVersion;
+            route.Destination = destination;
+            route.Prefix = prefix;
+            route.Gateway = gateway;
+            route.InterfaceGuid = Global.NetworkInterfaces.First(i => i.Value.Index == int.Parse(interfaceIndex)).Value.Guid;
+            treeView = Global.Config.SavedRoutes.Find(route);
+            if (treeView.SelectedNode != treeView.Nodes[0])
+            {
+                updateSavedRouteCheckBox.Checked = true;
+                updateSavedRouteCheckBox.Enabled = true;
+            }
+            // Populate IPv4 or IPv6
             if (ipVersion == 4)
             {
-                Text = "Add IPv4 Route";
+                Text = "Edit IPv4 Route";
                 groupBox1.Text = "IPv4 Route";
                 routeDestination.Text = "0.0.0.0";
                 routePrefix.Text = "255.255.255.255";
@@ -49,7 +65,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             }
             else
             {
-                Text = "Add IPv6 Route";
+                Text = "Edit IPv6 Route";
                 groupBox1.Text = "IPv6 Route";
                 routeDestination.Text = "::";
                 routePrefix.Text = "128";
@@ -293,6 +309,19 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
                     type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
             }
             Iphlpapi.AddRoute(routeDestination.Text, routePrefix.Text, routeGateway.Text, ifIndex.ToString(), routeMetric.Text, type);
+            if (updateSavedRouteCheckBox.Checked)
+            {
+                route.Destination = routeDestination.Text;
+                route.Prefix = routePrefix.Text;
+                route.Gateway = routeGateway.Text;
+                if (ifIndex == 1)
+                    route.InterfaceGuid = NetworkInterface.Loopback.Guid;
+                else
+                    route.InterfaceGuid = Global.NetworkInterfaces.Values.Where((i) => i.Index == ifIndex).FirstOrDefault().Guid;
+                route.Metric = ushort.Parse(routeMetric.Text);
+                Global.Config.SavedRoutes.AddNode(treeView, route, true);
+            }
+                
             Close();
         }
     }

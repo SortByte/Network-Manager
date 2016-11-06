@@ -54,7 +54,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             ClientSize = new Size(clientSize.Width, clientSize.Height);
             // load routes
             IPAddress ipAddress = new IPAddress(0);
-            Config.SavedRouteNode loadNode = Global.Config.SavedRoutes.GetNode(treeView);
+            Config.SavedRouteNode loadNode = Global.Config.SavedRoutes.GetSelectedNode(treeView);
             loadRoutes = Global.Config.SavedRoutes.GetRoutes(loadNode);
             activeRoutes = Iphlpapi.GetRoutes(Iphlpapi.FAMILY.AF_UNSPEC);
             foreach (Config.SavedRouteItem item in loadRoutes)
@@ -177,7 +177,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     }
 
                 }
-                listView1.Items.Add(new ListViewItem(new string[] {
+                ListViewItem lvItem = new ListViewItem(new string[] {
                     item.Destination,
                     item.Prefix,
                     item.Gateway,
@@ -185,7 +185,9 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     item.Metric.ToString(),
                     item.Name,
                     status
-                })).Checked = true;
+                });
+                lvItem.Tag = item;
+                listView1.Items.Add(lvItem).Checked = true;
             }  
             foreach (ColumnHeader column in listView1.Columns)
                 column.Width = -2;
@@ -237,8 +239,9 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     tabControl1.TabPages[1].Enabled = false;
             }
             else
+            // overwrite
             {
-                
+
                 if (loadIPv4 > 0)
                     tabControl1.TabPages[0].Enabled = true;
                 else
@@ -256,6 +259,16 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             }
             else
                 button1.Enabled = true;
+            if (tabControl1.TabPages[0].Enabled || tabControl1.TabPages[1].Enabled)
+            {
+                updateSavedRoutesCheckBox.Checked = true;
+                updateSavedRoutesCheckBox.Enabled = true;
+            }
+            else
+            {
+                updateSavedRoutesCheckBox.Checked = false;
+                updateSavedRoutesCheckBox.Enabled = false;
+            }
         }
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -577,13 +590,13 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     // if on-link set type to direct for XP
                     Iphlpapi.MIB_IPFORWARD_TYPE type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_INDIRECT;
                     NetworkInterface nic;
-                        if (ifIndex == 1)
-                            nic = NetworkInterface.Loopback;
-                        else
-                            nic = Global.NetworkInterfaces.Values.Where((i) => i.Index == ifIndex).First();
+                    if (ifIndex == 1)
+                        nic = NetworkInterface.Loopback;
+                    else
+                        nic = Global.NetworkInterfaces.Values.Where((i) => i.Index == ifIndex).First();
                     if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
                     {
-                        
+
                         if (savedRoute.IPVersion == 4)
                         {
                             if (nic.IPv4Address.Where((i) => i.Address == savedRoute.Gateway).Count() > 0)
@@ -611,6 +624,14 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     }
                     Iphlpapi.DeleteRoute(savedRoute.Destination, savedRoute.Prefix, savedRoute.Gateway, ifIndex.ToString());
                     Iphlpapi.AddRoute(savedRoute.Destination, savedRoute.Prefix, savedRoute.Gateway, ifIndex.ToString(), savedRoute.Metric.ToString(), type);
+                    if (updateSavedRoutesCheckBox.Checked == true)
+                    {
+                        // TODO: update saved route with new interface + gw
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Could not load route:\nDestination: " + loadRoutes[j].Destination + "\nPrefix: " + loadRoutes[j].Prefix + "\nGateway: " + loadRoutes[j].Gateway + "\nIP version: " + loadRoutes[j].IPVersion, "Invalid route", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             Close();
         }

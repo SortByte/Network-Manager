@@ -83,21 +83,24 @@ namespace Network_Manager.Gadget.ControlPanel.IPSessions
                     foreach (Iphlpapi.IPSession session in sessions)
                     {
                         // get process info
-                        string filePath = Psapi.GetProcessFileName(session.OwningPid);
+                        string filePath = "";
                         int imageIndex = 0;
                         if (processList.ContainsKey(session.OwningPid))
                         {
                             imageIndex = processList[session.OwningPid].ImageListIndex;
+                            filePath = processList[session.OwningPid].Path;
                         }
                         else if (processList.Where(i => i.Value.Path == filePath).Count() > 0)
                         {
                             OwningProcess owningProcess = processList.Where(i => i.Value.Path == filePath).First().Value;
                             processList.TryAdd(session.OwningPid, owningProcess);
                             imageIndex = owningProcess.ImageListIndex;
+                            filePath = owningProcess.Path;
                         }
                         else
                         {
                             System.Drawing.Icon icon = null;
+                            filePath = Psapi.GetProcessFileName(session.OwningPid);
                             if (filePath != "")
                                 icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                             if (icon != null)
@@ -402,7 +405,7 @@ namespace Network_Manager.Gadget.ControlPanel.IPSessions
         {
             if (listView1.SelectedItems.Count == 0)
             {
-                new BalloonTip("No selection", "Sselect an IP session first", listView1, BalloonTip.ICON.INFO, 5000);
+                new BalloonTip("No selection", "Select an IP session first", listView1, BalloonTip.ICON.INFO, 5000);
                 return;
             }
             IPEndPoint remoteEP;

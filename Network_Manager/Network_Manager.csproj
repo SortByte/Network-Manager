@@ -196,6 +196,12 @@
     <Compile Include="Gadget\ControlPanel\ConfigureInterface\SaveProfileForm.Designer.cs">
       <DependentUpon>SaveProfileForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gadget\ControlPanel\InterfacePerformance\InterfacePerformanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gadget\ControlPanel\InterfacePerformance\InterfacePerformanceForm.Designer.cs">
+      <DependentUpon>InterfacePerformanceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gadget\ControlPanel\IPSessions\IPSessionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -347,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Gadget\ControlPanel\ConfigureInterface\SaveProfileForm.resx">
       <DependentUpon>SaveProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gadget\ControlPanel\InterfacePerformance\InterfacePerformanceForm.resx">
+      <DependentUpon>InterfacePerformanceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gadget\ControlPanel\IPSessions\IPSessionsForm.resx">
       <DependentUpon>IPSessionsForm.cs</DependentUpon>
@@ -533,6 +542,7 @@
       <Name>Lib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

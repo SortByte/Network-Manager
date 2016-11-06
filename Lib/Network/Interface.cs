@@ -103,6 +103,7 @@ namespace Lib.Network
         //public Int64 IPv6InSpeed; // ???
         //public Int64 IPv6OutSpeed; // ???
 
+        // TODO: remove this static and add to GettAll()
         public static NetworkInterface Loopback = new NetworkInterface();
 
         public static Process Netsh()
@@ -678,7 +679,7 @@ namespace Lib.Network
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\Tcpip\Parameters\Interfaces", true);
                 foreach (string guid in key.GetSubKeyNames())
                 {
-                    if (guid == excludedGuid)
+                    if (string.Compare(guid, excludedGuid, true) == 0)
                         continue;
                     RegistryKey ifKey = key.OpenSubKey(guid, true);
                     string[] ipAddress = (string[])ifKey.GetValue("IPAddress", new[] { "" });

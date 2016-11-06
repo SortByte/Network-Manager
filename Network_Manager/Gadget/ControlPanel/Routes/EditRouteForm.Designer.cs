@@ -44,11 +44,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.updateSavedRouteCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.updateSavedRouteCheckBox);
             this.groupBox1.Controls.Add(this.routeGateway);
             this.groupBox1.Controls.Add(this.routeInterface);
             this.groupBox1.Controls.Add(this.routeMetric);
@@ -62,7 +67,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(519, 168);
+            this.groupBox1.Size = new System.Drawing.Size(519, 191);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "IPv4 Route";
@@ -170,7 +175,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(246, 186);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.button1.Location = new System.Drawing.Point(246, 212);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -178,11 +184,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // updateSavedRouteCheckBox
+            // 
+            this.updateSavedRouteCheckBox.AutoSize = true;
+            this.updateSavedRouteCheckBox.Enabled = false;
+            this.updateSavedRouteCheckBox.Location = new System.Drawing.Point(19, 158);
+            this.updateSavedRouteCheckBox.Name = "updateSavedRouteCheckBox";
+            this.updateSavedRouteCheckBox.Size = new System.Drawing.Size(155, 17);
+            this.updateSavedRouteCheckBox.TabIndex = 12;
+            this.updateSavedRouteCheckBox.Text = "Update saved route as well";
+            this.updateSavedRouteCheckBox.UseVisualStyleBackColor = true;
+            // 
             // EditRouteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 216);
+            this.ClientSize = new System.Drawing.Size(545, 242);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -213,5 +230,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox updateSavedRouteCheckBox;
     }
 }

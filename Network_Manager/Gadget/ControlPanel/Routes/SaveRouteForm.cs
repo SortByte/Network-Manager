@@ -307,8 +307,15 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             }
             if (result == 2)
             {
-                new BalloonTip("Warning", "Route name already used at current destination", savedRouteName, BalloonTip.ICON.WARNING);
-                return;
+                DialogResult dialogResult = MessageBox.Show("Route name already used at current destination.\nDo you want to overwrite?", "Overwrite confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                if (dialogResult == DialogResult.No)
+                    return;
+                if (treeView1.SelectedNode.ImageIndex == (int)Config.SavedRouteNode.ImageIndex.Group)
+                    treeView1.SelectedNode = treeView1.SelectedNode.Nodes.Find(savedRouteName.Text, false).First();
+                else if (treeView1.SelectedNode.Name != savedRouteName.Text)
+                    treeView1.SelectedNode = treeView1.SelectedNode.Parent.Nodes.Find(savedRouteName.Text, false).First();
+                Global.Config.SavedRoutes.DeleteNode(treeView1);
+                Global.Config.SavedRoutes.AddNode(treeView1, savedRoute);
             }
             Close();
         }
@@ -443,5 +450,13 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             }
         }
 
+        private void treeView1_DoubleClick(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null &&
+                treeView1.SelectedNode.ImageIndex == (int)Config.SavedRouteNode.ImageIndex.Item)
+            {
+                savedRouteName.Text = treeView1.SelectedNode.Text;
+            }
+        }
     }
 }

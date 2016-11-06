@@ -36,6 +36,8 @@
             this.routesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadBalancingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTCPIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.iPv4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.iPv6ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gadgetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,8 +47,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.iPv4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.iPv6ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.networkMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wiFiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -69,7 +71,9 @@
             this.connectionsToolStripMenuItem,
             this.routesToolStripMenuItem,
             this.loadBalancingToolStripMenuItem,
-            this.resetTCPIPToolStripMenuItem});
+            this.resetTCPIPToolStripMenuItem,
+            this.networkMapToolStripMenuItem,
+            this.wiFiToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -103,6 +107,20 @@
             this.resetTCPIPToolStripMenuItem.Name = "resetTCPIPToolStripMenuItem";
             this.resetTCPIPToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.resetTCPIPToolStripMenuItem.Text = "Reset TCP/IP";
+            // 
+            // iPv4ToolStripMenuItem
+            // 
+            this.iPv4ToolStripMenuItem.Name = "iPv4ToolStripMenuItem";
+            this.iPv4ToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.iPv4ToolStripMenuItem.Text = "IPv4";
+            this.iPv4ToolStripMenuItem.Click += new System.EventHandler(this.iPv4ToolStripMenuItem_Click);
+            // 
+            // iPv6ToolStripMenuItem
+            // 
+            this.iPv6ToolStripMenuItem.Name = "iPv6ToolStripMenuItem";
+            this.iPv6ToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.iPv6ToolStripMenuItem.Text = "IPv6";
+            this.iPv6ToolStripMenuItem.Click += new System.EventHandler(this.iPv6ToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -177,19 +195,19 @@
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // iPv4ToolStripMenuItem
+            // networkMapToolStripMenuItem
             // 
-            this.iPv4ToolStripMenuItem.Name = "iPv4ToolStripMenuItem";
-            this.iPv4ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.iPv4ToolStripMenuItem.Text = "IPv4";
-            this.iPv4ToolStripMenuItem.Click += new System.EventHandler(this.iPv4ToolStripMenuItem_Click);
+            this.networkMapToolStripMenuItem.Name = "networkMapToolStripMenuItem";
+            this.networkMapToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.networkMapToolStripMenuItem.Text = "Network map";
+            this.networkMapToolStripMenuItem.Visible = false;
             // 
-            // iPv6ToolStripMenuItem
+            // wiFiToolStripMenuItem
             // 
-            this.iPv6ToolStripMenuItem.Name = "iPv6ToolStripMenuItem";
-            this.iPv6ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.iPv6ToolStripMenuItem.Text = "IPv6";
-            this.iPv6ToolStripMenuItem.Click += new System.EventHandler(this.iPv6ToolStripMenuItem_Click);
+            this.wiFiToolStripMenuItem.Name = "wiFiToolStripMenuItem";
+            this.wiFiToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.wiFiToolStripMenuItem.Text = "WiFi";
+            this.wiFiToolStripMenuItem.Visible = false;
             // 
             // ControlPanelForm
             // 
@@ -235,5 +253,7 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ToolStripMenuItem iPv4ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iPv6ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem networkMapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wiFiToolStripMenuItem;
     }
 }

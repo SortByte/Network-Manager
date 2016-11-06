@@ -41,6 +41,7 @@ namespace Network_Manager
                 }
                 catch { }
             }
+
             if (processDuplicates.Count > 0)
             {
                 DialogResult result = MessageBox.Show("Network Manager is already running. Do you want to restart the application ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

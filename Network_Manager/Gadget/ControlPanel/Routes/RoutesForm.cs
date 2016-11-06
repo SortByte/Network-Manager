@@ -75,7 +75,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
                     listView1.BeginUpdate();
                     List<Iphlpapi.Route> routes = Iphlpapi.GetRoutes(Iphlpapi.FAMILY.AF_UNSPEC);
                     List<Config.SavedRouteItem> savedRoutes = Global.Config.SavedRoutes.GetRoutes(Global.Config.SavedRoutes.Nodes[0]);
-                    Config.SavedRouteNode selectedNode = Global.Config.SavedRoutes.GetNode(treeView1);
+                    Config.SavedRouteNode selectedNode = Global.Config.SavedRoutes.GetSelectedNode(treeView1);
                     List<Config.SavedRouteItem> selectedRoutes = Global.Config.SavedRoutes.GetRoutes(selectedNode);
                     // add/update items
                     foreach (Iphlpapi.Route route in routes)
@@ -113,6 +113,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
                                 NetworkInterface.Loopback.Index == route.InterfaceIndex)) == null)
                                 filter = true;
                         }
+                        // TODO: update routes with all matching saved routes using Find()
                         // update existing items
                         foreach (ListViewItem item in listView1.Items)
                             if (item.SubItems[0].Text == route.Destination &&

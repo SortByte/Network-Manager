@@ -50,7 +50,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             ClientSize = new Size(clientSize.Width, clientSize.Height);
             // load routes
             IPAddress ipAddress = new IPAddress(0);
-            Config.SavedRouteNode unloadNode = Global.Config.SavedRoutes.GetNode(treeView);
+            Config.SavedRouteNode unloadNode = Global.Config.SavedRoutes.GetSelectedNode(treeView);
             unloadRoutes = Global.Config.SavedRoutes.GetRoutes(unloadNode);
             activeRoutes = Iphlpapi.GetRoutes(Iphlpapi.FAMILY.AF_UNSPEC);
             foreach (Config.SavedRouteItem item in unloadRoutes)

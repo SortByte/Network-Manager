@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
@@ -147,7 +148,7 @@ namespace Network_Manager
             }
 
             /// <summary>
-            /// For rename, if node already exists and source is a group it renames it without changing its subnodes,
+            /// For rename = true, if node already exists and source is a group it renames it without changing its subnodes,
             /// and if it's an item it replaces it.<para/>
             /// Returns:<para/>
             /// 0: success<para/>
@@ -156,6 +157,7 @@ namespace Network_Manager
             /// </summary>
             /// <param name="treeView"></param>
             /// <param name="name"></param>
+            /// <param name="rename">Rename group/edit item</param>
             /// <returns></returns>
             public int AddNode(TreeView treeView, SavedRouteNode node, bool rename = false)
             {
@@ -206,9 +208,16 @@ namespace Network_Manager
                 return 0;
             }
 
-            public SavedRouteNode GetNode(TreeView treeView, bool getParent = false)
+            /// <summary>
+            /// Get the SavedRouteNode based on Tree View selection
+            /// </summary>
+            /// <param name="treeView"></param>
+            /// <param name="getParent"></param>
+            /// <returns></returns>
+            public SavedRouteNode GetSelectedNode(TreeView treeView, bool getParent = false, TreeNode selectedNode = null)
             {
-                TreeNode selectedNode = treeView.SelectedNode;
+                if (selectedNode == null)
+                    selectedNode = treeView.SelectedNode;
                 if (selectedNode == null)
                     return null;
                 // get TV selection path
@@ -234,6 +243,47 @@ namespace Network_Manager
                         break;
                     }
                 return getNode;
+            }
+
+            /// <summary>
+            /// Find the first SavedRouteItem based on destination+prefix+gateway+interface and return a Tree View with the equivalent node selected,
+            /// that can be passed to the other functions
+            /// </summary>
+            /// <param name="route"></param>
+            /// <returns></returns>
+            public TreeView Find(SavedRouteItem route)
+            {
+                List<string> path = FindPath(route);
+                TreeView treeView = new TreeView();
+                Populate(treeView, path);
+                return treeView;
+            }
+
+            private List<string> FindPath(SavedRouteItem route, SavedRouteGroup rootNode = null)
+            {
+                if (rootNode == null)
+                    rootNode = (SavedRouteGroup)Nodes[0];
+                foreach (SavedRouteNode node in rootNode.Nodes)
+                {
+                    if (node is SavedRouteItem)
+                    {
+                        SavedRouteItem item = (SavedRouteItem)node;
+                        if (item.IPVersion == route.IPVersion)
+                            if (item.Destination == route.Destination)
+                                if (item.Prefix == route.Prefix)
+                                    if (item.Gateway == route.Gateway)
+                                        if (item.InterfaceGuid == route.InterfaceGuid)
+                                            return new List<string>(new string[] { rootNode.Name, item.Name });
+                    }
+                    else
+                    {
+                        SavedRouteGroup group = (SavedRouteGroup)node;
+                        List<string> relativePath = FindPath(route, group);
+                        if (relativePath != null)
+                            return new List<string>(new string[] { rootNode.Name }).Concat(relativePath).ToList();
+                    }
+                }
+                return null;
             }
 
             public int DeleteNode(TreeView treeView)
@@ -346,6 +396,12 @@ namespace Network_Manager
         public class SavedRouteNode 
         {
             public string Name;
+            
+            public enum ImageIndex
+            {
+                Group,
+                Item
+            }
         }
 
         public class SavedRouteItem : SavedRouteNode

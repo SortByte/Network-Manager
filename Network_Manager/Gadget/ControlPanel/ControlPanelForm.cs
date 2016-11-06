@@ -21,6 +21,8 @@ using Lib.Extensions;
 namespace Network_Manager.Gadget.ControlPanel
 {
     // TODO: add disable/enable Teredo option
+    // TODO: add IP forwarding
+    // TODO: add WLAN configs, info and ICS
     public partial class ControlPanelForm : Form
     {
         public static Form Instance = null;
@@ -119,8 +121,9 @@ namespace Network_Manager.Gadget.ControlPanel
                 });
                 toolStripItem.MouseLeave += new EventHandler((s, e) => { BalloonTip.CloseAll(); });
 
-                // TODO: add speed and lattency test
-                //contextMenuStrip.Items.Add("Test speed").Enabled = false;
+                // TODO: add speed, lattency test and network map
+                //toolStripItem = contextMenuStrip.Items.Add("Test performance");
+                //toolStripItem.Click += new EventHandler((s,e) => new InterfacePerformance.InterfacePerformanceForm(nic));
                 //contextMenuStrip.Items.Add("Test lattency").Enabled = false;
                 button.Click += new EventHandler((s, e) => { contextMenuStrip.Show((Control)s, 0, ((Control)s).Height); });
                 groupBox.Controls.Add(button);

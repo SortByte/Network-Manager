@@ -123,7 +123,17 @@ namespace Network_Manager.Jobs.Extensions
         private void DownloadCompleted(bool success, string filePath)
         {
             if (success)
+            {
+                if (Regex.IsMatch(filePath, "winpcap", RegexOptions.IgnoreCase))
+                    if (Process.GetCurrentProcess().Modules.Cast<ProcessModule>().Any(i => i.ModuleName == "wpcap.dll" || i.ModuleName == "packet.dll"))
+                    {
+                        MessageBox.Show("'wpcap.dll' or 'packet.dll' is in use.\nThe application will close now, so you can install WinPcap.\nIf that doesn't work, try rebooting the system.\n\nYou'll have to manually start Network Manager after WinPcap installation is finished.", "Download", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Process.Start(new ProcessStartInfo(filePath));
+                        Global.Exit();
+                        return;
+                    }
                 Process.Start(new ProcessStartInfo(filePath));
+            }       
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -186,7 +196,8 @@ namespace Network_Manager.Jobs.Extensions
         {
             // get WinPcap version
             if (File.Exists(Environment.GetEnvironmentVariable("windir") + @"\System32\wpcap.dll") &&
-                File.Exists(Environment.GetEnvironmentVariable("windir") + @"\System32\Packet.dll"))
+                File.Exists(Environment.GetEnvironmentVariable("windir") + @"\System32\Packet.dll") &&
+                ServiceController.GetDevices().Where(i => i.ServiceName == "NPF").Count() > 0)
             {
                 string version = Marshal.PtrToStringAnsi(pcap_lib_version());
                 version = Regex.Replace(version, @"^.*WinPcap version ([0-9\.]+).*$", "$1", RegexOptions.IgnoreCase);
