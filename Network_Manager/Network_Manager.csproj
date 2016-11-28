@@ -537,7 +537,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lib\WinLib.csproj">
+    <ProjectReference Include="..\WinLib\WinLib.csproj">
       <Project>{0f24aad4-64b4-4efc-9ac6-dde32543211f}</Project>
       <Name>WinLib</Name>
     </ProjectReference>
