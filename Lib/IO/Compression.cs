@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Shell32;
 
-namespace Lib.IO
+namespace WinLib.IO
 {
     public static class Compression
     {

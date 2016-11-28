@@ -1,4 +1,4 @@
-﻿namespace Lib.Network.Http
+﻿namespace WinLib.Network.Http
 {
     partial class Download
     {

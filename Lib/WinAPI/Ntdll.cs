@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class Ntdll
     {

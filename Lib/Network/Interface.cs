@@ -16,12 +16,12 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using Microsoft.Win32;
-using Lib.WinAPI;
-using Lib.Sync;
-using Lib.Extensions;
-using Lib.Network.Http;
+using WinLib.WinAPI;
+using WinLib.Sync;
+using WinLib.Extensions;
+using WinLib.Network.Http;
 
-namespace Lib.Network
+namespace WinLib.Network
 {
     /// <summary>
     /// Describe your class quickly here.

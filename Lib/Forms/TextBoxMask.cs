@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Lib.Forms
+namespace WinLib.Forms
 {
     public class TextBoxMask
     {

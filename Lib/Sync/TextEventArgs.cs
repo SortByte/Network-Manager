@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Lib.Sync
+namespace WinLib.Sync
 {
     public class TextEventArgs : EventArgs
     {

@@ -25,7 +25,7 @@ using PcapDotNet.Packets.IpV4;
 using PcapDotNet.Packets.Transport;
 using System.Net;
 using System.Net.Sockets;
-using Lib.Network;
+using WinLib.Network;
 
 namespace Network_Manager.Jobs.Extensions
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Reflection;
 
 
-namespace Lib.Extensions
+namespace WinLib.Extensions
 {
     public static class Methods
     {

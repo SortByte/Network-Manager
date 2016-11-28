@@ -8,9 +8,9 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Lib.WinAPI;
-using Lib.Network;
-using Lib.Forms;
+using WinLib.WinAPI;
+using WinLib.Network;
+using WinLib.Forms;
 
 namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 {
@@ -77,8 +77,8 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             dataGridView3.Enabled = nic.Dhcpv4Enabled < NetworkInterface.Dhcp.IPnDns;
             interfaceMetric.Text = nic.InterfaceMetric.ToString();
             ipv4Mtu.Text = nic.IPv4Mtu;
-            new Lib.Forms.TextBoxMask(interfaceMetric, Lib.Forms.TextBoxMask.Mask.Numeric);
-            new Lib.Forms.TextBoxMask(ipv4Mtu, Lib.Forms.TextBoxMask.Mask.Numeric);
+            new WinLib.Forms.TextBoxMask(interfaceMetric, WinLib.Forms.TextBoxMask.Mask.Numeric);
+            new WinLib.Forms.TextBoxMask(ipv4Mtu, WinLib.Forms.TextBoxMask.Mask.Numeric);
             netbiosEnabled.Checked = nic.NetbiosEnabled < NetworkInterface.Netbios.Disabled;
             if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
             {
@@ -104,7 +104,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 dataGridView6.Rows.Add(nic.IPv6DnsServer[i]);
             routerDiscoveryEnabled.Checked = nic.IPv6RouterDiscoveryEnabled;
             ipv6Mtu.Text = nic.IPv6Mtu;
-            new Lib.Forms.TextBoxMask(ipv6Mtu, Lib.Forms.TextBoxMask.Mask.Numeric);
+            new WinLib.Forms.TextBoxMask(ipv6Mtu, WinLib.Forms.TextBoxMask.Mask.Numeric);
             if (!nic.IPv4Enabled)
                 tabControl1.TabPages[0].Enabled = false;
             if (!nic.IPv6Enabled)

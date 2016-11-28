@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using Lib.WinAPI;
-using Lib.Network;
-using Lib.Forms;
+using WinLib.WinAPI;
+using WinLib.Network;
+using WinLib.Forms;
 
 namespace Network_Manager.Jobs.Extensions
 {
@@ -202,7 +202,7 @@ namespace Network_Manager.Jobs.Extensions
                 LoadingForm splash = new LoadingForm("Decompressing TAP driver...");
                 Directory.CreateDirectory("Temp");
                 File.WriteAllBytes(@"Temp\TAP Driver.zip", Network_Manager.Properties.Resources.TAP_Driver);
-                Lib.IO.Compression.UnZip(@"Temp\TAP Driver.zip", "Temp");
+                WinLib.IO.Compression.UnZip(@"Temp\TAP Driver.zip", "Temp");
                 // Vista driver version does not install correctly on Vista, so Win2K is used
                 string driverPath;
                 if (Environment.Is64BitOperatingSystem)

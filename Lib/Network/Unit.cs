@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Lib.Network
+namespace WinLib.Network
 {
     public static class Unit
     {

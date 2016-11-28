@@ -10,8 +10,8 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Net;
 using System.Xml;
-using Lib.Network.Http;
-using Lib.IO;
+using WinLib.Network.Http;
+using WinLib.IO;
 
 
 namespace Network_Manager
@@ -127,7 +127,7 @@ namespace Network_Manager
         {
             if (success)
             {
-                if (Lib.IO.Compression.UnZip(Path.GetFullPath(fileName), Path.GetDirectoryName(Path.GetFullPath(fileName))))
+                if (WinLib.IO.Compression.UnZip(Path.GetFullPath(fileName), Path.GetDirectoryName(Path.GetFullPath(fileName))))
                 {
                     File.Delete(fileName);
                     if (File.Exists("License.txt"))

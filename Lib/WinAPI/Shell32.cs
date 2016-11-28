@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class Shell32
     {

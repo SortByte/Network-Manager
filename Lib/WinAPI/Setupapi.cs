@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class Setupapi
     {

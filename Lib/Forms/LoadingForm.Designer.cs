@@ -1,4 +1,4 @@
-﻿namespace Lib.Forms
+﻿namespace WinLib.Forms
 {
     partial class LoadingForm
     {

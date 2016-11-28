@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Lib.Network;
-using Lib.WinAPI;
-using Lib.Sync;
+using WinLib.Network;
+using WinLib.WinAPI;
+using WinLib.Sync;
 
 namespace Network_Manager.Gadget
 {
@@ -36,8 +36,8 @@ namespace Network_Manager.Gadget
         private Chart hoveredGraph = null;
         private Point startMovePoint;
         private System.Timers.Timer timer = new System.Timers.Timer();
-        private Dictionary<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>> publicIPv4Subscriptions = new Dictionary<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>>();
-        private Dictionary<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>> publicIPv6Subscriptions = new Dictionary<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>>();
+        private Dictionary<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>> publicIPv4Subscriptions = new Dictionary<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>>();
+        private Dictionary<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>> publicIPv6Subscriptions = new Dictionary<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>>();
         private List<EventHandler<TextEventArgs>> internetInterfaceSubscriptions = new List<EventHandler<TextEventArgs>>();
 
         public GadgetForm()
@@ -117,7 +117,7 @@ namespace Network_Manager.Gadget
                 int xOffset = 0;
                 int i = 0;
                 int y = 0;
-                foreach(Lib.Network.NetworkInterface nic in Global.NetworkInterfaces.Values)
+                foreach(WinLib.Network.NetworkInterface nic in Global.NetworkInterfaces.Values)
                 {
                     if (hiddenInterfaces.Contains(nic.Guid))
                         continue;
@@ -170,7 +170,7 @@ namespace Network_Manager.Gadget
                         {
                             Invoke(new Action(() =>
                             {
-                                if (nic.Guid == ((Lib.Network.NetworkInterface)s).Guid)
+                                if (nic.Guid == ((WinLib.Network.NetworkInterface)s).Guid)
                                     Controls["publicIP" + nic.Guid].Text = e.Text;
                             }));
                         }
@@ -200,7 +200,7 @@ namespace Network_Manager.Gadget
                         }
                         catch { }
                     };
-                    Lib.Network.NetworkInterface.InternetInterfaceChanged += handler;
+                    WinLib.Network.NetworkInterface.InternetInterfaceChanged += handler;
                     internetInterfaceSubscriptions.Add(handler);
                 }
                 AddImage(midBkgImage, "midBkgLast", 0, this.Height-60);
@@ -437,7 +437,7 @@ namespace Network_Manager.Gadget
                     int xValue = e.X * ((Chart)sender).Series[0].Points.Count / ((Chart)sender).Width;
                     Int64 dw = (Int64)((Chart)sender).Series[0].Points[xValue].YValues[0];
                     Int64 up = (Int64)((Chart)sender).Series[1].Points[xValue].YValues[0];
-                    this.toolTip.Show("D:" + Lib.Network.Unit.AutoScale(dw, "B") + "\nU:" + Lib.Network.Unit.AutoScale(up, "B"), (Control)sender, e.X + 15, e.Y + 15);
+                    this.toolTip.Show("D:" + WinLib.Network.Unit.AutoScale(dw, "B") + "\nU:" + WinLib.Network.Unit.AutoScale(up, "B"), (Control)sender, e.X + 15, e.Y + 15);
                 }
                 lastMouseEvent = e;
             }
@@ -497,18 +497,18 @@ namespace Network_Manager.Gadget
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     int i = 0;
-                    foreach (Lib.Network.NetworkInterface nic in Global.NetworkInterfaces.Values)
+                    foreach (WinLib.Network.NetworkInterface nic in Global.NetworkInterfaces.Values)
                     {
                         if (hiddenInterfaces.Contains(nic.Guid))
                             continue;
                         if (i >= (maxVerticalSlots * maxHorizontalSlots))
                             break;
-                        this.Controls["downByte" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4InSpeed, "B");
-                        this.Controls["downBit" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4InSpeed * 8, "b");
-                        this.Controls["upByte" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4OutSpeed, "B");
-                        this.Controls["upBit" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4OutSpeed * 8, "b");
-                        this.Controls["totalDown" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4BytesReceived, "B");
-                        this.Controls["totalUp" + nic.Guid].Text = Lib.Network.Unit.AutoScale(nic.IPv4BytesSent, "B");
+                        this.Controls["downByte" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4InSpeed, "B");
+                        this.Controls["downBit" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4InSpeed * 8, "b");
+                        this.Controls["upByte" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeed, "B");
+                        this.Controls["upBit" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeed * 8, "b");
+                        this.Controls["totalDown" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4BytesReceived, "B");
+                        this.Controls["totalUp" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4BytesSent, "B");
                         Chart chart = ((Chart)this.Controls["graph" + nic.Guid]);
                         chart.Series[0].Points.RemoveAt(0);
                         chart.Series[0].Points.AddY(nic.IPv4InSpeed);
@@ -516,17 +516,17 @@ namespace Network_Manager.Gadget
                         chart.Series[1].Points.AddY(nic.IPv4OutSpeed);
                         chart.ChartAreas[0].RecalculateAxesScale();
 
-                        this.toolTip.SetToolTip(this.Controls["downByte" + nic.Guid], "Avg:" + Lib.Network.Unit.AutoScale(nic.IPv4InSpeedAvg20, "B/s"));
-                        this.toolTip.SetToolTip(this.Controls["downBit" + nic.Guid], "Avg:" + Lib.Network.Unit.AutoScale(nic.IPv4InSpeedAvg20 * 8, "b/s"));
-                        this.toolTip.SetToolTip(this.Controls["upByte" + nic.Guid], "Avg:" + Lib.Network.Unit.AutoScale(nic.IPv4OutSpeedAvg20, "B/s"));
-                        this.toolTip.SetToolTip(this.Controls["upBit" + nic.Guid], "Avg:" + Lib.Network.Unit.AutoScale(nic.IPv4OutSpeedAvg20 * 8, "b/s"));
+                        this.toolTip.SetToolTip(this.Controls["downByte" + nic.Guid], "Avg:" + WinLib.Network.Unit.AutoScale(nic.IPv4InSpeedAvg20, "B/s"));
+                        this.toolTip.SetToolTip(this.Controls["downBit" + nic.Guid], "Avg:" + WinLib.Network.Unit.AutoScale(nic.IPv4InSpeedAvg20 * 8, "b/s"));
+                        this.toolTip.SetToolTip(this.Controls["upByte" + nic.Guid], "Avg:" + WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeedAvg20, "B/s"));
+                        this.toolTip.SetToolTip(this.Controls["upBit" + nic.Guid], "Avg:" + WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeedAvg20 * 8, "b/s"));
 
                         if (hoveredGraph == chart)
                         {
                             int xValue = lastMouseEvent.X * chart.Series[0].Points.Count / chart.Width;
                             Int64 dw = (Int64)chart.Series[0].Points[xValue].YValues[0];
                             Int64 up = (Int64)chart.Series[1].Points[xValue].YValues[0];
-                            this.toolTip.Show("D:" + Lib.Network.Unit.AutoScale(dw, "B") + "\nU:" + Lib.Network.Unit.AutoScale(up, "B"), (Control)chart, lastMouseEvent.X + 15, lastMouseEvent.Y + 15);
+                            this.toolTip.Show("D:" + WinLib.Network.Unit.AutoScale(dw, "B") + "\nU:" + WinLib.Network.Unit.AutoScale(up, "B"), (Control)chart, lastMouseEvent.X + 15, lastMouseEvent.Y + 15);
                         }
                         i++;
                     }
@@ -559,12 +559,12 @@ namespace Network_Manager.Gadget
             try { NetworkChange.NetworkAddressChanged -= NetworkChange_NetworkAddressChanged; }
             catch (Exception) { }
             Global.VersionInfo.UpdateAvailableEvent -= VersionInfo_UpdateAvailableEvent;
-            foreach (KeyValuePair<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>> subscription in publicIPv4Subscriptions)
+            foreach (KeyValuePair<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>> subscription in publicIPv4Subscriptions)
                 subscription.Key.PublicIPv4Changed -= subscription.Value;
-            foreach (KeyValuePair<Lib.Network.NetworkInterface, EventHandler<TextEventArgs>> subscription in publicIPv6Subscriptions)
+            foreach (KeyValuePair<WinLib.Network.NetworkInterface, EventHandler<TextEventArgs>> subscription in publicIPv6Subscriptions)
                 subscription.Key.PublicIPv6Changed -= subscription.Value;
             foreach (EventHandler<TextEventArgs> subscription in internetInterfaceSubscriptions)
-                Lib.Network.NetworkInterface.InternetInterfaceChanged -= subscription;
+                WinLib.Network.NetworkInterface.InternetInterfaceChanged -= subscription;
             cts.Cancel();
             GadgetForm.Instance = null;
             //Task task;

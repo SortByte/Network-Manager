@@ -10,8 +10,8 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
+using WinLib.Network;
+using WinLib.WinAPI;
 
 namespace Network_Manager
 {
@@ -109,8 +109,8 @@ namespace Network_Manager
                     selectionPath.Add(selectedNode.Text);
                 }
                 treeView.ImageList = new ImageList();
-                treeView.ImageList.Images.Add(Lib.WinAPI.Shell32.ExtractIcon("shell32.dll", 3, false)); // group
-                treeView.ImageList.Images.Add(Lib.WinAPI.Shell32.ExtractIcon("shell32.dll", 72, false)); // item
+                treeView.ImageList.Images.Add(WinLib.WinAPI.Shell32.ExtractIcon("shell32.dll", 3, false)); // group
+                treeView.ImageList.Images.Add(WinLib.WinAPI.Shell32.ExtractIcon("shell32.dll", 72, false)); // item
                 treeView.Nodes.Clear();
                 PopulateNode(treeView.Nodes, this.Nodes);
                 treeView.Nodes[0].Expand();

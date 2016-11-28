@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
-using Lib.Forms;
+using WinLib.Network;
+using WinLib.WinAPI;
+using WinLib.Forms;
 using Network_Manager.Jobs;
 
 namespace Network_Manager.Gadget.ControlPanel.LoadBalancing

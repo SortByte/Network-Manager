@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lib.WinAPI;
+using WinLib.WinAPI;
 
 namespace Network_Manager
 {
@@ -160,7 +160,7 @@ namespace Network_Manager
             //starting
             splashForm.UpdateStatus("Loading configuration file ...");
             Global.Load();
-            Global.NetworkInterfaces = Lib.Network.NetworkInterface.GetAll(splashForm.UpdateStatus);
+            Global.NetworkInterfaces = WinLib.Network.NetworkInterface.GetAll(splashForm.UpdateStatus);
             splashForm.Stop();
             new Gadget.GadgetForm();
             new Thread(new ThreadStart(Jobs.TrafficMonitor.Start)).Start();

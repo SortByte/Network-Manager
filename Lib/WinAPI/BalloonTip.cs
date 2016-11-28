@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public class BalloonTip
     {

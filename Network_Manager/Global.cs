@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Drawing;
-using Lib.Network;
+using WinLib.Network;
 
 namespace Network_Manager
 {
@@ -125,7 +125,7 @@ namespace Network_Manager
         {
             try
             {
-                foreach (Lib.Network.NetworkInterface nic in NetworkInterfaces.Values)
+                foreach (WinLib.Network.NetworkInterface nic in NetworkInterfaces.Values)
                     Task.Factory.StartNew(() => { nic.GetPublicIP(); });
             }
             catch (Exception) { }
@@ -135,7 +135,7 @@ namespace Network_Manager
         {
             try
             {
-                await Task.Factory.StartNew(() => { return Lib.Network.NetworkInterface.GetInternetInterface(); });
+                await Task.Factory.StartNew(() => { return WinLib.Network.NetworkInterface.GetInternetInterface(); });
             }
             catch (Exception) { }
         }

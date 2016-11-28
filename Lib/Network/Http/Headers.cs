@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Lib.Network.Http
+namespace WinLib.Network.Http
 {
     public class Headers
     {

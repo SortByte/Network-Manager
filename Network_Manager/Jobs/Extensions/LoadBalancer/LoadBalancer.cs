@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Lib.Network;
+using WinLib.Network;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using PcapDotNet.Packets.Arp;
@@ -17,7 +17,7 @@ using PcapDotNet.Packets.Icmp;
 using PcapDotNet.Packets.Igmp;
 using PcapDotNet.Packets.IpV4;
 using PcapDotNet.Packets.Transport;
-using Lib.Forms;
+using WinLib.Forms;
 
 namespace Network_Manager.Jobs.Extensions
 {

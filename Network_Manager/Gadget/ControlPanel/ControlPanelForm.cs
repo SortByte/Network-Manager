@@ -12,11 +12,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Lib.Network;
-using Lib.WinAPI;
-using Lib.Forms;
-using Lib.Sync;
-using Lib.Extensions;
+using WinLib.Network;
+using WinLib.WinAPI;
+using WinLib.Forms;
+using WinLib.Sync;
+using WinLib.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel
 {
@@ -166,7 +166,7 @@ namespace Network_Manager.Gadget.ControlPanel
                     {
                         Invoke(new Action(() =>
                         {
-                            if (nic.Guid == ((Lib.Network.NetworkInterface)s).Guid)
+                            if (nic.Guid == ((WinLib.Network.NetworkInterface)s).Guid)
                                 groupBox.Controls["publicIPv4"].Text = e.Text;
                         }));
                     }
@@ -181,7 +181,7 @@ namespace Network_Manager.Gadget.ControlPanel
                     {
                         Invoke(new Action(() =>
                         {
-                            if (nic.Guid == ((Lib.Network.NetworkInterface)s).Guid)
+                            if (nic.Guid == ((WinLib.Network.NetworkInterface)s).Guid)
                                 groupBox.Controls["publicIPv6"].Text = e.Text;
                         }));
                     }
@@ -211,7 +211,7 @@ namespace Network_Manager.Gadget.ControlPanel
                     }
                     catch { }
                 });
-                Lib.Network.NetworkInterface.InternetInterfaceChanged += handler;
+                WinLib.Network.NetworkInterface.InternetInterfaceChanged += handler;
                 internetInterfaceSubscriptions.Add(handler);
 
                 Controls.Add(groupBox);

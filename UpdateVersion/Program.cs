@@ -8,8 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Lib.IO;
-using Lib.WinAPI;
+using WinLib.IO;
+using WinLib.WinAPI;
 using Network_Manager;
 
 namespace UpdateVersion

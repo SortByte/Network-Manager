@@ -14,7 +14,7 @@ using PcapDotNet.Packets.IpV4;
 using PcapDotNet.Packets.IpV6;
 using PcapDotNet.Packets.Ethernet;
 using PcapDotNet.Packets.Transport;
-using Lib.Forms;
+using WinLib.Forms;
 
 namespace Network_Manager.Jobs.Extensions
 {

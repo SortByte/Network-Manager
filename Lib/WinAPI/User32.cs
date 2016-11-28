@@ -6,7 +6,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class User32
     {

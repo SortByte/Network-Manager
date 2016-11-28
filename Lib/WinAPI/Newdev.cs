@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class Newdev
     {

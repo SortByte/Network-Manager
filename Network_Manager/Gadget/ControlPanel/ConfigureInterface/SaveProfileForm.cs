@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Lib.WinAPI;
-using Lib.Network;
-using Lib.Extensions;
+using WinLib.WinAPI;
+using WinLib.Network;
+using WinLib.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 {

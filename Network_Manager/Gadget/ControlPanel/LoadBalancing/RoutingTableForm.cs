@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lib.Network;
+using WinLib.Network;
 
 namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
 {

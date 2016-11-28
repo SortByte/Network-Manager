@@ -8,8 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using Lib.Network;
-using Lib.Extensions;
+using WinLib.Network;
+using WinLib.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 {
@@ -142,7 +142,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             {
                 TreeNode ipv4Node = treeView1.Nodes.Add("IPv4");
                 ipv4Node.Checked = true;
-                if (profile.DhcpEnabled < Lib.Network.NetworkInterface.Dhcp.IPOnly)
+                if (profile.DhcpEnabled < WinLib.Network.NetworkInterface.Dhcp.IPOnly)
                     if (profile.IPv4LocalAddresses.Count > 0)
                     {
                         TreeNode node = ipv4Node.Nodes.Add("Local Address & Subnet Mask");
@@ -155,7 +155,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                         }
                             
                     }
-                if (profile.DhcpEnabled < Lib.Network.NetworkInterface.Dhcp.IPOnly)
+                if (profile.DhcpEnabled < WinLib.Network.NetworkInterface.Dhcp.IPOnly)
                     if (profile.IPv4GatewayAddresses.Count > 0)
                     {
                         TreeNode node = ipv4Node.Nodes.Add("Gateway Address & Metric");
@@ -168,7 +168,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                         }
                             
                     }
-                if (profile.DhcpEnabled != Lib.Network.NetworkInterface.Dhcp.IPnDns)
+                if (profile.DhcpEnabled != WinLib.Network.NetworkInterface.Dhcp.IPnDns)
                     if (profile.IPv4DnsAddresses.Count > 0)
                     {
                         TreeNode node = ipv4Node.Nodes.Add("DNS Server");

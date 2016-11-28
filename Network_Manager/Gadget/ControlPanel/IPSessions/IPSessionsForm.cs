@@ -14,8 +14,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
+using WinLib.Network;
+using WinLib.WinAPI;
 using Network_Manager.Jobs.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel.IPSessions
@@ -64,7 +64,7 @@ namespace Network_Manager.Gadget.ControlPanel.IPSessions
 
             comboBox1.SelectedIndex = 0;
             filterProtocol.SelectedIndex = 2;
-            imageList1.Images.Add(Lib.WinAPI.Shell32.ExtractIcon("shell32.dll", 2, false));
+            imageList1.Images.Add(WinLib.WinAPI.Shell32.ExtractIcon("shell32.dll", 2, false));
             treeView1.Nodes.Add("root", "All connected processes", 0, 0);
             Show();
         }

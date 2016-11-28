@@ -14,9 +14,9 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using Microsoft.Win32;
-using Lib.Network;
-using Lib.Network.Http;
-using Lib.Forms;
+using WinLib.Network;
+using WinLib.Network.Http;
+using WinLib.Forms;
 
 
 namespace Network_Manager.Jobs.Extensions

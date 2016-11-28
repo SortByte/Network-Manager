@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Net;
-using Lib.WinAPI;
-using Lib.Network;
+using WinLib.WinAPI;
+using WinLib.Network;
 
-namespace Lib.Network
+namespace WinLib.Network
 {
     //class Route
     //{

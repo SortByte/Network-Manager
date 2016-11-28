@@ -8,8 +8,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
+using WinLib.Network;
+using WinLib.WinAPI;
 
 namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
 {
@@ -58,7 +58,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     routeInterface.Items.Add("1 (" + NetworkInterface.Loopback.Name + " - ::1)");
             }
             routeGatewayMode.SelectedIndex = 1;
-            new Lib.Forms.TextBoxMask(routeMetric, Lib.Forms.TextBoxMask.Mask.Numeric);
+            new WinLib.Forms.TextBoxMask(routeMetric, WinLib.Forms.TextBoxMask.Mask.Numeric);
             if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
             {
                 routeMetric.Text = "1";
@@ -89,7 +89,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
         private void EditItemForm_Shown(object sender, EventArgs e)
         {
             if (!Global.NetworkInterfaces.ContainsKey(route.InterfaceGuid) && NetworkInterface.Loopback.Guid != route.InterfaceGuid)
-                new Lib.WinAPI.BalloonTip("Warning", "The interface saved in the route is not currently connected", routeInterface, Lib.WinAPI.BalloonTip.ICON.WARNING);
+                new WinLib.WinAPI.BalloonTip("Warning", "The interface saved in the route is not currently connected", routeInterface, WinLib.WinAPI.BalloonTip.ICON.WARNING);
         }
 
         private void routeGatewayMode_SelectedIndexChanged(object sender, EventArgs e)

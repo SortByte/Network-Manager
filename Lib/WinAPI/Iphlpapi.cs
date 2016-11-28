@@ -7,9 +7,9 @@ using System.Text;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Reflection;
-using Lib.Network;
+using WinLib.Network;
 
-namespace Lib.WinAPI
+namespace WinLib.WinAPI
 {
     public static class Iphlpapi
     {

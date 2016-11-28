@@ -9,10 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Forms;
-using Lib.WinAPI;
-using Lib.Network.Http;
+using WinLib.WinAPI;
+using WinLib.Network.Http;
 
-namespace Lib.Network.Http
+namespace WinLib.Network.Http
 {
     /// <summary>
     /// TODO: Implement pause/resume download (C++ too)

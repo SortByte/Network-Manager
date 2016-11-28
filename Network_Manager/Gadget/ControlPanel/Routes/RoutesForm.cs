@@ -10,8 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
+using WinLib.Network;
+using WinLib.WinAPI;
 
 namespace Network_Manager.Gadget.ControlPanel.Routes
 {

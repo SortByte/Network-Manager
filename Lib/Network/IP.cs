@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using System.Net;
 
-namespace Lib.Network
+namespace WinLib.Network
 {
     public static class IP
     {

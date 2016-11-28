@@ -8,8 +8,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
+using WinLib.Network;
+using WinLib.WinAPI;
 
 
 namespace Network_Manager.Gadget.ControlPanel.LoadBalancing

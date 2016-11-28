@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Lib.Network
+namespace WinLib.Network
 {
     public class DNS
     {

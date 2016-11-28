@@ -8,9 +8,9 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Lib.Network;
-using Lib.WinAPI;
-using Lib.Forms;
+using WinLib.Network;
+using WinLib.WinAPI;
+using WinLib.Forms;
 
 namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
 {

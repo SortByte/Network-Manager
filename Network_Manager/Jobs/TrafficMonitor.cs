@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Text;
 using System.Windows.Forms;
-using Lib.Network;
+using WinLib.Network;
 
 namespace Network_Manager.Jobs
 {
