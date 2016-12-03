@@ -594,7 +594,6 @@ foreach (var item in filesToCleanup)
     <PostBuildEvent>taskkill /F /IM Network_Manager_$(PlatformName).exe 2&gt;nul
 copy "$(OutDir)Network_Manager.exe" "$(OutDir)Network_Manager_$(PlatformName).exe" /Y
 rem if $(ConfigurationName)==Release "$(TargetDir)UpdateVersion.exe"
-
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" />

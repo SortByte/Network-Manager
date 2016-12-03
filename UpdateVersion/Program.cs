@@ -16,6 +16,8 @@ namespace UpdateVersion
 {
     class Program
     {
+        private static string signingCertificateSha1 = "b10805ed7543c1201e86654e7504e474e59bf44c";
+
         static void Main(string[] args)
         {
             if (args.Length == 0)
@@ -50,6 +52,24 @@ namespace UpdateVersion
                 File.Copy(path + @"\Network_Manager_x86.exe", path + @"\Network Manager\Network_Manager_x86.exe", true);
                 File.Copy(path + @"\Network_Manager_x64.exe", path + @"\Network Manager\Network_Manager_x64.exe", true);
                 File.Copy(path + @"\License.txt", path + @"\Network Manager\License.txt", true);
+                ProcessStartInfo si = new ProcessStartInfo();
+                si.FileName = "signtool.exe";
+                si.CreateNoWindow = true;
+                si.WindowStyle = ProcessWindowStyle.Hidden;
+                si.RedirectStandardError = true;
+                si.UseShellExecute = false;
+                foreach (string filePath in new string[] { path + @"\Network Manager\Launcher.exe", path + @"\Network Manager\Network_Manager_x86.exe", path + @"\Network Manager\Network_Manager_x64.exe" })
+                {
+                    si.Arguments = "sign /sha1 " + signingCertificateSha1 + " /t http://timestamp.verisign.com/scripts/timstamp.dll " + "\"" + filePath + "\"";
+                    Process process = Process.Start(si);
+                    process.WaitForExit();
+                    if (process.ExitCode != 0)
+                    {
+                        Console.WriteLine("Failed to sign " + filePath + ":\n" + process.StandardError.ReadToEnd());
+                        Console.ReadKey();
+                        return;
+                    }
+                }
                 Compression.Zip(path + "\\Network Manager", path + "\\Network_Manager.zip");
                 Directory.Delete(path + "\\Network Manager", true);
                 int crc32 = 0;

@@ -408,7 +408,7 @@ namespace Network_Manager.Gadget.ControlPanel
                 int xValue = e.X * ((Chart)sender).Series[0].Points.Count / ((Chart)sender).Width;
                 Int64 dw = (Int64)((Chart)sender).Series[0].Points[xValue].YValues[0];
                 Int64 up = (Int64)((Chart)sender).Series[1].Points[xValue].YValues[0];
-                toolTip1.Show("D:" + Unit.AutoScale(dw, "B") + "\nU:" + Unit.AutoScale(up, "B"), (Control)sender, e.X + 15, e.Y + 15);
+                toolTip1.Show("D:" + Unit.AutoScale(dw, "B/s") + "\nU:" + Unit.AutoScale(up, "B/s"), (Control)sender, e.X + 15, e.Y + 15);
             }
             lastMouseEvent = e;
         }
