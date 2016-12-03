@@ -6,6 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using System.Net;
+using static WinLib.WinAPI.Iphlpapi;
+using System.Runtime.InteropServices;
+using static WinLib.WinAPI.Kernel32;
 
 namespace WinLib.Network
 {
@@ -181,6 +184,23 @@ namespace WinLib.Network
             }
             byte[] bNetwork = IPAddress.Parse(sIP).GetAddressBytes().Zip(bPrefix, (b1,b2) => (byte)(b1 & b2)).ToArray();
             return new IPAddress(bNetwork).ToString();
+        }
+
+        public static int Ping(IPAddress ip)
+        {
+            in_addr destinationAddress = new in_addr((ip ?? IPAddress.Parse("0.0.0.0")).ToString());
+            IntPtr icmpHandle = IcmpCreateFile();
+            byte[] requestData = new byte[] { 0 };
+            byte[] replyByte = new byte[1000];
+            uint result = IcmpSendEcho(icmpHandle, destinationAddress, requestData, (ushort)requestData.Length, IntPtr.Zero, replyByte, (uint)replyByte.Length, 1000);
+            if (result > 0)
+            {
+                GCHandle handle = GCHandle.Alloc(replyByte, GCHandleType.Pinned);
+                ICMP_ECHO_REPLY reply = (ICMP_ECHO_REPLY)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(ICMP_ECHO_REPLY));
+                return (int)reply.RoundTripTime;
+            }
+            ERROR error = (ERROR)GetLastError();
+            return -1;
         }
 
         public struct SocketID

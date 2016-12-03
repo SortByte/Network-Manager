@@ -81,6 +81,7 @@
     <Compile Include="Network\Http\Headers.cs" />
     <Compile Include="Network\Interface.cs" />
     <Compile Include="Network\IP.cs" />
+    <Compile Include="Network\L2.cs" />
     <Compile Include="Network\Route.cs" />
     <Compile Include="Network\Unit.cs" />
     <Compile Include="Sync\ExceptionEventArgs.cs" />
@@ -122,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="LICENSE" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

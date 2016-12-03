@@ -24,6 +24,18 @@ namespace WinLib.WinAPI
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern ERROR SendARP(in_addr DestIP, in_addr SrcIP, ref UInt64 MacAddr, ref uint PhyAddrLen);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr IcmpCreateFile();
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool IcmpCloseHandle(IntPtr IcmpHandle);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint IcmpSendEcho(IntPtr IcmpHandle, in_addr DestinationAddress, byte[] RequestData, ushort RequestSize, IntPtr RequestOptions, byte[] ReplyBuffer, uint ReplySize, uint Timeout);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint IcmpSendEcho(IntPtr IcmpHandle, in_addr DestinationAddress, byte[] RequestData, ushort RequestSize, ref IP_OPTION_INFORMATION RequestOptions, byte[] ReplyBuffer, uint ReplySize, uint Timeout);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint IcmpSendEcho(IntPtr IcmpHandle, in_addr DestinationAddress, byte[] RequestData, ushort RequestSize, ref IP_OPTION_INFORMATION RequestOptions, ref ICMP_ECHO_REPLY ReplyBuffer, uint ReplySize, uint Timeout);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint IcmpSendEcho(IntPtr IcmpHandle, in_addr DestinationAddress, byte[] RequestData, ushort RequestSize, IntPtr pRequestOptions, ref ICMP_ECHO_REPLY ReplyBuffer, uint ReplySize, uint Timeout);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint FreeMibTable(IntPtr Memory);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint GetIpForwardTable2(FAMILY Family, out IntPtr Table);
@@ -738,6 +750,40 @@ namespace WinLib.WinAPI
             public uint PrefixLength;
         }
 
+        /// <summary>
+        /// This covers IP_OPTION_INFORMATION and IP_OPTION_INFORMATION32
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct IP_OPTION_INFORMATION
+        {
+            public char Ttl;
+            public char Tos;
+            public char Flags;
+            public char OptionsSize;
+            /// <summary>
+            /// This is a UCHAR * POINTER_32 type on 64-bit and a PUCHAR on 32-bit
+            /// </summary>
+            public int OptionsData;
+        }
+
+        /// <summary>
+        /// This covers ICMP_ECHO_REPLY and ICMP_ECHO_REPLY32
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ICMP_ECHO_REPLY
+        {
+            public in_addr Address;
+            public uint Status;
+            public uint RoundTripTime;
+            public ushort DataSize;
+            public ushort Reserved;
+            /// <summary>
+            /// This is a VOID * POINTER_32 type on 64-bit and a PVOID on 32-bit
+            /// </summary>
+            public int Data;
+            public IP_OPTION_INFORMATION Options;
+        }
+
         public enum MIB_IPFORWARD_TYPE: uint
         {
             MIB_IPROUTE_TYPE_OTHER = 1,
@@ -1380,6 +1426,30 @@ namespace WinLib.WinAPI
             UDP_TABLE_OWNER_MODULE
         }
 
+        public enum IP_STATUS
+        {
+            IP_SUCCESS = 0,
+            IP_BUF_TOO_SMALL = 11001,
+            IP_DEST_NET_UNREACHABLE = 11002,
+            IP_DEST_HOST_UNREACHABLE = 11003,
+            IP_DEST_PROT_UNREACHABLE = 11004,
+            IP_DEST_PORT_UNREACHABLE = 11005,
+            IP_NO_RESOURCES = 11006,
+            IP_BAD_OPTION = 11007,
+            IP_HW_ERROR = 11008,
+            IP_PACKET_TOO_BIG = 11009,
+            IP_REQ_TIMED_OUT = 11010,
+            IP_BAD_REQ = 11011,
+            IP_BAD_ROUTE = 11012,
+            IP_TTL_EXPIRED_TRANSIT = 11013,
+            IP_TTL_EXPIRED_REASSEM = 11014,
+            IP_PARAM_PROBLEM = 11015,
+            IP_SOURCE_QUENCH = 11016,
+            IP_OPTION_TOO_BIG = 11017,
+            IP_BAD_DESTINATION = 11018,
+            IP_GENERAL_FAILURE = 11050
+        }
+
         // constants
         private const int MAX_ADAPTER_ADDRESS_LENGTH = 8;
         private const int MAX_ADAPTER_NAME_LENGTH = 256;
@@ -1441,7 +1511,9 @@ namespace WinLib.WinAPI
         {
             public string Guid;
             public List<UnicastAddress> UnicastAddresses = new List<UnicastAddress>();
-            // unreliable; use routing table
+            /// <summary>
+            /// unreliable; use routing table
+            /// </summary>
             public List<string> GatewayAddresses = new List<string>();
             public bool DhcpEnabled;
             public string Dhcpv4Server;
