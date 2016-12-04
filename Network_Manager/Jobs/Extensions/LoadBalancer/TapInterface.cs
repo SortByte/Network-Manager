@@ -17,7 +17,7 @@ namespace Network_Manager.Jobs.Extensions
     {
         public static class TapInterface
         {
-            public static string Guid;
+            public static Guid Guid;
             public static string FriendlyName;
             public static string Mac;
             public static int Index;
@@ -52,7 +52,6 @@ namespace Network_Manager.Jobs.Extensions
                 }
                 // not connected; seeking available interface
                 Connected = false;
-                Guid = null;
                 string cfgKeyPath = @"SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}";
                 string nameKeyPath = @"SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}";
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(cfgKeyPath);
@@ -67,7 +66,7 @@ namespace Network_Manager.Jobs.Extensions
                             if (NetworkInterface.GetAdapterStatus(friendlyName) == NetworkInterface.Status.MediaDisconnected ||
                                 NetworkInterface.GetAdapterStatus(friendlyName) == NetworkInterface.Status.Disconnected)
                             {
-                                Guid = netCfgInstanceId;
+                                Guid = new Guid(netCfgInstanceId);
                                 FriendlyName = friendlyName;
                                 splash.Stop();
                                 return true;
@@ -80,7 +79,7 @@ namespace Network_Manager.Jobs.Extensions
                 return false;
             }
 
-            public static bool IsTap(string guid)
+            public static bool IsTap(Guid guid)
             {
                 string cfgKeyPath = @"SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}";
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(cfgKeyPath);
@@ -91,7 +90,7 @@ namespace Network_Manager.Jobs.Extensions
                         if ((string)Registry.LocalMachine.OpenSubKey(cfgKeyPath + @"\" + name).GetValue("ComponentId") == componentID)
                         {
                             string netCfgInstanceId = (string)Registry.LocalMachine.OpenSubKey(cfgKeyPath + @"\" + name).GetValue("NetCfgInstanceId");
-                            if (netCfgInstanceId == guid)
+                            if (string.Compare(netCfgInstanceId, guid.ToString(), true) == 0)
                                 return true;
                         }
                     }

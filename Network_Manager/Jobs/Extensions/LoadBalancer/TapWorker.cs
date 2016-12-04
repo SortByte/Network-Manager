@@ -31,7 +31,7 @@ namespace Network_Manager.Jobs.Extensions
     {
         public class TapWorker
         {
-            public string Guid;
+            public Guid Guid;
             public string Name;
             public static string ownHardwareAddressString = "0A:03:03:03:03:03";
             public static string ownProtocolAddressString;
@@ -66,7 +66,7 @@ namespace Network_Manager.Jobs.Extensions
             }
 
 
-            public TapWorker(string guid, string name, string mac, string ip, string gateway)
+            public TapWorker(Guid guid, string name, string mac, string ip, string gateway)
             {
                 Guid = guid;
                 Name = name;
@@ -98,7 +98,7 @@ namespace Network_Manager.Jobs.Extensions
                 for (int i = 0; i != allDevices.Count; ++i)
                 {
                     LivePacketDevice device = allDevices[i];
-                    if (device.Name.Contains(Guid))
+                    if (device.Name.ToUpper().Contains(Guid.ToString().ToUpper()))
                     {
                         selectedDevice = device;
                         break;

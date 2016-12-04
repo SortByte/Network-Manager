@@ -39,9 +39,10 @@ namespace Network_Manager.Gadget.Settings
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)
             {
                 checkBox = new CheckBox();
-                checkBox.Name = nic.Guid;
+                checkBox.Name = nic.Guid.ToString();
                 checkBox.Text = nic.Name;
                 checkBox.Width = flowLayoutPanel1.Width;
+                checkBox.Tag = nic.Guid;
                 if (!Global.Config.Gadget.HiddenInterfaces.Contains(nic.Guid))
                     checkBox.Checked = true;
                 flowLayoutPanel1.Controls.Add(checkBox);
@@ -73,7 +74,7 @@ namespace Network_Manager.Gadget.Settings
             foreach(CheckBox checkBox in flowLayoutPanel1.Controls)
             {
                 if (!checkBox.Checked)
-                    Global.Config.Gadget.HiddenInterfaces.Add(checkBox.Name);
+                    Global.Config.Gadget.HiddenInterfaces.Add((Guid)(checkBox.Tag));
             }
             Global.Save();
             GadgetForm.AutoRefreshAllowed = false;

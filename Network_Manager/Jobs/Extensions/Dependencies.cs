@@ -305,8 +305,8 @@ namespace Network_Manager.Jobs.Extensions
                     if (verbose)
                         splash.UpdateStatus("Getting devices captured by WinPcap ...");
                     WinPcapDevices = GetWinPcapDevs();
-                    List<NetworkInterface> nonCapturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.Contains(i.Guid)) == null).ToList();
-                    List<NetworkInterface> capturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.Contains(i.Guid)) != null).ToList();
+                    List<NetworkInterface> nonCapturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.ToUpper().Contains(i.Guid.ToString().ToUpper())) == null).ToList();
+                    List<NetworkInterface> capturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.ToUpper().Contains(i.Guid.ToString().ToUpper())) != null).ToList();
                     List<NetworkInterface> supportedNonCapturedNics = nonCapturedNics.Where(i =>
                             i.Type != NetworkInterface.AdapterType.Ppp &&
                             i.Type != NetworkInterface.AdapterType.Wwanpp &&
@@ -328,8 +328,8 @@ namespace Network_Manager.Jobs.Extensions
                         if (verbose)
                             splash.UpdateStatus("Recheck devices captured by WinPcap ...");
                         WinPcapDevices = GetWinPcapDevs();
-                        nonCapturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.Contains(i.Guid)) == null).ToList();
-                        capturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.Contains(i.Guid)) != null).ToList();
+                        nonCapturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.ToUpper().Contains(i.Guid.ToString().ToUpper())) == null).ToList();
+                        capturedNics = requiredNics.Where(i => WinPcapDevices.Find(j => j.ToUpper().Contains(i.Guid.ToString().ToUpper())) != null).ToList();
                         supportedNonCapturedNics = nonCapturedNics.Where(i =>
                                 i.Type != NetworkInterface.AdapterType.Ppp &&
                                 i.Type != NetworkInterface.AdapterType.Wwanpp &&

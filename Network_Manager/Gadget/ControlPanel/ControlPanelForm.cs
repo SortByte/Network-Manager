@@ -139,7 +139,7 @@ namespace Network_Manager.Gadget.ControlPanel
                 groupBox.Controls.Add(CreateLabel("Route Metric:", 360, 175, 120));
                 groupBox.Controls.Add(CreateLabel("Public IPv4:", 360, 220, 120));
                 groupBox.Controls.Add(CreateLabel("Public IPv6:", 360, 235, 120));
-                groupBox.Controls.Add(CreateLabel(nic.Guid, 480, 40, 265, true));
+                groupBox.Controls.Add(CreateLabel(nic.Guid.ToString().ToUpper(), 480, 40, 265, true));
                 groupBox.Controls.Add(CreateLabel(nic.Description, 480, 55, 265, true));
                 groupBox.Controls.Add(CreateLabel(nic.Type.GetDescription(), 480, 70, 265, true));
                 groupBox.Controls.Add(CreateLabel(nic.Index.ToString(), 480, 85, 120, true));
@@ -226,7 +226,7 @@ namespace Network_Manager.Gadget.ControlPanel
         /// HACK: metrics are sometimes ignored or the effect is delayed
         /// </summary>
         /// <param name="guid"></param>
-        void MakeInterfacePrimary(string guid)
+        void MakeInterfacePrimary(Guid guid)
         {
             LoadingForm splash = new LoadingForm("Retrieving interfaces ...");
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)

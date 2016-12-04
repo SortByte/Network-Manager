@@ -32,7 +32,7 @@ namespace Network_Manager.Gadget
         private int maxVerticalSlots = Global.Config.Gadget.MaxVerticalSlots;
         private int maxHorizontalSlots = Global.Config.Gadget.MaxHorizontalSlots;
         private int graphTimeSpan = Global.Config.Gadget.GraphTimeSpan;
-        private List<string> hiddenInterfaces = Global.Config.Gadget.HiddenInterfaces;
+        private List<Guid> hiddenInterfaces = Global.Config.Gadget.HiddenInterfaces;
         private Chart hoveredGraph = null;
         private Point startMovePoint;
         private System.Timers.Timer timer = new System.Timers.Timer();
@@ -62,7 +62,7 @@ namespace Network_Manager.Gadget
             MainContextMenu.Items.Add("Settings", null, new EventHandler((s, e) => { new Settings.SettingsForm(); }));
             MainContextMenu.Items.Add("About", null, new EventHandler((s, e) => { new About.AboutForm(); }));
 
-            foreach (string ifGuid in hiddenInterfaces)
+            foreach (Guid ifGuid in hiddenInterfaces)
                 if (Global.NetworkInterfaces.ContainsKey(ifGuid))
                     requiredSlots--;
             if ((requiredSlots > maxVerticalSlots) && (maxHorizontalSlots > 1))

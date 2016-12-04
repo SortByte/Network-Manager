@@ -35,13 +35,13 @@ namespace Network_Manager
             public int GraphTimeSpan = 60;
             public Point Location = new Point(Screen.GetWorkingArea(Cursor.Position).Left + Screen.GetWorkingArea(Cursor.Position).Width / 2 - 100
                 , Screen.GetWorkingArea(Cursor.Position).Top + Screen.GetWorkingArea(Cursor.Position).Height / 2 - 200);
-            public List<string> HiddenInterfaces = new List<string>();
+            public List<Guid> HiddenInterfaces = new List<Guid>();
         }
 
         public class LoadBalancerConfig
         {
-            public List<string> ExcludedInterfacesForTap = new List<string>();
-            public List<string> ExcludedInterfacesForWindows = new List<string>();
+            public List<Guid> ExcludedInterfacesForTap = new List<Guid>();
+            public List<Guid> ExcludedInterfacesForWindows = new List<Guid>();
             public List<NetworkInterface.IPHostAddress> IPv4LocalAddresses = new List<NetworkInterface.IPHostAddress>();
             public List<NetworkInterface.IPGatewayAddress> IPv4GatewayAddresses = new List<NetworkInterface.IPGatewayAddress>();
             public List<string> IPv4DnsAddresses = new List<string>();
@@ -409,7 +409,7 @@ namespace Network_Manager
             public string Destination;
             public string Prefix;
             public string Gateway;
-            public string InterfaceGuid;
+            public Guid InterfaceGuid;
             public ushort Metric;
             public int IPVersion;
         }
@@ -528,7 +528,7 @@ namespace Network_Manager
                             route.Destination = sRoute[0];
                             route.Prefix = sRoute[1];
                             route.Gateway = sRoute[2];
-                            route.InterfaceGuid = Guid.Empty.ToString();
+                            route.InterfaceGuid = Guid.Empty;
                             route.Metric = ushort.Parse(sRoute[4]);
                             route.IPVersion = 4;
                             group.Nodes.Add(route);

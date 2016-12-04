@@ -45,7 +45,7 @@ namespace WinLib.Network
         /// </summary>
         public event EventHandler<TextEventArgs> PublicIPv6Changed;
         public System.Net.NetworkInformation.NetworkInterface networkInterface;
-        public string Guid;
+        public Guid Guid;
         public int Index;
         public string Name;
         public string Description;
@@ -119,9 +119,9 @@ namespace WinLib.Network
         // Acquiring functions
         // ===================
 
-        public static ConcurrentDictionary<string, NetworkInterface> GetAll(Action<string>UpdateStatus = null)
+        public static ConcurrentDictionary<Guid, NetworkInterface> GetAll(Action<string>UpdateStatus = null)
         {
-            ConcurrentDictionary<string, NetworkInterface> NICs = new ConcurrentDictionary<string, NetworkInterface>();
+            ConcurrentDictionary<Guid, NetworkInterface> NICs = new ConcurrentDictionary<Guid, NetworkInterface>();
             try
             {
                 System.Net.NetworkInformation.NetworkInterface[] nics = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
@@ -165,7 +165,7 @@ namespace WinLib.Network
                         (i.Supports(NetworkInterfaceComponent.IPv4) &&  i.Supports(NetworkInterfaceComponent.IPv6) &&
                         i.GetIPProperties().GetIPv6Properties().Index == 1)).FirstOrDefault();
                     NetworkInterface.Loopback.networkInterface = loopbackNic;
-                    NetworkInterface.Loopback.Guid = loopbackNic.Id;
+                    NetworkInterface.Loopback.Guid = new Guid(loopbackNic.Id);
                     NetworkInterface.Loopback.Name = loopbackNic.Name;
                     NetworkInterface.Loopback.Description = loopbackNic.Description;
                     NetworkInterface.Loopback.Type = (AdapterType)loopbackNic.NetworkInterfaceType;
@@ -221,97 +221,97 @@ namespace WinLib.Network
                             {
                                 if (UpdateStatus != null)
                                     UpdateStatus("Detecting " + nic.Name + " ...");
-
-                                NICs.TryAdd(nic.Id, new NetworkInterface());
-                                NICs[nic.Id].networkInterface = nic;
-                                NICs[nic.Id].Guid = nic.Id;
-                                NICs[nic.Id].Name = nic.Name;
-                                NICs[nic.Id].Description = nic.Description;
-                                NICs[nic.Id].Type = (AdapterType)nic.NetworkInterfaceType;
-                                NICs[nic.Id].Mac = BitConverter.ToString(nic.GetPhysicalAddress().GetAddressBytes().ToArray()).Replace("-", ":");
-                                NICs[nic.Id].IPv4BytesReceived = nic.GetIPv4Statistics().BytesReceived;
-                                NICs[nic.Id].IPv4BytesSent = nic.GetIPv4Statistics().BytesSent;
-                                NICs[nic.Id].IPv4Enabled = nic.Supports(NetworkInterfaceComponent.IPv4);
-                                NICs[nic.Id].IPv6Enabled = nic.Supports(NetworkInterfaceComponent.IPv6);
+                                Guid guid = new Guid(nic.Id);
+                                NICs.TryAdd(guid, new NetworkInterface());
+                                NICs[guid].networkInterface = nic;
+                                NICs[guid].Guid = new Guid(nic.Id);
+                                NICs[guid].Name = nic.Name;
+                                NICs[guid].Description = nic.Description;
+                                NICs[guid].Type = (AdapterType)nic.NetworkInterfaceType;
+                                NICs[guid].Mac = BitConverter.ToString(nic.GetPhysicalAddress().GetAddressBytes().ToArray()).Replace("-", ":");
+                                NICs[guid].IPv4BytesReceived = nic.GetIPv4Statistics().BytesReceived;
+                                NICs[guid].IPv4BytesSent = nic.GetIPv4Statistics().BytesSent;
+                                NICs[guid].IPv4Enabled = nic.Supports(NetworkInterfaceComponent.IPv4);
+                                NICs[guid].IPv6Enabled = nic.Supports(NetworkInterfaceComponent.IPv6);
 
                                 // forcefully no IPv6 support on XP
                                 if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
-                                    NICs[nic.Id].IPv6Enabled = false;
+                                    NICs[guid].IPv6Enabled = false;
 
                                 if (nic.Supports(NetworkInterfaceComponent.IPv4))
                                 {
                                     if (nic.GetIPProperties().GetIPv4Properties() != null)
-                                        NICs[nic.Id].Index = nic.GetIPProperties().GetIPv4Properties().Index;
+                                        NICs[guid].Index = nic.GetIPProperties().GetIPv4Properties().Index;
                                 }
                                 else if (nic.Supports(NetworkInterfaceComponent.IPv6))
                                     if (nic.GetIPProperties().GetIPv6Properties() != null)
-                                        NICs[nic.Id].Index = nic.GetIPProperties().GetIPv6Properties().Index;
+                                        NICs[guid].Index = nic.GetIPProperties().GetIPv6Properties().Index;
 
                                 // unicasts
-                                if (adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index) != null)
-                                    foreach (Iphlpapi.Adapter.UnicastAddress ip in adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).UnicastAddresses)
+                                if (adapters.Find(i => i.InterfaceIndex == NICs[guid].Index) != null)
+                                    foreach (Iphlpapi.Adapter.UnicastAddress ip in adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).UnicastAddresses)
                                         if (IPAddress.Parse(ip.Address).AddressFamily == AddressFamily.InterNetwork)
-                                            NICs[nic.Id].IPv4Address.Add(new IPHostAddress(ip.Address, IP.PrefixToMask(ip.Prefix)));
+                                            NICs[guid].IPv4Address.Add(new IPHostAddress(ip.Address, IP.PrefixToMask(ip.Prefix)));
                                         else if (IPAddress.Parse(ip.Address).AddressFamily == AddressFamily.InterNetworkV6)
-                                            NICs[nic.Id].IPv6Address.Add(ip.Address, ip.Prefix.ToString());
+                                            NICs[guid].IPv6Address.Add(ip.Address, ip.Prefix.ToString());
 
                                 // interface metric
                                 if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
-                                    NICs[nic.Id].GetInterfaceMetric();
-                                else if (adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index) != null)
-                                    NICs[nic.Id].InterfaceMetric = (ushort)adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).IPv4InterfaceMetric;
+                                    NICs[guid].GetInterfaceMetric();
+                                else if (adapters.Find(i => i.InterfaceIndex == NICs[guid].Index) != null)
+                                    NICs[guid].InterfaceMetric = (ushort)adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).IPv4InterfaceMetric;
 
                                 // default gateways
                                 foreach (Iphlpapi.Route route in routes.Where(i =>
                                     IPAddress.Parse(i.Destination).GetAddressBytes().Max() == 0 &&
                                     (i.IPVersion == 4 ? IPAddress.Parse(i.Prefix).GetAddressBytes().Max() == 0 : int.Parse(i.Prefix) == 0) &&
-                                    i.InterfaceIndex == NICs[nic.Id].Index))
+                                    i.InterfaceIndex == NICs[guid].Index))
                                     if (route.IPVersion == 4)
-                                        NICs[nic.Id].IPv4Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
+                                        NICs[guid].IPv4Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
                                     else
-                                        NICs[nic.Id].IPv6Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
+                                        NICs[guid].IPv6Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
                                 
-                                List<IPGatewayAddress> gateways = NICs[nic.Id].IPv4Gateway;
+                                List<IPGatewayAddress> gateways = NICs[guid].IPv4Gateway;
                                 gateways.Sort((x, y) => x.GatewayMetric.CompareTo(y.GatewayMetric));
                                 if (gateways.Any((i) => !IPAddress.Parse(i.Address).Equals(IPAddress.Any)))
                                 {
-                                    if (gateways.Any(i => NICs[nic.Id].IPv4Address.Any(j => IP.CheckIfSameNetwork(i.Address, j.Address, j.Subnet))))
+                                    if (gateways.Any(i => NICs[guid].IPv4Address.Any(j => IP.CheckIfSameNetwork(i.Address, j.Address, j.Subnet))))
                                     {
-                                        NICs[nic.Id].DefaultIPv4Gateway = gateways.Find(i => NICs[nic.Id].IPv4Address.Any(j => IP.CheckIfSameNetwork(i.Address, j.Address, j.Subnet))).Address;
-                                        NICs[nic.Id].LocalIPv4Exit = NICs[nic.Id].IPv4Address.Find(i => IP.CheckIfSameNetwork(NICs[nic.Id].DefaultIPv4Gateway, i.Address, i.Subnet)).Address;
+                                        NICs[guid].DefaultIPv4Gateway = gateways.Find(i => NICs[guid].IPv4Address.Any(j => IP.CheckIfSameNetwork(i.Address, j.Address, j.Subnet))).Address;
+                                        NICs[guid].LocalIPv4Exit = NICs[guid].IPv4Address.Find(i => IP.CheckIfSameNetwork(NICs[guid].DefaultIPv4Gateway, i.Address, i.Subnet)).Address;
                                     }
                                 }
                                 else
-                                    if (NICs[nic.Id].IPv4Address.Count > 0)
-                                        NICs[nic.Id].LocalIPv4Exit = NICs[nic.Id].IPv4Address[0].Address;
+                                    if (NICs[guid].IPv4Address.Count > 0)
+                                        NICs[guid].LocalIPv4Exit = NICs[guid].IPv4Address[0].Address;
                                 
                                 
                                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_" + nic.Id, true);
                                 if (key != null)
                                 {
-                                    NICs[nic.Id].NetbiosEnabled = (Netbios)Convert.ToInt32(key.GetValue("NetbiosOptions"));
+                                    NICs[guid].NetbiosEnabled = (Netbios)Convert.ToInt32(key.GetValue("NetbiosOptions"));
                                     key.Close();
                                 }
 
                                 key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\" + nic.Id, true);
-                                if (key != null && adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index) != null)
+                                if (key != null && adapters.Find(i => i.InterfaceIndex == NICs[guid].Index) != null)
                                 {
-                                    NICs[nic.Id].Dhcpv4Enabled = (Dhcp)(adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).DhcpEnabled ? 1 : 0) + (((string)key.GetValue("NameServer", "") == "") & adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).DhcpEnabled ? 1 : 0);
+                                    NICs[guid].Dhcpv4Enabled = (Dhcp)(adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).DhcpEnabled ? 1 : 0) + (((string)key.GetValue("NameServer", "") == "") & adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).DhcpEnabled ? 1 : 0);
                                     key.Close();
                                 }
 
-                                if (adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index) != null)
+                                if (adapters.Find(i => i.InterfaceIndex == NICs[guid].Index) != null)
                                 {
-                                    NICs[nic.Id].DhcpServer = adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).Dhcpv4Server;
-                                    NICs[nic.Id].Dhcpv6Server = adapters.Find(i => i.InterfaceIndex == NICs[nic.Id].Index).Dhcpv6Server;
+                                    NICs[guid].DhcpServer = adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).Dhcpv4Server;
+                                    NICs[guid].Dhcpv6Server = adapters.Find(i => i.InterfaceIndex == NICs[guid].Index).Dhcpv6Server;
                                 }
 
                                 foreach (string line in ipv4Mtus)
                                     if (Regex.IsMatch(line, @"\s*" + nic.Name + @"\s*$"))
-                                        NICs[nic.Id].IPv4Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                                        NICs[guid].IPv4Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
                                 foreach (string line in ipv6Mtus)
                                     if (Regex.IsMatch(line, @"\s*" + nic.Name + @"\s*$"))
-                                        NICs[nic.Id].IPv6Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                                        NICs[guid].IPv6Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
 
                                 //heavily unreliable
                                 //foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
@@ -354,16 +354,16 @@ namespace WinLib.Network
                                 foreach (IPAddress ip in nic.GetIPProperties().DnsAddresses)
                                 {
                                     if (ip.AddressFamily == AddressFamily.InterNetwork)
-                                        NICs[nic.Id].IPv4DnsServer.Add(ip.ToString());
+                                        NICs[guid].IPv4DnsServer.Add(ip.ToString());
                                     else if (ip.AddressFamily == AddressFamily.InterNetworkV6)
-                                        NICs[nic.Id].IPv6DnsServer.Add(ip.ToString());
+                                        NICs[guid].IPv6DnsServer.Add(ip.ToString());
                                 }
                                 foreach (IPAddress ip in nic.GetIPProperties().DhcpServerAddresses)
                                 {
                                     if (ip.AddressFamily == AddressFamily.InterNetwork)
-                                        NICs[nic.Id].DhcpServer = ip.ToString();
+                                        NICs[guid].DhcpServer = ip.ToString();
                                     else if (ip.AddressFamily == AddressFamily.InterNetworkV6)
-                                        NICs[nic.Id].Dhcpv6Server = ip.ToString();
+                                        NICs[guid].Dhcpv6Server = ip.ToString();
                                 }
 
                                 // PPP missing on Vista and above
@@ -436,7 +436,7 @@ namespace WinLib.Network
                                 //        //    }
                                 //        //}
                                 //    }
-                                process.StartInfo.Arguments = "int ipv6 show interface " + NICs[nic.Id].Index;
+                                process.StartInfo.Arguments = "int ipv6 show interface " + NICs[guid].Index;
                                 process.Start();
                                 process.WaitForExit();
                                 stdo = process.StandardOutput;
@@ -445,7 +445,7 @@ namespace WinLib.Network
                                 {
                                     if (Regex.IsMatch(line, @"Router Discovery", RegexOptions.IgnoreCase))
                                         if (Regex.IsMatch(line, @"enabled|dhcp", RegexOptions.IgnoreCase))
-                                            NICs[nic.Id].IPv6RouterDiscoveryEnabled = true;
+                                            NICs[guid].IPv6RouterDiscoveryEnabled = true;
                                 }
 
                             }
@@ -670,7 +670,7 @@ namespace WinLib.Network
             }
         }
 
-        public static string CheckIfIPv4Used(string ip, string excludedGuid = "")
+        public static string CheckIfIPv4Used(string ip, Guid excludedGuid = new Guid())
         {
             IPAddress ipVersion;
             IPAddress.TryParse(ip, out ipVersion);
@@ -679,7 +679,7 @@ namespace WinLib.Network
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\Tcpip\Parameters\Interfaces", true);
                 foreach (string guid in key.GetSubKeyNames())
                 {
-                    if (string.Compare(guid, excludedGuid, true) == 0)
+                    if (string.Compare(guid, excludedGuid.ToString(), true) == 0)
                         continue;
                     RegistryKey ifKey = key.OpenSubKey(guid, true);
                     string[] ipAddress = (string[])ifKey.GetValue("IPAddress", new[] { "" });
@@ -1096,9 +1096,9 @@ namespace WinLib.Network
             SetNetBios(Guid, enabled);
         }
 
-        public static void SetNetBios(string guid, bool enabled)
+        public static void SetNetBios(Guid guid, bool enabled)
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_" + guid, true);
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_" + guid.ToString(), true);
             key.SetValue("NetbiosOptions", enabled ? 1 : 2, RegistryValueKind.DWord);
             key.Close();
         }

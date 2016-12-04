@@ -31,7 +31,7 @@ namespace Network_Manager.Jobs.Extensions
     {
         public class PhysicalWorker
         {
-            public string Guid;
+            public Guid Guid;
             public string Name;
             public PacketCommunicator communicator = null;
             public FragmentationBuffer fragBuffer = new FragmentationBuffer();
@@ -79,7 +79,7 @@ namespace Network_Manager.Jobs.Extensions
             public static byte[] offeredIp;
             public static byte[] dhcpServer;
             
-            public PhysicalWorker(string guid, string name, string ifMac, string ifIp, string ifMask, string gatewayMac, string gatewayIp)
+            public PhysicalWorker(Guid guid, string name, string ifMac, string ifIp, string ifMask, string gatewayMac, string gatewayIp)
             {
                 Guid = guid;
                 Name = name;
@@ -368,7 +368,7 @@ namespace Network_Manager.Jobs.Extensions
                 for (int i = 0; i != allDevices.Count; ++i)
                 {
                     LivePacketDevice device = allDevices[i];
-                    if (device.Name.Contains(Guid))
+                    if (device.Name.ToUpper().Contains(Guid.ToString().ToUpper()))
                     {
                         selectedDevice = device;
                         break;

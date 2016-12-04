@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static WinLib.WinAPI.Rpcdce;
 
 namespace WinLib.WinAPI
 {
@@ -136,16 +137,6 @@ namespace WinLib.WinAPI
             }
             SetupDiDestroyDeviceInfoList(deviceInfoSet);
             return true;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct GUID
-        {
-            public uint Data1;
-            public ushort Data2;
-            public ushort Data3;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            public byte[] Data4;
         }
 
         [StructLayout(LayoutKind.Sequential)]

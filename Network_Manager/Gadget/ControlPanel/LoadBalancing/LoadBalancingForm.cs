@@ -144,9 +144,9 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
                 List<NetworkInterface> loadBalancingInterfaces = new List<NetworkInterface>();
                 foreach (Control control in tapInterfaces.Controls)
                     if (!((CheckBox)control).Checked)
-                        Global.Config.LoadBalancer.ExcludedInterfacesForTap.Add((string)((CheckBox)control).Tag);
+                        Global.Config.LoadBalancer.ExcludedInterfacesForTap.Add((Guid)((CheckBox)control).Tag);
                     else
-                        loadBalancingInterfaces.Add(Global.NetworkInterfaces[(string)((CheckBox)control).Tag]);
+                        loadBalancingInterfaces.Add(Global.NetworkInterfaces[(Guid)((CheckBox)control).Tag]);
                 Global.Config.Save();
                 Jobs.Extensions.LoadBalancer.Start(loadBalancingInterfaces);
             }
@@ -185,9 +185,9 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
             List<NetworkInterface> loadBalancingInterfaces = new List<NetworkInterface>();
             foreach (Control control in windowsInterfaces.Controls)
                 if (!((CheckBox)control).Checked)
-                    Global.Config.LoadBalancer.ExcludedInterfacesForWindows.Add((string)((CheckBox)control).Tag);
+                    Global.Config.LoadBalancer.ExcludedInterfacesForWindows.Add((Guid)((CheckBox)control).Tag);
                 else
-                    loadBalancingInterfaces.Add(Global.NetworkInterfaces[(string)((CheckBox)control).Tag]);
+                    loadBalancingInterfaces.Add(Global.NetworkInterfaces[(Guid)((CheckBox)control).Tag]);
             Global.Config.Save();
             // Configure high metrics on interfaces that are not used
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)

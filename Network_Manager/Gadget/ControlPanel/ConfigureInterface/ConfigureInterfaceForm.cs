@@ -29,7 +29,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
         private List<NetworkInterface.IPGatewayAddress> ipv6Gateway = new List<NetworkInterface.IPGatewayAddress>();
         private List<string> ipv6Dns = new List<string>();
 
-        public ConfigureInterfaceForm(string guid)
+        public ConfigureInterfaceForm(Guid guid)
         {
             if (Instance != null)
             {

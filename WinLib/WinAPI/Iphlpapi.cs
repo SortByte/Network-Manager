@@ -8,6 +8,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using WinLib.Network;
+using static WinLib.WinAPI.Rpcdce;
 
 namespace WinLib.WinAPI
 {
@@ -358,7 +359,7 @@ namespace WinLib.WinAPI
                         {
                             IP_ADAPTER_INFO adapterInfo = (IP_ADAPTER_INFO)Marshal.PtrToStructure(pCurrAdapterInfo, typeof(IP_ADAPTER_INFO));
                             Adapter adapter = new Adapter();
-                            adapter.Guid = adapterInfo.AdapterName;
+                            adapter.Guid = new Guid(adapterInfo.AdapterName);
                             adapter.UnicastAddresses.Add(new Adapter.UnicastAddress(adapterInfo.IpAddressList.IpAddress, adapterInfo.IpAddressList.IpMask));
                             IntPtr pUnicastAddress = adapterInfo.IpAddressList.Next;
                             while (pUnicastAddress != IntPtr.Zero)
@@ -400,7 +401,7 @@ namespace WinLib.WinAPI
                         {
                             IP_ADAPTER_ADDRESSES adapterAddress = (IP_ADAPTER_ADDRESSES)Marshal.PtrToStructure(currPtr, typeof(IP_ADAPTER_ADDRESSES));
                             Adapter adapter = new Adapter();
-                            adapter.Guid = Marshal.PtrToStringAnsi(adapterAddress.AdapterName);
+                            adapter.Guid = new Guid(Marshal.PtrToStringAnsi(adapterAddress.AdapterName));
                             IntPtr pUnicastAddress = adapterAddress.FirstUnicastAddress;
                             while (pUnicastAddress != IntPtr.Zero)
                             {
@@ -1107,16 +1108,6 @@ namespace WinLib.WinAPI
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct GUID
-        {
-            uint Data1;
-            ushort Data2;
-            ushort Data3;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            byte[] Data4;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public struct SOCKADDR
         {
             /// u_short->unsigned short
@@ -1509,7 +1500,7 @@ namespace WinLib.WinAPI
 
         public class Adapter
         {
-            public string Guid;
+            public Guid Guid;
             public List<UnicastAddress> UnicastAddresses = new List<UnicastAddress>();
             /// <summary>
             /// unreliable; use routing table

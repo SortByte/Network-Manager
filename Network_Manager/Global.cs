@@ -16,14 +16,14 @@ namespace Network_Manager
 {
     static class Global
     {
-        public static ConcurrentDictionary<string, NetworkInterface> NetworkInterfaces;
+        public static ConcurrentDictionary<Guid, NetworkInterface> NetworkInterfaces;
         public static ConcurrentQueue<BusyForm> BusyForms = new ConcurrentQueue<BusyForm>();
         public static Config Config = new Config();
         public static bool AutoStartup = false;
         public static NotifyIcon TrayIcon = new NotifyIcon();
         public static ContextMenu TrayMenu = new ContextMenu();
         public static VersionInfo VersionInfo = new VersionInfo();
-        public static string InternetInterface = null;
+        public static Guid? InternetInterface = null;
 
         public static void ShowTrayIcon()
         {

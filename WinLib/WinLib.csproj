@@ -94,6 +94,7 @@
     <Compile Include="WinAPI\Newdev.cs" />
     <Compile Include="WinAPI\Ntdll.cs" />
     <Compile Include="WinAPI\Psapi.cs" />
+    <Compile Include="WinAPI\Rpcdce.cs" />
     <Compile Include="WinAPI\Setupapi.cs" />
     <Compile Include="WinAPI\Shell32.cs" />
     <Compile Include="WinAPI\User32.cs" />

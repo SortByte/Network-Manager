@@ -405,9 +405,9 @@ namespace Network_Manager.Jobs.Extensions
             public class RoutingEntry
             {
                 public IP.SocketID SocketID = new IP.SocketID();
-                public string InterfaceGuid;
+                public Guid InterfaceGuid;
 
-                public RoutingEntry(ConnId connID, string guid)
+                public RoutingEntry(ConnId connID, Guid guid)
                 {
                     SocketID.LocalEP = new IPEndPoint(IPAddress.Parse(Global.Config.LoadBalancer.IPv4LocalAddresses[0].Address), connID.lPort);
                     SocketID.RemoteEP = new IPEndPoint(IPAddress.Parse(connID.rIp.ToString()), connID.rPort);
