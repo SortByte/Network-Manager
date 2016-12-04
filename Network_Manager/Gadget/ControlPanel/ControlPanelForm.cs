@@ -83,7 +83,7 @@ namespace Network_Manager.Gadget.ControlPanel
                 groupBox.Controls["name"].Anchor = AnchorStyles.Left;
                 if (!Global.Config.Gadget.HiddenInterfaces.Contains(nic.Guid))
                     groupBox.Controls["name"].Font = new System.Drawing.Font(DefaultFont, FontStyle.Bold);
-                if (Global.InternetInterface != null)
+                if (Global.InternetInterface != Guid.Empty)
                     if (nic.Guid == Global.InternetInterface)
                     {
                         groupBox.Controls["name"].ForeColor = Color.Blue;
@@ -228,7 +228,7 @@ namespace Network_Manager.Gadget.ControlPanel
         /// <param name="guid"></param>
         void MakeInterfacePrimary(Guid guid)
         {
-            LoadingForm splash = new LoadingForm("Retrieving interfaces ...");
+            LoadingForm splash = LoadingForm.Create("Retrieving interfaces ...");
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)
             {
                 splash.UpdateStatus("Configuring interface \"" + nic.Name + "\" ...");

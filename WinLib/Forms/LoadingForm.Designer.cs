@@ -65,7 +65,7 @@
             this.Name = "LoadingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Busy";
-            this.TopMost = true;
+            this.TopMost = false;
             this.ResumeLayout(false);
 
         }

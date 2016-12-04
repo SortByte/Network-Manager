@@ -34,11 +34,6 @@ namespace Network_Manager.Gadget.About
             busyForm.Done.SetResult(true);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Jobs.Extensions.LoadBalancer.TapInterface.PutUp();
-        }
-
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             new LicenseForm().ShowDialog();

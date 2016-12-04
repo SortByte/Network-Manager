@@ -382,7 +382,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             // validation passed; starting configuring
             Hide();
             GadgetForm.AutoRefreshAllowed = false;
-            splash = new LoadingForm("Configuring interface \"" + nic.Name + "\" ...");
+            splash = LoadingForm.Create("Configuring interface \"" + nic.Name + "\" ...");
             // XP sets gateway metric along with interface metric, if gwmetric is auto, so we do this first
             if (interfaceMetric.Text != nic.InterfaceMetric.ToString())
                 nic.SetInterfaceMetric(interfaceMetric.Text);

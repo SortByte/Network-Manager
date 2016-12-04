@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,35 +13,40 @@ namespace WinLib.Forms
 {
     public partial class LoadingForm : Form
     {
-        /// <summary>
-        /// Starts a splash loading form on a new thread running a separate message pump
-        /// </summary>
-        public LoadingForm(string status)
+        private bool stop = false;
+        
+        private LoadingForm(string status, bool topMost = true)
         {
             InitializeComponent();
             label1.Text = status;
-            Thread thread = new Thread(new ThreadStart(Start));
-            thread.Start();
+            TopMost = topMost;
+            Show();
         }
 
-        public void Start()
+        /// <summary>
+        /// Starts a splash loading form on a new thread running a separate message pump
+        /// </summary>
+        public static LoadingForm Create(string status, bool topMost = true)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(this);
+            LoadingForm loadingForm = null;
+            new Thread(new ThreadStart(() => {
+                loadingForm = new LoadingForm(status, topMost);
+                while (!loadingForm.stop)
+                    Application.DoEvents();
+                loadingForm.Close();
+            })).Start();
+            while (loadingForm == null || !loadingForm.IsHandleCreated)
+                Application.DoEvents(); // usually splashForms are triggered by UI threads; if not, no harm done
+            return loadingForm;
         }
-
+        
         public void UpdateStatus(string status)
         {
-            while (!IsHandleCreated)
-                Thread.Sleep(100);
             Invoke(new Action(() => { label1.Text = status; }));
         }
 
         public void UpdateProgress(int percent)
         {
-            while (!IsHandleCreated)
-                Thread.Sleep(100);
             if (percent < 0)
                 Invoke(new Action(() => {
                     progressBar1.Style = ProgressBarStyle.Marquee;
@@ -54,9 +60,7 @@ namespace WinLib.Forms
 
         public void Stop()
         {
-            while (!IsHandleCreated)
-                Thread.Sleep(100);
-            Invoke(new Action(() => { Close(); }));
+            stop = true;
         }
     }
 }

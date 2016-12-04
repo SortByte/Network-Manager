@@ -270,7 +270,7 @@ namespace Network_Manager.Jobs.Extensions
         {
             LoadingForm splash = null;
             if (verbose)
-                splash = new LoadingForm("Searching \"NetGroup Packet Filter\" service ...");
+                splash = LoadingForm.Create("Searching \"NetGroup Packet Filter\" service ...");
             if (ServiceController.GetDevices().Where(i => i.ServiceName == "NPF").Count() == 0)
             {
                 if (verbose)

@@ -51,6 +51,7 @@ namespace Network_Manager.Jobs.Extensions
             public RoutingObject tapRoutingObject;
             public ManualResetEventSlim Initialized = new ManualResetEventSlim(false);
             public ManualResetEventSlim ThreadActive = new ManualResetEventSlim(true);
+            // TODO: add stopped event for all workers
             private object ipIDLock = new object();
             private ushort _ipID = 0;
             private ushort ipID

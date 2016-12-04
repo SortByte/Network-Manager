@@ -73,7 +73,10 @@ namespace Network_Manager.Jobs.Extensions
                 Status.Update(State.Failed);
                 return false;
             }
-            if (!Dependencies.RunWinPcapService(requiredNics, true))
+            NetworkInterface tapInterface = new NetworkInterface();
+            tapInterface.Guid = TapInterface.Guid;
+            tapInterface.Name = TapInterface.FriendlyName;
+            if (!Dependencies.RunWinPcapService(requiredNics.Concat(new NetworkInterface[] { tapInterface }), true))
             {
                 Global.WriteLog("Load Balancer failed to start because some interfaces were not captured by WinPcap.", true);
                 Global.ShowTrayTip("Load Balancer", "Failed to start", System.Windows.Forms.ToolTipIcon.Error);
@@ -83,7 +86,7 @@ namespace Network_Manager.Jobs.Extensions
             }
             Interfaces = requiredNics;
             // start LB threads
-            LoadingForm splash = new LoadingForm("Initializing ...");
+            LoadingForm splash = LoadingForm.Create("Initializing ...");
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)
                 if (nic.Guid != TapInterface.Guid &&
                     (nic.IPv4Gateway.Count > 0 || nic.IPv6Gateway.Count > 0))
@@ -160,7 +163,7 @@ namespace Network_Manager.Jobs.Extensions
         {
             Status.Update(State.Stopping);
             TapInterface.PutDown();
-            LoadingForm splash = new LoadingForm("Stopping Load Balancer ...");
+            LoadingForm splash = LoadingForm.Create("Stopping Load Balancer ...");
             if (physicalWorkers.Count() > 0)
             {
                 for (int i = physicalWorkers.Count() - 1; i >= 0; i--)

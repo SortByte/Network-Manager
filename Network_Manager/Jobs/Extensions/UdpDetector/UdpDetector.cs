@@ -33,7 +33,7 @@ namespace Network_Manager.Jobs.Extensions
                 Global.ShowTrayTip("UDP Detector", "Failed to start", System.Windows.Forms.ToolTipIcon.Error);
                 return false;
             }
-            LoadingForm splash = new LoadingForm("Initializing ...");
+            LoadingForm splash = LoadingForm.Create("Initializing ...");
             interfaceWorkers.Clear();
             foreach (string guid in Dependencies.WinPcapDevices)
             {

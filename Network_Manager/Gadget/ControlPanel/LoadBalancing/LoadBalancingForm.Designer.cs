@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoadBalancingForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.advanced = new System.Windows.Forms.Button();
             this.uninstallTapDriver = new System.Windows.Forms.Button();
             this.installTapDriver = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.windowsInterfaces = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -91,6 +91,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "TAP-WinPcap";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Orange;
+            this.label3.Location = new System.Drawing.Point(6, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "[Experimental]";
             // 
             // advanced
             // 
@@ -332,16 +342,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = resources.GetString("label4.Text");
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.Orange;
-            this.label3.Location = new System.Drawing.Point(6, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "[Experimental]";
-            // 
             // LoadBalancingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -356,7 +356,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Balancing";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadBalancerForm_FormClosing);
-            this.Shown += new System.EventHandler(this.LoadBalancerForm_Shown);
+            this.Shown += new System.EventHandler(this.LoadBalancingForm_Shown);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

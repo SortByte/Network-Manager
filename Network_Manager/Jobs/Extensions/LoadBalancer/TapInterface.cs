@@ -32,7 +32,7 @@ namespace Network_Manager.Jobs.Extensions
             /// <returns></returns>
             public static bool Check()
             {
-                LoadingForm splash = new LoadingForm("Checking TAP interface ...");
+                LoadingForm splash = LoadingForm.Create("Checking TAP interface ...");
                 if (handle != IntPtr.Zero)
                 {
                     IntPtr pTapVersion = Marshal.AllocHGlobal(2000);
@@ -52,6 +52,7 @@ namespace Network_Manager.Jobs.Extensions
                 }
                 // not connected; seeking available interface
                 Connected = false;
+                Guid = Guid.Empty;
                 string cfgKeyPath = @"SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}";
                 string nameKeyPath = @"SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}";
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(cfgKeyPath);
@@ -75,6 +76,7 @@ namespace Network_Manager.Jobs.Extensions
                     }
                     catch { }
                 }
+                key.Close();
                 splash.Stop();
                 return false;
             }
@@ -96,6 +98,7 @@ namespace Network_Manager.Jobs.Extensions
                     }
                     catch { }
                 }
+                key.Close();
                 return false;
             }
 
@@ -105,7 +108,7 @@ namespace Network_Manager.Jobs.Extensions
                     return false;
                 if (handle != IntPtr.Zero)
                     return true;
-                LoadingForm splash = new LoadingForm("Connecting to \"" + FriendlyName + "\" ...");
+                LoadingForm splash = LoadingForm.Create("Connecting to \"" + FriendlyName + "\" ...");
                 string duplicateName;
                 if ((duplicateName = NetworkInterface.CheckIfIPv4Used(Global.Config.LoadBalancer.IPv4LocalAddresses[0].Address, Guid)) != null)
                 {
@@ -114,7 +117,7 @@ namespace Network_Manager.Jobs.Extensions
                     MessageBox.Show("\"" + FriendlyName + "\" can't use the IP address " + Global.Config.LoadBalancer.IPv4LocalAddresses[0].Address + " because it's already used by \"" + duplicateName + "\".\n\n Set a different IPv4 address in Control Panel>Tools>Load balancing>Advanced.", "TAP Interface", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
-                handle = Kernel32.CreateFile(@"\\.\Global\" + Guid + ".tap",
+                handle = Kernel32.CreateFile(@"\\.\Global\{" + Guid + "}.tap",
                     Kernel32.FILE_READ_DATA | Kernel32.FILE_WRITE_DATA,
                     Kernel32.FILE_SHARE_READ | Kernel32.FILE_SHARE_WRITE,
                     IntPtr.Zero,
@@ -180,7 +183,7 @@ namespace Network_Manager.Jobs.Extensions
             {
                 if (handle == IntPtr.Zero)
                     return true;
-                LoadingForm splash = new LoadingForm("Disconnecting from \"" + FriendlyName + "\" ...");
+                LoadingForm splash = LoadingForm.Create("Disconnecting from \"" + FriendlyName + "\" ...");
                 uint bytesReturned = 0;
                 IntPtr pBuffer = Marshal.AllocHGlobal(4);
                 Marshal.Copy(BitConverter.GetBytes(0), 0, pBuffer, 4);
@@ -198,7 +201,7 @@ namespace Network_Manager.Jobs.Extensions
                     "TAP Driver Setup", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.No)
                     return false;
-                LoadingForm splash = new LoadingForm("Decompressing TAP driver...");
+                LoadingForm splash = LoadingForm.Create("Decompressing TAP driver...");
                 Directory.CreateDirectory("Temp");
                 File.WriteAllBytes(@"Temp\TAP Driver.zip", Network_Manager.Properties.Resources.TAP_Driver);
                 WinLib.IO.Compression.UnZip(@"Temp\TAP Driver.zip", "Temp");
@@ -250,6 +253,7 @@ namespace Network_Manager.Jobs.Extensions
                     }
                     catch { }
                 }
+                key.Close();
                 if (tapList == "")
                 {
                     MessageBox.Show("No TAP interface was found.", "TAP Driver Setup", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -260,7 +264,7 @@ namespace Network_Manager.Jobs.Extensions
                     "TAP Driver Setup", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.No)
                     return false;
-                LoadingForm splash = new LoadingForm("Uninstalling TAP driver ...");
+                LoadingForm splash = LoadingForm.Create("Uninstalling TAP driver ...");
                 if (Setupapi.UninstallDevice(componentID))
                 {
                     splash.Stop();

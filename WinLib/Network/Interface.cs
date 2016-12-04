@@ -679,7 +679,7 @@ namespace WinLib.Network
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\Tcpip\Parameters\Interfaces", true);
                 foreach (string guid in key.GetSubKeyNames())
                 {
-                    if (string.Compare(guid, excludedGuid.ToString(), true) == 0)
+                    if (guid.ToUpper().Contains(excludedGuid.ToString().ToUpper()))
                         continue;
                     RegistryKey ifKey = key.OpenSubKey(guid, true);
                     string[] ipAddress = (string[])ifKey.GetValue("IPAddress", new[] { "" });
@@ -1098,7 +1098,7 @@ namespace WinLib.Network
 
         public static void SetNetBios(Guid guid, bool enabled)
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_" + guid.ToString(), true);
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_{" + guid + "}", true);
             key.SetValue("NetbiosOptions", enabled ? 1 : 2, RegistryValueKind.DWord);
             key.Close();
         }

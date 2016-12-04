@@ -11,6 +11,7 @@ using WinLib.Network;
 using WinLib.WinAPI;
 using WinLib.Forms;
 using Network_Manager.Jobs;
+using System.Threading;
 
 namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
 {
@@ -29,6 +30,7 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
                 return;
             }
             Instance = this;
+            Instance.Activate();
             Global.BusyForms.Enqueue(busyForm);
             InitializeComponent();
             foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)
@@ -47,13 +49,15 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
                     EventHandler handler = null;
                     handler = new EventHandler((s, e) =>
                     {
-                        nic.DefaultIPv4GatewayChecked -= handler;
-                        if (nic.DefaultIPv4GatewayMac != null)
-                        {
-                            Invoke(new Action(() => { checkBox1.Enabled = true; }));
-                            if (!Global.Config.LoadBalancer.ExcludedInterfacesForTap.Contains(nic.Guid))
-                                Invoke(new Action(() => { checkBox1.Checked = true; }));
-                        }
+                        try {
+                            nic.DefaultIPv4GatewayChecked -= handler;
+                            if (nic.DefaultIPv4GatewayMac != null)
+                            {
+                                Invoke(new Action(() => { checkBox1.Enabled = true; }));
+                                if (!Global.Config.LoadBalancer.ExcludedInterfacesForTap.Contains(nic.Guid))
+                                    Invoke(new Action(() => { checkBox1.Checked = true; }));
+                            }
+                        } catch { }
                     });
                     nic.DefaultIPv4GatewayChecked += handler;
                     nic.CheckDefaultIPv4Gateway();
@@ -76,9 +80,10 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
             // update status
             status.Text = Jobs.Extensions.LoadBalancer.Status.Message;
             status.ForeColor = Jobs.Extensions.LoadBalancer.Status.Color;
-            statusEventHandler = new EventHandler((s, e) =>
+            UpdateControls();
+            statusEventHandler = new EventHandler((s, ev) =>
             {
-                Invoke(new Action(UpdateControls));
+                try { Invoke(new Action(() => { UpdateControls(); })); } catch { }
             });
             Jobs.Extensions.LoadBalancer.Status.Changed += statusEventHandler;
             Show();
@@ -94,9 +99,9 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
             System.Diagnostics.Process.Start("http://www.sortbyte.com/software-programs/networking/network-manager/kb/1001");
         }
 
-        private void LoadBalancerForm_Shown(object sender, EventArgs e)
+        private void LoadBalancingForm_Shown(object sender, EventArgs e)
         {
-            UpdateControls();
+
         }
 
         private void UpdateControls()
@@ -104,7 +109,7 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
             Jobs.Extensions.LoadBalancer.TapInterface.Check();
             status.Text = Jobs.Extensions.LoadBalancer.Status.Message;
             status.ForeColor = Jobs.Extensions.LoadBalancer.Status.Color;
-            if (Jobs.Extensions.LoadBalancer.TapInterface.Guid != null)
+            if (Jobs.Extensions.LoadBalancer.TapInterface.Guid != Guid.Empty)
             {
                 installTapDriver.Enabled = false;
                 uninstallTapDriver.Enabled = true;
@@ -180,7 +185,7 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
 
         private void button5_Click(object sender, EventArgs e)
         {
-            LoadingForm splash = new LoadingForm("Initializing ...");
+            LoadingForm splash = LoadingForm.Create("Initializing ...");
             Global.Config.LoadBalancer.ExcludedInterfacesForWindows.Clear();
             List<NetworkInterface> loadBalancingInterfaces = new List<NetworkInterface>();
             foreach (Control control in windowsInterfaces.Controls)

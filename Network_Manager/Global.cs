@@ -23,7 +23,7 @@ namespace Network_Manager
         public static NotifyIcon TrayIcon = new NotifyIcon();
         public static ContextMenu TrayMenu = new ContextMenu();
         public static VersionInfo VersionInfo = new VersionInfo();
-        public static Guid? InternetInterface = null;
+        public static Guid InternetInterface = Guid.Empty;
 
         public static void ShowTrayIcon()
         {
@@ -57,7 +57,7 @@ namespace Network_Manager
 
         public static void Load()
         {
-            InternetInterface = null;
+            InternetInterface = Guid.Empty;
             BusyForm busyForm;
             while (!BusyForms.IsEmpty)
                 BusyForms.TryDequeue(out busyForm);
