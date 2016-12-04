@@ -92,7 +92,7 @@ namespace Network_Manager.Jobs.Extensions
                         if ((string)Registry.LocalMachine.OpenSubKey(cfgKeyPath + @"\" + name).GetValue("ComponentId") == componentID)
                         {
                             string netCfgInstanceId = (string)Registry.LocalMachine.OpenSubKey(cfgKeyPath + @"\" + name).GetValue("NetCfgInstanceId");
-                            if (string.Compare(netCfgInstanceId, guid.ToString(), true) == 0)
+                            if (netCfgInstanceId.ToUpper().Contains(guid.ToString().ToUpper()))
                                 return true;
                         }
                     }

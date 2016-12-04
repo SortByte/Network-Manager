@@ -36,6 +36,7 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
             Global.Config.LoadBalancer.IPv4GatewayAddresses.Add(new NetworkInterface.IPGatewayAddress(tapGateway.Text, 1));
             Global.Config.LoadBalancer.IPv4DnsAddresses.Clear();
             Global.Config.LoadBalancer.IPv4DnsAddresses.Add(tapDnsServer.Text);
+            Global.Config.LoadBalancer.ShowTrayTipsWarnings = checkBox1.Checked;
             Global.Config.Save();
             MessageBox.Show("Settings will apply next time you start the Load Balancer.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close();
