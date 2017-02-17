@@ -20,6 +20,7 @@ using Network_Manager.Jobs.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel.IPSessions
 {
+    // TODO: operations on multiple rows (like route, copy remote end point)
     public partial class IPSessionsForm : Form
     {
         public static Form Instance = null;

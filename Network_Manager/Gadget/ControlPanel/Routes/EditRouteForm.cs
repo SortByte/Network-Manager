@@ -45,6 +45,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             treeView = Global.Config.SavedRoutes.Find(route);
             if (treeView.SelectedNode != treeView.Nodes[0])
             {
+                route.Name = treeView.SelectedNode.Name;
                 updateSavedRouteCheckBox.Checked = true;
                 updateSavedRouteCheckBox.Enabled = true;
             }

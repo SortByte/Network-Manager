@@ -46,13 +46,15 @@ namespace WinLib.WinAPI
         public static extern uint SetIpForwardEntry2(IntPtr pRow);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint DeleteIpForwardEntry2(IntPtr pRow);
+        [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern ERROR FlushIpPathTable(FAMILY Family);
 
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint GetIpForwardTable(IntPtr pIpForwardTable, ref uint dwSize, bool bOrder);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern void InitializeIpForwardEntry(out IntPtr PMIB_IPFORWARD_ROW2);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern uint CreateIpForwardEntry(IntPtr pRoute);
+        public static extern ERROR CreateIpForwardEntry(IntPtr pRoute);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint SetIpForwardEntry(IntPtr pRoute);
         [DllImport("iphlpapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -138,6 +140,7 @@ namespace WinLib.WinAPI
             return routes;
         }
 
+        // TODO: replace CreateIpForwardEntry2 with CreateIpForwardEntry; CreateIpForwardEntry2 adds the route but is not active; same for edit
         /// <summary>
         /// XP - IPv4 Only
         /// </summary>
@@ -795,20 +798,6 @@ namespace WinLib.WinAPI
 
         public enum NL_ROUTE_PROTOCOL : uint
         {
-            RouteProtocolOther = 1,
-            RouteProtocolLocal,
-            RouteProtocolNetMgmt,
-            RouteProtocolIcmp,
-            RouteProtocolEgp,
-            RouteProtocolGgp,
-            RouteProtocolHello,
-            RouteProtocolRip,
-            RouteProtocolIsIs,
-            RouteProtocolEsIs,
-            RouteProtocolCisco,
-            RouteProtocolBbn,
-            RouteProtocolOspf,
-            RouteProtocolBgp,
             MIB_IPPROTO_OTHER = 1,
             MIB_IPPROTO_LOCAL = 2,
             MIB_IPPROTO_NETMGMT = 3,
@@ -892,14 +881,15 @@ namespace WinLib.WinAPI
         public enum ERROR : uint
         {
             ERROR_SUCCESS = 0,
+            ERROR_ACCESS_DENIED = 5,
+            ERROR_NOT_SUPPORTED = 50,
             ERROR_NO_DATA = 232,
             ERROR_BUFFER_OVERFLOW = 111,
             ERROR_INSUFFICIENT_BUFFER = 122,
             ERROR_INVALID_PARAMETER = 87,
             ERROR_BAD_NET_NAME = 67,
             ERROR_GEN_FAILURE = 31,
-            ERROR_INVALID_USER_BUFFER = 1784,
-            ERROR_NOT_SUPPORTED = 50
+            ERROR_INVALID_USER_BUFFER = 1784
         }
         public enum IF_OPER_STATUS : uint
         {

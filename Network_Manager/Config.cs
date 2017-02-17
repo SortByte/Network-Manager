@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using WinLib.Network;
 using WinLib.WinAPI;
+using System.Xml;
 
 namespace Network_Manager
 {
@@ -423,6 +424,7 @@ namespace Network_Manager
         {
             XmlSerializer writer = new XmlSerializer(typeof(Config));
             StreamWriter file = new StreamWriter("Network_Manager.xml.tmp");
+            XmlWriter xmlWriter = XmlWriter.Create(file);
             writer.Serialize(file, this);
             file.Close();
             if (File.Exists("Network_Manager.xml"))
@@ -440,7 +442,8 @@ namespace Network_Manager
                     XmlSerializer reader = new XmlSerializer(typeof(Config));
                     using (StreamReader file = new StreamReader("Network_Manager.xml"))
                     {
-                        currentConfig = (Config)reader.Deserialize(file);
+                        XmlReader xmlReader = XmlReader.Create(file);
+                        currentConfig = (Config)reader.Deserialize(xmlReader);
                         //Config defaultConfig = new Config();
                         //currentConfig = (Config)CheckIfNull(typeof(Config), currentConfig, defaultConfig); // not needed, XML does a nice job
                     }
