@@ -615,7 +615,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 
         private void SaveProfile_Click(object sender, EventArgs e)
         {
-            if (!ValidateConfigs())
+            if (!ValidateConfigs(false))
                 return;
             using (SaveProfileForm form = new SaveProfileForm(comboBox1.SelectedIndex > 0 ? comboBox1.Text : "",
                 nic.IPv4Enabled,
@@ -713,7 +713,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             }
         }
 
-        bool ValidateConfigs()
+        bool ValidateConfigs(bool checkIfIPUsed = true)
         {
             ipv4Address.Clear();
             ipv4Gateway.Clear();
@@ -750,7 +750,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                             return false;
                         }
                         string name;
-                        if ((name = NetworkInterface.CheckIfIPv4Used(row.Cells[0].Value.ToString(), nic.Guid)) != null)
+                        if ((name = NetworkInterface.CheckIfIPv4Used(row.Cells[0].Value.ToString(), nic.Guid)) != null & checkIfIPUsed)
                         {
                             tabControl1.SelectTab(0);
                             dataGridView1.CurrentCell = null;
@@ -879,7 +879,8 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                         foreach (NetworkInterface n in Global.NetworkInterfaces.Values)
                         {
                             if (n.Guid != nic.Guid &&
-                                n.IPv6Address.Contains(row.Cells[0].Value.ToString()))
+                                n.IPv6Address.Contains(row.Cells[0].Value.ToString()) &&
+                                checkIfIPUsed)
                             {
                                 tabControl1.SelectTab(1);
                                 dataGridView4.CurrentCell = null;

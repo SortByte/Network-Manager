@@ -67,17 +67,17 @@
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button12 = new System.Windows.Forms.Button();
+            this.deleteProfileButton = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.interfaceMetric = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button11 = new System.Windows.Forms.Button();
+            this.saveProfileButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.balloonTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.loadProfileButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -516,16 +516,16 @@
             this.Column7.HeaderText = "Subnet Prefix Length";
             this.Column7.Name = "Column7";
             // 
-            // button12
+            // deleteProfileButton
             // 
-            this.button12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button12.Location = new System.Drawing.Point(582, 17);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(89, 23);
-            this.button12.TabIndex = 15;
-            this.button12.Text = "Delete profile";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.DeleteProfile_Click);
+            this.deleteProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteProfileButton.Location = new System.Drawing.Point(582, 17);
+            this.deleteProfileButton.Name = "deleteProfileButton";
+            this.deleteProfileButton.Size = new System.Drawing.Size(89, 23);
+            this.deleteProfileButton.TabIndex = 15;
+            this.deleteProfileButton.Text = "Delete profile";
+            this.deleteProfileButton.UseVisualStyleBackColor = true;
+            this.deleteProfileButton.Click += new System.EventHandler(this.DeleteProfile_Click);
             // 
             // buttonApply
             // 
@@ -568,16 +568,16 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Interface metric:";
             // 
-            // button11
+            // saveProfileButton
             // 
-            this.button11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button11.Location = new System.Drawing.Point(414, 17);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(77, 23);
-            this.button11.TabIndex = 14;
-            this.button11.Text = "Save profile";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.SaveProfile_Click);
+            this.saveProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveProfileButton.Location = new System.Drawing.Point(414, 17);
+            this.saveProfileButton.Name = "saveProfileButton";
+            this.saveProfileButton.Size = new System.Drawing.Size(77, 23);
+            this.saveProfileButton.TabIndex = 14;
+            this.saveProfileButton.Text = "Save profile";
+            this.saveProfileButton.UseVisualStyleBackColor = true;
+            this.saveProfileButton.Click += new System.EventHandler(this.SaveProfile_Click);
             // 
             // toolTip
             // 
@@ -596,9 +596,9 @@
             this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox8.Controls.Add(this.comboBox1);
-            this.groupBox8.Controls.Add(this.button2);
-            this.groupBox8.Controls.Add(this.button11);
-            this.groupBox8.Controls.Add(this.button12);
+            this.groupBox8.Controls.Add(this.loadProfileButton);
+            this.groupBox8.Controls.Add(this.saveProfileButton);
+            this.groupBox8.Controls.Add(this.deleteProfileButton);
             this.groupBox8.Location = new System.Drawing.Point(8, 12);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(677, 46);
@@ -617,16 +617,16 @@
             this.comboBox1.Size = new System.Drawing.Size(402, 21);
             this.comboBox1.TabIndex = 17;
             // 
-            // button2
+            // loadProfileButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(497, 17);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(79, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Load profile";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.LoadProfile_Click);
+            this.loadProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadProfileButton.Location = new System.Drawing.Point(497, 17);
+            this.loadProfileButton.Name = "loadProfileButton";
+            this.loadProfileButton.Size = new System.Drawing.Size(79, 23);
+            this.loadProfileButton.TabIndex = 11;
+            this.loadProfileButton.Text = "Load profile";
+            this.loadProfileButton.UseVisualStyleBackColor = true;
+            this.loadProfileButton.Click += new System.EventHandler(this.LoadProfile_Click);
             // 
             // ConfigureInterfaceForm
             // 
@@ -673,12 +673,12 @@
 
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button deleteProfileButton;
         private System.Windows.Forms.Button buttonApply;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox interfaceMetric;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button saveProfileButton;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button13;
@@ -717,7 +717,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button loadProfileButton;
         private System.Windows.Forms.ComboBox comboBox1;
 
     }
