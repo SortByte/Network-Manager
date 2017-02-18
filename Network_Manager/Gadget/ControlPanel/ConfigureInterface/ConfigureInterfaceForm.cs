@@ -76,7 +76,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             button14.Enabled = nic.Dhcpv4Enabled < NetworkInterface.Dhcp.IPnDns;
             dataGridView3.Enabled = nic.Dhcpv4Enabled < NetworkInterface.Dhcp.IPnDns;
             interfaceMetric.Text = nic.InterfaceMetric.ToString();
-            ipv4Mtu.Text = nic.IPv4Mtu;
+            ipv4Mtu.Text = nic.IPv4Mtu.ToString();
             new WinLib.Forms.TextBoxMask(interfaceMetric, WinLib.Forms.TextBoxMask.Mask.Numeric);
             new WinLib.Forms.TextBoxMask(ipv4Mtu, WinLib.Forms.TextBoxMask.Mask.Numeric);
             netbiosEnabled.Checked = nic.NetbiosEnabled < NetworkInterface.Netbios.Disabled;
@@ -103,7 +103,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             for (int i = 0; i < nic.IPv6DnsServer.Count; i++)
                 dataGridView6.Rows.Add(nic.IPv6DnsServer[i]);
             routerDiscoveryEnabled.Checked = nic.IPv6RouterDiscoveryEnabled;
-            ipv6Mtu.Text = nic.IPv6Mtu;
+            ipv6Mtu.Text = nic.IPv6Mtu.ToString();
             new WinLib.Forms.TextBoxMask(ipv6Mtu, WinLib.Forms.TextBoxMask.Mask.Numeric);
             if (!nic.IPv4Enabled)
                 tabControl1.TabPages[0].Enabled = false;
@@ -440,7 +440,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 if (netbiosEnabled.Checked && nic.NetbiosEnabled == NetworkInterface.Netbios.Disabled)
                     nic.SetNetBios(true);
                 if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1)
-                    if (ipv4Mtu.Text != nic.IPv4Mtu)
+                    if (int.Parse(ipv4Mtu.Text) != nic.IPv4Mtu && int.Parse(ipv4Mtu.Text) > 0)
                         nic.SetIPv4Mtu(ipv4Mtu.Text);
             }
             if (nic.IPv6Enabled)
@@ -475,7 +475,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 if (routerDiscoveryEnabled.Checked != nic.IPv6RouterDiscoveryEnabled)
                     nic.SetRouterDiscovery(routerDiscoveryEnabled.Checked);
                 if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1)
-                    if (ipv6Mtu.Text != nic.IPv6Mtu)
+                    if (int.Parse(ipv6Mtu.Text) != nic.IPv6Mtu && int.Parse(ipv6Mtu.Text) > 0)
                         nic.SetIPv6Mtu(ipv6Mtu.Text);
             }
             splash.UpdateStatus("Waiting for changes to be applied ...");
@@ -841,7 +841,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             if (ipv4Mtu.Text == "")
                 ipv4Mtu.Text = "1500";
             if (nic.IPv4Enabled && Regex.IsMatch(ipv4Mtu.Text, @"^[\d]*$"))
-                if (Convert.ToInt32(ipv4Mtu.Text) < 576)
+                if (Convert.ToInt32(ipv4Mtu.Text) < 576 && Convert.ToInt32(ipv4Mtu.Text) > 0)
                 {
                     tabControl1.SelectTab(0);
                     new BalloonTip("Warning", "MTU for IPv4 can't be smaller than 576 bytes", ipv4Mtu, BalloonTip.ICON.WARNING);
@@ -977,7 +977,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 if (ipv6Mtu.Text == "")
                     ipv6Mtu.Text = "1280";
                 if (Regex.IsMatch(ipv6Mtu.Text, @"^[\d]*$"))
-                    if (Convert.ToInt32(ipv6Mtu.Text) < 1280)
+                    if (Convert.ToInt32(ipv6Mtu.Text) < 1280 && Convert.ToInt32(ipv6Mtu.Text) > 0)
                     {
                         tabControl1.SelectTab(1);
                         new BalloonTip("Warning", "MTU for IPv6 can't be smaller than 1280 bytes", ipv6Mtu, BalloonTip.ICON.WARNING);

@@ -505,7 +505,7 @@ namespace Network_Manager.Gadget.ControlPanel
                     if (nic.DhcpServer != null && nic.DhcpServer != "255.255.255.255")
                         listView.Items.Add(new ListViewItem(new string[] { "DHCP Server", nic.DhcpServer })).ToolTipText = "Click to copy to clipboard";
                     listView.Items.Add(new ListViewItem(new string[] { "NetBIOS over TCP/IP", nic.NetbiosEnabledString })).ToolTipText = "Click to copy to clipboard";
-                    listView.Items.Add(new ListViewItem(new string[] { "MTU", nic.IPv4Mtu })).ToolTipText = "Click to copy to clipboard";
+                    listView.Items.Add(new ListViewItem(new string[] { "MTU", nic.IPv4Mtu.ToString() })).ToolTipText = "Click to copy to clipboard";
                     //listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     foreach (ColumnHeader column in listView.Columns)
                         column.Width = -2;
@@ -542,7 +542,7 @@ namespace Network_Manager.Gadget.ControlPanel
                 if (nic.Dhcpv6Server != null)
                     listView.Items.Add(new ListViewItem(new string[] { "DHCPv6 Server", nic.Dhcpv6Server })).ToolTipText = "Click to copy to clipboard";
                 listView.Items.Add(new ListViewItem(new string[] { "Router Discovery", nic.IPv6RouterDiscoveryEnabled ? "Enabled" : "Disabled" })).ToolTipText = "Click to copy to clipboard";
-                listView.Items.Add(new ListViewItem(new string[] { "MTU", nic.IPv6Mtu })).ToolTipText = "Click to copy to clipboard";
+                listView.Items.Add(new ListViewItem(new string[] { "MTU", nic.IPv6Mtu.ToString() })).ToolTipText = "Click to copy to clipboard";
                 //listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                 foreach (ColumnHeader column in listView.Columns)
                     column.Width = -2;

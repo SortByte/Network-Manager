@@ -112,8 +112,7 @@ namespace Network_Manager.Jobs.Extensions
                 new Thread(new ThreadStart(physicalWorkers.Last().ReceivePackets)).Start();
                 physicalWorkers.Last().Initialized.Wait(10000);
             }
-            int mtu;
-            MTU = requiredNics.Min((i) => int.TryParse(i.IPv4Mtu, out mtu) ? mtu : 1500);
+            MTU = (int)requiredNics.Min((i) => i.IPv4Mtu > 0 ? i.IPv4Mtu : 1500);
             Global.WriteLog("Load Balancer: Negociated MTU = " + MTU);
             MSS = (ushort)(MTU - 40);
             splash.Stop();

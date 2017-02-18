@@ -73,7 +73,7 @@ namespace WinLib.Network
         public event EventHandler DefaultIPv4GatewayChecked;
         public string DefaultIPv4GatewayMac;
         public string PublicIPv4 = "Detecting ...";
-        public string IPv4Mtu = "N/A";
+        public uint IPv4Mtu = 0;
         public Netbios NetbiosEnabled;
         public Int64 IPv4BytesReceived;
         public Int64 IPv4BytesSent;
@@ -97,7 +97,7 @@ namespace WinLib.Network
         public bool IPv6RouterDiscoveryEnabled = false;
         public string Dhcpv6Server;
         public string PublicIPv6 = "Detecting ...";
-        public string IPv6Mtu = "N/A";
+        public uint IPv6Mtu = 0;
         //public Int64 IPv6BytesReceived; // ???
         //public Int64 IPv6BytesSent; // ???
         //public Int64 IPv6InSpeed; // ???
@@ -182,10 +182,10 @@ namespace WinLib.Network
                         NetworkInterface.Loopback.Index = loopbackNic.GetIPProperties().GetIPv6Properties().Index;
                     foreach (string line in ipv4Mtus)
                         if (Regex.IsMatch(line, @"\s*" + loopbackNic.Name + @"\s*$"))
-                            NetworkInterface.Loopback.IPv4Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                            NetworkInterface.Loopback.IPv4Mtu = uint.Parse(Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1"));
                     foreach (string line in ipv6Mtus)
                         if (Regex.IsMatch(line, @"\s*" + loopbackNic.Name + @"\s*$"))
-                            NetworkInterface.Loopback.IPv6Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                            NetworkInterface.Loopback.IPv6Mtu = uint.Parse(Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1"));
                     foreach (IPAddress ip in loopbackNic.GetIPProperties().DnsAddresses)
                     {
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
@@ -308,10 +308,10 @@ namespace WinLib.Network
 
                                 foreach (string line in ipv4Mtus)
                                     if (Regex.IsMatch(line, @"\s*" + nic.Name + @"\s*$"))
-                                        NICs[guid].IPv4Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                                        NICs[guid].IPv4Mtu = uint.Parse(Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1"));
                                 foreach (string line in ipv6Mtus)
                                     if (Regex.IsMatch(line, @"\s*" + nic.Name + @"\s*$"))
-                                        NICs[guid].IPv6Mtu = Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1");
+                                        NICs[guid].IPv6Mtu = uint.Parse(Regex.Replace(line, @"^\s*(\d+)\s+.+$", "$1"));
 
                                 //heavily unreliable
                                 //foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
