@@ -51,9 +51,9 @@ namespace WinLib.Network
         public string Description;
         public AdapterType Type;
         public string Mac = "N/A";
-        
+
         public ushort InterfaceMetric;
-        
+
         // IPv4
         public bool IPv4Enabled;
         // TODO: accomodate naming conventions
@@ -119,7 +119,7 @@ namespace WinLib.Network
         // Acquiring functions
         // ===================
 
-        public static ConcurrentDictionary<Guid, NetworkInterface> GetAll(Action<string>UpdateStatus = null)
+        public static ConcurrentDictionary<Guid, NetworkInterface> GetAll(Action<string> UpdateStatus = null)
         {
             ConcurrentDictionary<Guid, NetworkInterface> NICs = new ConcurrentDictionary<Guid, NetworkInterface>();
             try
@@ -128,7 +128,8 @@ namespace WinLib.Network
                 ManagementClass Win32_NetworkAdapterConfiguration = new ManagementClass("Win32_NetworkAdapterConfiguration");
                 ManagementObjectCollection Win32_NetworkAdapterConfiguration_Items;
                 try { Win32_NetworkAdapterConfiguration_Items = Win32_NetworkAdapterConfiguration.GetInstances(); }
-                catch (COMException) {
+                catch (COMException)
+                {
                     System.Windows.Forms.MessageBox.Show("\"" + System.Reflection.MethodBase.GetCurrentMethod().Name + "\" function failed this time becose WMI did not respond in time. Try again.", "WMI error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     return NICs;
                 }
@@ -162,7 +163,7 @@ namespace WinLib.Network
                 if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1)
                 {
                     System.Net.NetworkInformation.NetworkInterface loopbackNic = nics.Where((i) =>
-                        (i.Supports(NetworkInterfaceComponent.IPv4) &&  i.Supports(NetworkInterfaceComponent.IPv6) &&
+                        (i.Supports(NetworkInterfaceComponent.IPv4) && i.Supports(NetworkInterfaceComponent.IPv6) &&
                         i.GetIPProperties().GetIPv6Properties().Index == 1)).FirstOrDefault();
                     NetworkInterface.Loopback.networkInterface = loopbackNic;
                     NetworkInterface.Loopback.Guid = new Guid(loopbackNic.Id);
@@ -270,7 +271,7 @@ namespace WinLib.Network
                                         NICs[guid].IPv4Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
                                     else
                                         NICs[guid].IPv6Gateway.Add(new IPGatewayAddress(route.Gateway, route.Metric));
-                                
+
                                 List<IPGatewayAddress> gateways = NICs[guid].IPv4Gateway;
                                 gateways.Sort((x, y) => x.GatewayMetric.CompareTo(y.GatewayMetric));
                                 if (gateways.Any((i) => !IPAddress.Parse(i.Address).Equals(IPAddress.Any)))
@@ -283,9 +284,9 @@ namespace WinLib.Network
                                 }
                                 else
                                     if (NICs[guid].IPv4Address.Count > 0)
-                                        NICs[guid].LocalIPv4Exit = NICs[guid].IPv4Address[0].Address;
-                                
-                                
+                                    NICs[guid].LocalIPv4Exit = NICs[guid].IPv4Address[0].Address;
+
+
                                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\Tcpip_" + nic.Id, true);
                                 if (key != null)
                                 {
@@ -450,8 +451,8 @@ namespace WinLib.Network
 
                             }
             }
-            catch (Exception e) 
-            { 
+            catch (Exception e)
+            {
                 if (ExceptionThrown != null)
                     ExceptionThrown(null, new ExceptionEventArgs(e));
             }
@@ -474,7 +475,7 @@ namespace WinLib.Network
                 IPv4BytesReceived = stats.BytesReceived;
                 IPv4BytesSent = stats.BytesSent;
             }
-            catch 
+            catch
             {
                 IPv4InSpeed = 0;
                 IPv4InSpeedAvg10 = IPv4InSpeedAvg10 * 9 / 10 + IPv4InSpeed * 1 / 10;
@@ -692,8 +693,12 @@ namespace WinLib.Network
                         string name = (string)nameKey.GetValue("Name", "");
                         nameKey.Close();
                         ushort status = (ushort)GetAdapterStatus(name);
-                        if (status == 1 || status == 2 || status == 3 || status == 8 || status == 9) // online
+                        if ((status == 1 || status == 2 || status == 3 || status == 8 || status == 9) && // online
+                            System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces().Where(i => 
+                            i.Id.ToUpper() == guid && (i.Supports(NetworkInterfaceComponent.IPv4) || i.Supports(NetworkInterfaceComponent.IPv6))).Count() > 0)
+                        {
                             return name;
+                        }
                         else if (enableDhcp == 0) // offline, only if static config
                         {
                             System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(
@@ -1520,71 +1525,71 @@ namespace WinLib.Network
                 return new string[] { "Disabled", "IP Only", "IP & DNS" }[(int)Dhcpv4Enabled];
             }
         }
-        
+
         public enum AdapterType
         {
             [Description("ASDL")]
             AsymmetricDsl = NetworkInterfaceType.AsymmetricDsl,
             [Description("ATM")]
-	        Atm = NetworkInterfaceType.Atm,
+            Atm = NetworkInterfaceType.Atm,
             [Description("Basic ISDN")]
             BasicIsdn = NetworkInterfaceType.BasicIsdn,
             [Description("Ethernet")]
-	        Ethernet = NetworkInterfaceType.Ethernet,
+            Ethernet = NetworkInterfaceType.Ethernet,
             [Description("Ethernet 3Mb/s")]
-	        Ethernet3Megabit = NetworkInterfaceType.Ethernet3Megabit,
+            Ethernet3Megabit = NetworkInterfaceType.Ethernet3Megabit,
             [Description("Fast Ethernet 100Base-FX")]
-	        FastEthernetFx = NetworkInterfaceType.FastEthernetFx,
+            FastEthernetFx = NetworkInterfaceType.FastEthernetFx,
             [Description("Fast Ethernet 100Base-T")]
-	        FastEthernetT = NetworkInterfaceType.FastEthernetT,
+            FastEthernetT = NetworkInterfaceType.FastEthernetT,
             [Description("FDDI")]
-	        Fddi = NetworkInterfaceType.Fddi,
+            Fddi = NetworkInterfaceType.Fddi,
             [Description("Modem")]
-	        GenericModem = NetworkInterfaceType.GenericModem,
+            GenericModem = NetworkInterfaceType.GenericModem,
             [Description("Gigabit Ethernet")]
-	        GigabitEthernet = NetworkInterfaceType.GigabitEthernet,
+            GigabitEthernet = NetworkInterfaceType.GigabitEthernet,
             [Description("High Performance Serial Bus")]
-	        HighPerformanceSerialBus = NetworkInterfaceType.HighPerformanceSerialBus,
+            HighPerformanceSerialBus = NetworkInterfaceType.HighPerformanceSerialBus,
             [Description("IP over ATM")]
-	        IPOverAtm = NetworkInterfaceType.IPOverAtm,
+            IPOverAtm = NetworkInterfaceType.IPOverAtm,
             [Description("ISDN")]
-	        Isdn = NetworkInterfaceType.Isdn,
+            Isdn = NetworkInterfaceType.Isdn,
             [Description("Loopback")]
-	        Loopback = NetworkInterfaceType.Loopback,
+            Loopback = NetworkInterfaceType.Loopback,
             [Description("MDSL")]
-	        MultiRateSymmetricDsl = NetworkInterfaceType.MultiRateSymmetricDsl,
+            MultiRateSymmetricDsl = NetworkInterfaceType.MultiRateSymmetricDsl,
             [Description("PPP")]
-	        Ppp = NetworkInterfaceType.Ppp,
+            Ppp = NetworkInterfaceType.Ppp,
             [Description("Primary rate ISDN")]
-	        PrimaryIsdn = NetworkInterfaceType.PrimaryIsdn,
+            PrimaryIsdn = NetworkInterfaceType.PrimaryIsdn,
             [Description("RADSL")]
-	        RateAdaptDsl = NetworkInterfaceType.RateAdaptDsl,
+            RateAdaptDsl = NetworkInterfaceType.RateAdaptDsl,
             [Description("SLIP")]
-	        Slip = NetworkInterfaceType.Slip,
+            Slip = NetworkInterfaceType.Slip,
             [Description("SDSL")]
-	        SymmetricDsl = NetworkInterfaceType.SymmetricDsl,
+            SymmetricDsl = NetworkInterfaceType.SymmetricDsl,
             [Description("Token-Ring")]
-	        TokenRing = NetworkInterfaceType.TokenRing,
+            TokenRing = NetworkInterfaceType.TokenRing,
             [Description("Tunnel")]
-	        Tunnel = NetworkInterfaceType.Tunnel,
+            Tunnel = NetworkInterfaceType.Tunnel,
             [Description("Unknown")]
-	        Unknown = NetworkInterfaceType.Unknown,
+            Unknown = NetworkInterfaceType.Unknown,
             [Description("VDSL")]
-	        VeryHighSpeedDsl = NetworkInterfaceType.VeryHighSpeedDsl,
+            VeryHighSpeedDsl = NetworkInterfaceType.VeryHighSpeedDsl,
             [Description("Wireless IEEE 802.11")]
-	        Wireless80211 = NetworkInterfaceType.Wireless80211,
+            Wireless80211 = NetworkInterfaceType.Wireless80211,
             [Description("WiMax")]
-	        Wman = 237,
+            Wman = 237,
             /// <summary>
             /// GSM-based
             /// </summary>
             [Description("GSM-based")]
-	        Wwanpp = 243,
+            Wwanpp = 243,
             /// <summary>
             /// CDMA-based
             /// </summary>
             [Description("CDMA-based")]
-	        Wwanpp2 = 244
+            Wwanpp2 = 244
         }
 
         public enum Status : ushort
