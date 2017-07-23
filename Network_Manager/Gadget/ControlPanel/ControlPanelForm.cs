@@ -23,6 +23,7 @@ namespace Network_Manager.Gadget.ControlPanel
     // TODO: add disable/enable Teredo option
     // TODO: add IP forwarding
     // TODO: add WLAN configs, info and ICS
+    // TODO: fminimizeConnections = 0 - WLAN is no longer disconnected when wired connection is established
     public partial class ControlPanelForm : Form
     {
         public static Form Instance = null;
