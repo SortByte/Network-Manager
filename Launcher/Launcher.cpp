@@ -1,5 +1,5 @@
 // Network_Manager_Launcher.cpp : Defines the entry point for the application.
-//
+// TODO: Add/migrate launcher to single exe setup file
 
 #include "stdafx.h"
 #include "CheckDependencies.h"

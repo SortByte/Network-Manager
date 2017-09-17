@@ -16,6 +16,8 @@ using WinLib.WinAPI;
 namespace Network_Manager.Gadget.ControlPanel.Routes
 {
     // TODO: add advanced route options (publish, persistent)
+    // IPv4 persistent routes are stored in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\PersistentRoutes
+    // IPv6 persistent routes seems to be stored in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nsi\{eb004a01-9b1a-11d4-9123-0050047759bc}\16 (probably safer through netsh)
     public partial class RoutesForm : Form
     {
         public static Form Instance = null;

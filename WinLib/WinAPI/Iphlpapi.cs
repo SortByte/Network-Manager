@@ -202,6 +202,8 @@ namespace WinLib.WinAPI
                 route2.InterfaceIndex = uint.Parse(interfaceIndex);
                 route2.Metric = uint.Parse(metric);
                 route2.Protocol = protocol;
+                route2.PreferredLifetime = uint.MaxValue;
+                route2.ValidLifetime = uint.MaxValue;
                 IntPtr pRoute = Marshal.AllocHGlobal(Marshal.SizeOf(route2));
                 Marshal.StructureToPtr(route2, pRoute, false);
                 CreateIpForwardEntry2(pRoute);
