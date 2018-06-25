@@ -419,7 +419,8 @@ namespace Network_Manager.Gadget
             chart.Location = new Point(x, y);
             chart.Size = new Size(140, 30);
             chart.Margin = new Padding(0);
-            chart.AntiAliasing = AntiAliasingStyles.None;
+            chart.BackColor = Color.Gray;
+            chart.AntiAliasing = AntiAliasingStyles.Graphics;
             chart.MouseMove += new MouseEventHandler(Graph_MouseMove);
             this.Controls.Add(chart);
             this.Controls[name].BringToFront();

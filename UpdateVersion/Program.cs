@@ -16,7 +16,7 @@ namespace UpdateVersion
 {
     class Program
     {
-        private static string signingCertificateSha1 = "b10805ed7543c1201e86654e7504e474e59bf44c";
+        private static string signingCertificateSha1 = "949b07d3c530ee2b433d74fb57620b0bb1930457";
 
         static void Main(string[] args)
         {
