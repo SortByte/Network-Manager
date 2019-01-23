@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using WinLib.WinAPI;
 using WinLib.Network;
 using WinLib.Forms;
+using WinLib.Extensions;
 
 namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 {
@@ -28,6 +29,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
         private List<NetworkInterface.IPHostAddress> ipv6Address = new List<NetworkInterface.IPHostAddress>();
         private List<NetworkInterface.IPGatewayAddress> ipv6Gateway = new List<NetworkInterface.IPGatewayAddress>();
         private List<string> ipv6Dns = new List<string>();
+        private Config.InterfaceDataUsage interfaceDataUsage = null;
 
         public ConfigureInterfaceForm(Guid guid)
         {
@@ -41,6 +43,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             Instance = this;
             Global.BusyForms.Enqueue(busyForm);
             InitializeComponent();
+            dataUsageResetInterval.SelectedIndex = 0;
             // load profiles
             LoadProfiles();
             // resize
@@ -109,6 +112,18 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 tabControl1.TabPages[0].Enabled = false;
             if (!nic.IPv6Enabled)
                 tabControl1.TabPages[1].Enabled = false;
+            Config.InterfaceDataUsage interfaceDataUsage = Global.Config.DataUsage.FirstOrDefault(i => i.InterfaceGuid == nic.Guid);
+            if (interfaceDataUsage != null)
+            {
+                trackDataUsage.Checked = interfaceDataUsage.Track;
+                dataUsageResetInterval.SelectedIndex = (int)interfaceDataUsage.ResetInterval;
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily)
+                    dataUsageResetTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).Add(interfaceDataUsage.MomentOfTheDayForReset);
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly)
+                    dataUsageResetDay.SelectedIndex = (int)interfaceDataUsage.DayOfTheWeekForReset;
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly)
+                    dataUsageResetDay.SelectedIndex = interfaceDataUsage.DayOfTheMonthForReset - 1;
+            }
             Text = "Configure " + Global.NetworkInterfaces[guid].Name;
             Show();
         }
@@ -478,6 +493,27 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     if (int.Parse(ipv6Mtu.Text) != nic.IPv6Mtu && int.Parse(ipv6Mtu.Text) > 0)
                         nic.SetIPv6Mtu(ipv6Mtu.Text);
             }
+            Config.InterfaceDataUsage interfaceDataUsage = Global.Config.DataUsage.FirstOrDefault(i => i.InterfaceGuid == nic.Guid);
+            if (interfaceDataUsage == null && trackDataUsage.Checked)
+            {
+                interfaceDataUsage = new Config.InterfaceDataUsage();
+                interfaceDataUsage.InterfaceGuid = nic.Guid;
+                Global.Config.DataUsage.Add(interfaceDataUsage);
+            }
+            if (interfaceDataUsage != null)
+            {
+                interfaceDataUsage.Track = trackDataUsage.Checked;
+                interfaceDataUsage.ResetInterval = (Config.InterfaceDataUsage.ResetIntervals)dataUsageResetInterval.SelectedIndex;
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily)
+                    interfaceDataUsage.MomentOfTheDayForReset = dataUsageResetTime.Value.TimeOfDay;
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly)
+                    interfaceDataUsage.DayOfTheWeekForReset = (DayOfWeek)dataUsageResetDay.SelectedIndex;
+                if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly)
+                    interfaceDataUsage.DayOfTheMonthForReset = dataUsageResetDay.SelectedIndex + 1;
+                if (!interfaceDataUsage.Track)
+                    Global.Config.DataUsage.Remove(interfaceDataUsage);
+                Global.Config.Save();
+            }
             splash.UpdateStatus("Waiting for changes to be applied ...");
             timer.AutoReset = false;
             timer.Interval = 10000;
@@ -610,6 +646,17 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
 
                 if (form.InterfaceMetric > -1)
                     interfaceMetric.Text = Convert.ToString(form.InterfaceMetric);
+                if (form.InterfaceDataUsage != null)
+                {
+                    trackDataUsage.Checked = form.InterfaceDataUsage.Track;
+                    dataUsageResetInterval.SelectedIndex = (int)form.InterfaceDataUsage.ResetInterval;
+                    if (form.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily)
+                        dataUsageResetTime.Value = DateTime.Now.Subtract(DateTime.Now.TimeOfDay).Add(form.InterfaceDataUsage.MomentOfTheDayForReset);
+                    if (form.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly)
+                        dataUsageResetDay.SelectedIndex = (int)form.InterfaceDataUsage.DayOfTheWeekForReset;
+                    if (form.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly)
+                        dataUsageResetDay.SelectedIndex = form.InterfaceDataUsage.DayOfTheMonthForReset - 1;
+                }
             }
         }
 
@@ -632,7 +679,8 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 ipv6Dns,
                 routerDiscoveryEnabled.Checked,
                 int.Parse(ipv6Mtu.Text),
-                int.Parse(interfaceMetric.Text)))
+                int.Parse(interfaceMetric.Text),
+                interfaceDataUsage))
             {
                 DialogResult result = form.ShowDialog();
                 if (result.CompareTo(DialogResult.OK) == 0)
@@ -662,6 +710,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     config.IPv6RouterDiscoveryEnabled = form.RouterDiscovery;
                     config.IPv6Mtu = form.IPv6Mtu;
                     config.InterfaceMetric = form.InterfaceMetric;
+                    config.InterfaceDataUsage = form.InterfaceDataUsage;
                     config.LoadMode = form.LoadMode;
                     Global.Config.Save();
                     LoadProfiles();
@@ -984,6 +1033,31 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                         return false;
                     }
             }
+            // data usage
+            if (trackDataUsage.Checked)
+            {
+                if (dataUsageResetInterval.SelectedIndex == -1)
+                {
+                    new BalloonTip("Warning", "Select the data usage reset interval", dataUsageResetInterval, BalloonTip.ICON.WARNING);
+                    return false;
+                }
+                if (new [] { (int)Config.InterfaceDataUsage.ResetIntervals.Weekly, (int)Config.InterfaceDataUsage.ResetIntervals.Monthly }.Contains(dataUsageResetInterval.SelectedIndex))
+                    if (dataUsageResetDay.SelectedIndex == -1)
+                    {
+                        new BalloonTip("Warning", "Select the data usage reset day", dataUsageResetDay, BalloonTip.ICON.WARNING);
+                        return false;
+                    }
+            }
+            interfaceDataUsage = new Config.InterfaceDataUsage();
+            interfaceDataUsage.InterfaceGuid = nic.Guid;
+            interfaceDataUsage.Track = trackDataUsage.Checked;
+            interfaceDataUsage.ResetInterval = (Config.InterfaceDataUsage.ResetIntervals)dataUsageResetInterval.SelectedIndex;
+            if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily)
+                interfaceDataUsage.MomentOfTheDayForReset = dataUsageResetTime.Value.TimeOfDay;
+            if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly)
+                interfaceDataUsage.DayOfTheWeekForReset = (DayOfWeek)dataUsageResetDay.SelectedIndex;
+            if (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly)
+                interfaceDataUsage.DayOfTheMonthForReset = dataUsageResetDay.SelectedIndex + 1;
             if (interfaceMetric.Text == "")
                 interfaceMetric.Text = "1";
             return true;
@@ -999,6 +1073,63 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             {
                 ((DataGridView)sender).Rows.Remove(cell.OwningRow);
                 e.SuppressKeyPress = false;
+            }
+        }
+
+        private void dataUsageResetInterval_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (dataUsageResetInterval.Text == "never")
+            {
+                dataUsageResetIntervalLabel.Visible = false;
+                dataUsageResetTime.Visible = false;
+                dataUsageResetDay.Visible = false;
+            }
+            else if (dataUsageResetInterval.Text == "every day")
+            {
+                dataUsageResetIntervalLabel.Text = "at";
+                dataUsageResetIntervalLabel.Visible = true;
+                dataUsageResetTime.Visible = true;
+                dataUsageResetDay.Visible = false;
+            }
+            else if (dataUsageResetInterval.Text == "every week")
+            {
+                dataUsageResetIntervalLabel.Text = "on";
+                dataUsageResetIntervalLabel.Visible = true;
+                dataUsageResetTime.Visible = false;
+                dataUsageResetDay.Items.Clear();
+                dataUsageResetDay.Items.AddRange(Enum.GetNames(typeof(DayOfWeek)));
+                dataUsageResetDay.SelectedIndex = 0;
+                dataUsageResetDay.Visible = true;
+            }
+            else if (dataUsageResetInterval.Text == "every month")
+            {
+                dataUsageResetIntervalLabel.Text = "on";
+                dataUsageResetIntervalLabel.Visible = true;
+                dataUsageResetTime.Visible = false;
+                dataUsageResetDay.Items.Clear();
+                dataUsageResetDay.Items.AddRange(Enumerable.Range(1, 31).Select(i => i.ToString()).ToArray());
+                dataUsageResetDay.SelectedIndex = 0;
+                dataUsageResetDay.Visible = true;
+            }
+        }
+
+        private void trackDataUsage_CheckedChanged(object sender, EventArgs e)
+        {
+            if (trackDataUsage.Checked)
+            {
+                dataUsageResetLabel.Enabled = true;
+                dataUsageResetInterval.Enabled = true;
+                dataUsageResetIntervalLabel.Enabled = true;
+                dataUsageResetTime.Enabled = true;
+                dataUsageResetDay.Enabled = true;
+            }
+            else
+            {
+                dataUsageResetLabel.Enabled = false;
+                dataUsageResetInterval.Enabled = false;
+                dataUsageResetIntervalLabel.Enabled = false;
+                dataUsageResetTime.Enabled = false;
+                dataUsageResetDay.Enabled = false;
             }
         }
     }

@@ -123,6 +123,22 @@ namespace Network_Manager.Gadget.ControlPanel
                         (short)(button.PointToScreen(Point.Empty).Y + button.Height * 2.5));
                 });
                 toolStripItem.MouseLeave += new EventHandler((s, e) => { BalloonTip.CloseAll(); });
+                Config.InterfaceDataUsage interfaceDataUsage = Global.Config.DataUsage.FirstOrDefault(d => d.InterfaceGuid == nic.Guid);
+                if (interfaceDataUsage != null)
+                {
+                    toolStripItem = contextMenuStrip.Items.Add("Reset data usage");
+                    toolStripItem.Click += new EventHandler((s, e) => {
+                        DialogResult result = MessageBox.Show(
+                            "Are you sure you want to reset current tracked data usage for \"" + nic.Name + "\"?", "Data uage reset confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (result == DialogResult.Yes)
+                        {
+                            Interlocked.Exchange(ref interfaceDataUsage.PreviousSessionsReceivedBytes, 0);
+                            Interlocked.Exchange(ref interfaceDataUsage.PreviousSessionsSentBytes, 0);
+                            interfaceDataUsage.LastReset = DateTime.Now;
+                            Global.Config.Save();
+                        }
+                    });
+                }
 
                 // TODO: add speed, lattency test and network map
                 //toolStripItem = contextMenuStrip.Items.Add("Test performance");
@@ -155,11 +171,11 @@ namespace Network_Manager.Gadget.ControlPanel
                 groupBox.Controls.Add(CreateLabel("Download:", 600, 85, 65, false, "", Color.FromArgb(0x9b, 0x87, 0x0c)));
                 groupBox.Controls.Add(CreateLabel("0 B/s", 600, 100, 65, false, "downByte", Color.FromArgb(0x9b, 0x87, 0x0c)));
                 groupBox.Controls.Add(CreateLabel("0 b/s", 600, 115, 65, false, "downBit", Color.FromArgb(0x9b, 0x87, 0x0c)));
-                groupBox.Controls.Add(CreateLabel(Unit.AutoScale(nic.IPv4BytesReceived, "B"), 600, 205, 65, false, "totalDown", Color.FromArgb(0x9b, 0x87, 0x0c)));
+                groupBox.Controls.Add(CreateLabel(Unit.AutoScale(nic.TotalReceivedBytes(), "B"), 600, 205, 65, false, "totalDown", Color.FromArgb(0x9b, 0x87, 0x0c)));
                 groupBox.Controls.Add(CreateLabel("Upload:", 665, 85, 65, false, "", Color.Green, ContentAlignment.MiddleRight));
                 groupBox.Controls.Add(CreateLabel("0 B/s", 665, 100, 65, false, "upByte", Color.Green, ContentAlignment.MiddleRight));
                 groupBox.Controls.Add(CreateLabel("0 b/s", 665, 115, 65, false, "upBit", Color.Green, ContentAlignment.MiddleRight));
-                groupBox.Controls.Add(CreateLabel(Unit.AutoScale(nic.IPv4BytesSent, "B"), 665, 205, 65, false, "totalUp", Color.Green, ContentAlignment.MiddleRight));
+                groupBox.Controls.Add(CreateLabel(Unit.AutoScale(nic.TotalSentdBytes(), "B"), 665, 205, 65, false, "totalUp", Color.Green, ContentAlignment.MiddleRight));
                 groupBox.Controls.Add(CreateLabel("Total:", 650, 190, 65));
                 groupBox.Controls.Add(CreateGraph("graph", 600, 145));
                 // interface event subscriptions
@@ -429,8 +445,8 @@ namespace Network_Manager.Gadget.ControlPanel
                         Controls["interface" + nic.Guid].Controls["downBit"].Text = Unit.AutoScale(nic.IPv4InSpeed * 8, "b");
                         Controls["interface" + nic.Guid].Controls["upByte"].Text = Unit.AutoScale(nic.IPv4OutSpeed, "B");
                         Controls["interface" + nic.Guid].Controls["upBit"].Text = Unit.AutoScale(nic.IPv4OutSpeed * 8, "b");
-                        Controls["interface" + nic.Guid].Controls["totalDown"].Text = Unit.AutoScale(nic.IPv4BytesReceived, "B");
-                        Controls["interface" + nic.Guid].Controls["totalUp"].Text = Unit.AutoScale(nic.IPv4BytesSent, "B");
+                        Controls["interface" + nic.Guid].Controls["totalDown"].Text = Unit.AutoScale(nic.TotalReceivedBytes(), "B");
+                        Controls["interface" + nic.Guid].Controls["totalUp"].Text = Unit.AutoScale(nic.TotalSentdBytes(), "B");
                         Chart chart = ((Chart)Controls["interface" + nic.Guid].Controls["graph"]);
                         chart.Series[0].Points.RemoveAt(0);
                         chart.Series[0].Points.AddY(nic.IPv4InSpeed);

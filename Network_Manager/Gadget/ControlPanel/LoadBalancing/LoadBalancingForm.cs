@@ -57,10 +57,16 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
                                 if (!Global.Config.LoadBalancer.ExcludedInterfacesForTap.Contains(nic.Guid))
                                     Invoke(new Action(() => { checkBox1.Checked = true; }));
                             }
-                        } catch { }
+                            else
+                            {
+                                checkBox1.Text += " (gateway is down)";
+                            }
+                        } catch (Exception ex) {
+                            checkBox1.Text += " (gateway check failed)";
+                            Global.WriteLog(ex.ToString());
+                        }
                     });
                     nic.DefaultIPv4GatewayChecked += handler;
-                    nic.CheckDefaultIPv4Gateway();
                 }
                 
                 // Windows LB
@@ -101,7 +107,8 @@ namespace Network_Manager.Gadget.ControlPanel.LoadBalancing
 
         private void LoadBalancingForm_Shown(object sender, EventArgs e)
         {
-
+            foreach (NetworkInterface nic in Global.NetworkInterfaces.Values)
+                nic.CheckDefaultIPv4Gateway();
         }
 
         private void UpdateControls()

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinLib.WinAPI;
+using static WinLib.WinAPI.Kernel32;
 
 namespace Network_Manager
 {
@@ -18,12 +20,13 @@ namespace Network_Manager
         /// The main entry point for the application.
         /// </summary>
         private static SemaphoreSlim requestRefresh = new SemaphoreSlim(1);
-
+        
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //AppDomain.CurrentDomain.FirstChanceException += (s, e) => { Global.WriteLog(e.Exception.ToString()); };
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
             //Advapi32.SetDebugPrivilege();
@@ -122,7 +125,17 @@ namespace Network_Manager
         {
             try
             {
+                foreach (Config.InterfaceDataUsage interfaceDataUsage in Global.Config.DataUsage)
+                {
+                    Global.NetworkInterfaces.Where(i => i.Value.Guid == interfaceDataUsage.InterfaceGuid).ToList().ForEach(i =>
+                    {
+                        interfaceDataUsage.CurrentSessionReceivedBytes = i.Value.IPv4BytesReceived;
+                        interfaceDataUsage.CurrentSessionSentBytes = i.Value.IPv4BytesSent;
+                    });
+                }
+                Global.Config.Save();
                 Global.TrayIcon.Visible = false;
+                Global.WriteLog(Process.GetCurrentProcess().MainModule.FileVersionInfo.ProductName + " has exited");
             }
             catch { }
         }

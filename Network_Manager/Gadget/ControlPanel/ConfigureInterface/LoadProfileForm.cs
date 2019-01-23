@@ -28,6 +28,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
         public NetworkInterface.RouterDiscovery RouterDiscovery = NetworkInterface.RouterDiscovery.Unchanged;
         public int IPv6Mtu = -1;
         public int InterfaceMetric = -1;
+        public Config.InterfaceDataUsage InterfaceDataUsage = null;
 
         public LoadProfileForm(string profileName)
         {
@@ -89,6 +90,10 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             foreach (TreeNode node in nodes)
                 if (node.Checked)
                     InterfaceMetric = (int)node.Tag;
+            nodes = treeView1.Nodes.Find("interfaceDataUsage", true);
+            foreach (TreeNode node in nodes)
+                if (node.Checked)
+                    InterfaceDataUsage = (Config.InterfaceDataUsage)node.Tag;
             //foreach (ListViewItem item in listView1.Items)
             //{
             //    if (item.SubItems[0].Text != "")
@@ -258,6 +263,12 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                 TreeNode item = treeView1.Nodes.Add("interfaceMetric", "Interface Metric: " + profile.InterfaceMetric);
                 item.Checked = true;
                 item.Tag = profile.InterfaceMetric;
+            }
+            if (profile.InterfaceDataUsage != null)
+            {
+                TreeNode item = treeView1.Nodes.Add("interfaceDataUsage", "Data Usage: " + (profile.InterfaceDataUsage.Track ? "Tracked, reset " + Enum.GetName(typeof(Config.InterfaceDataUsage.ResetIntervals), profile.InterfaceDataUsage.ResetInterval) + (profile.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily ? " at " + profile.InterfaceDataUsage.MomentOfTheDayForReset : (profile.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly ? " on " + Enum.GetName(typeof(DayOfWeek), profile.InterfaceDataUsage.DayOfTheWeekForReset) : (profile.InterfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly ? " on " + profile.InterfaceDataUsage.DayOfTheMonthForReset : ""))) : "Not tracked"));
+                item.Checked = true;
+                item.Tag = profile.InterfaceDataUsage;
             }
             treeView1.ExpandAll();
             //if (profile.DhcpEnabled < Lib.Network.NetworkInterface.Dhcp.IPOnly)

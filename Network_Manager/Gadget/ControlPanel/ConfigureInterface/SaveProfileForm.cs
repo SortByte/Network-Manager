@@ -28,6 +28,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
         public NetworkInterface.RouterDiscovery RouterDiscovery = NetworkInterface.RouterDiscovery.Unchanged;
         public int IPv6Mtu = -1;
         public int InterfaceMetric = -1;
+        public Config.InterfaceDataUsage InterfaceDataUsage = null;
 
         public SaveProfileForm(string name,
             bool ipv4Enabled,
@@ -44,10 +45,12 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             List<string> ipv6DnsServer,
             bool routerDiscovery,
             int ipv6Mtu,
-            int interfaceMetric)
+            int interfaceMetric,
+            Config.InterfaceDataUsage interfaceDataUsage)
         {
             InitializeComponent();
             textBox1.Text = name;
+            TreeNode item;
             if (ipv4Enabled)
             {
                 TreeNode ipv4Node = treeView1.Nodes.Add("IPv4");
@@ -57,7 +60,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv4Node.Nodes.Add("Local Address & Subnet Mask");
                     foreach (NetworkInterface.IPHostAddress ip in ipv4Address)
                     {
-                        TreeNode item = node.Nodes.Add("ipv4LocalAddress", ip.Address + " - " + ip.Subnet);
+                        item = node.Nodes.Add("ipv4LocalAddress", ip.Address + " - " + ip.Subnet);
                         item.Checked = true;
                         item.Tag = ip;
                     }
@@ -67,7 +70,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv4Node.Nodes.Add("Gateway Address & Metric");
                     foreach (NetworkInterface.IPGatewayAddress ip in ipv4Gateway)
                     {
-                        TreeNode item = node.Nodes.Add("ipv4GatewayAddress", ip.Address + " - " + ip.GatewayMetric);
+                        item = node.Nodes.Add("ipv4GatewayAddress", ip.Address + " - " + ip.GatewayMetric);
                         item.Checked = true;
                         item.Tag = ip;
                     }
@@ -77,23 +80,23 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv4Node.Nodes.Add("DNS Server");
                     foreach (string ip in ipv4DnsServer)
                     {
-                        TreeNode item = node.Nodes.Add("ipv4DnsAddress", ip);
+                        item = node.Nodes.Add("ipv4DnsAddress", ip);
                         item.Checked = true;
                         item.Tag = ip;
                     }
                 }
                 {
-                    TreeNode item = ipv4Node.Nodes.Add("dhcp", "DHCP: " + ((NetworkInterface.Dhcp)(Convert.ToInt32(dhcpIP) + Convert.ToInt32(dhcpDns))).GetDescription());
+                    item = ipv4Node.Nodes.Add("dhcp", "DHCP: " + ((NetworkInterface.Dhcp)(Convert.ToInt32(dhcpIP) + Convert.ToInt32(dhcpDns))).GetDescription());
                     item.Checked = true;
                     item.Tag = (NetworkInterface.Dhcp)(Convert.ToInt32(dhcpIP) + Convert.ToInt32(dhcpDns));
                 }
                 {
-                    TreeNode item = ipv4Node.Nodes.Add("netbios", "NetBIOS: " + ((NetworkInterface.Netbios)(netbios ? 1 : 2)).GetDescription());
+                    item = ipv4Node.Nodes.Add("netbios", "NetBIOS: " + ((NetworkInterface.Netbios)(netbios ? 1 : 2)).GetDescription());
                     item.Checked = true;
                     item.Tag = (NetworkInterface.Netbios)(netbios ? 1 : 2);
                 }
                 {
-                    TreeNode item = ipv4Node.Nodes.Add("ipv4Mtu", "MTU: " + ipv4Mtu);
+                    item = ipv4Node.Nodes.Add("ipv4Mtu", "MTU: " + ipv4Mtu);
                     item.Checked = true;
                     item.Tag = ipv4Mtu;
                 }
@@ -107,7 +110,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv6Node.Nodes.Add("Local Address & Subnet Prefix Length");
                     foreach (NetworkInterface.IPHostAddress ip in ipv6Address)
                     {
-                        TreeNode item = node.Nodes.Add("ipv6LocalAddress", ip.Address + " - " + ip.Subnet);
+                        item = node.Nodes.Add("ipv6LocalAddress", ip.Address + " - " + ip.Subnet);
                         item.Checked = true;
                         item.Tag = ip;
                     }
@@ -117,7 +120,7 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv6Node.Nodes.Add("Gateway Address & Metric");
                     foreach (NetworkInterface.IPGatewayAddress ip in ipv6Gateway)
                     {
-                        TreeNode item = node.Nodes.Add("ipv6GatewayAddress", ip.Address + " - " + ip.GatewayMetric);
+                        item = node.Nodes.Add("ipv6GatewayAddress", ip.Address + " - " + ip.GatewayMetric);
                         item.Checked = true;
                         item.Tag = ip;
                     }
@@ -127,27 +130,30 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
                     TreeNode node = ipv6Node.Nodes.Add("DNS Server");
                     foreach (string ip in ipv6DnsServer)
                     {
-                        TreeNode item = node.Nodes.Add("ipv6DnsAddress", ip);
+                        item = node.Nodes.Add("ipv6DnsAddress", ip);
                         item.Checked = true;
                         item.Tag = ip;
                     }
                 }
                 {
-                    TreeNode item = ipv6Node.Nodes.Add("ipv6RouterDiscovery", "Router Discovery: " + ((NetworkInterface.RouterDiscovery)Convert.ToInt32(routerDiscovery)).GetDescription());
+                    item = ipv6Node.Nodes.Add("ipv6RouterDiscovery", "Router Discovery: " + ((NetworkInterface.RouterDiscovery)Convert.ToInt32(routerDiscovery)).GetDescription());
                     item.Checked = true;
                     item.Tag = (NetworkInterface.RouterDiscovery)Convert.ToInt32(routerDiscovery);
                 }
                 {
-                    TreeNode item = ipv6Node.Nodes.Add("ipv6Mtu", "MTU: " + ipv6Mtu);
+                    item = ipv6Node.Nodes.Add("ipv6Mtu", "MTU: " + ipv6Mtu);
                     item.Checked = true;
                     item.Tag = ipv6Mtu;
                 }
             }
-            {
-                TreeNode item = treeView1.Nodes.Add("interfaceMetric", "Interface Metric: " + interfaceMetric);
-                item.Checked = true;
-                item.Tag = interfaceMetric;
-            }
+            item = treeView1.Nodes.Add("interfaceMetric", "Interface Metric: " + interfaceMetric);
+            item.Checked = true;
+            item.Tag = interfaceMetric;
+
+            item = treeView1.Nodes.Add("interfaceDataUsage", "Data Usage: " + (interfaceDataUsage.Track ? "Tracked, reset " + Enum.GetName(typeof(Config.InterfaceDataUsage.ResetIntervals), interfaceDataUsage.ResetInterval) + (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Daily ? " at " + interfaceDataUsage.MomentOfTheDayForReset : (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Weekly ? " on " + Enum.GetName(typeof(DayOfWeek), interfaceDataUsage.DayOfTheWeekForReset) : (interfaceDataUsage.ResetInterval == Config.InterfaceDataUsage.ResetIntervals.Monthly ? " on " + interfaceDataUsage.DayOfTheMonthForReset : ""))) : "Not tracked"));
+            item.Checked = true;
+            item.Tag = interfaceDataUsage;
+            
             treeView1.ExpandAll();
             loadMode.SelectedIndex = 0;
         }
@@ -216,6 +222,10 @@ namespace Network_Manager.Gadget.ControlPanel.ConfigureInterface
             foreach (TreeNode node in nodes)
                 if (node.Checked)
                     InterfaceMetric = (int)node.Tag;
+            nodes = treeView1.Nodes.Find("interfaceDataUsage", true);
+            foreach (TreeNode node in nodes)
+                if (node.Checked)
+                    InterfaceDataUsage = (Config.InterfaceDataUsage)node.Tag;
             DialogResult = System.Windows.Forms.DialogResult.OK;
             Close();
         }

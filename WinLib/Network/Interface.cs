@@ -744,7 +744,6 @@ namespace WinLib.Network
             // TODO: default gateway check needs testing on multi default gateway interfaces
             new Thread(new ThreadStart(() =>
                 {
-                    Thread.Sleep(1000);
                     if (DefaultIPv4Gateway != null)
                         DefaultIPv4GatewayMac = Iphlpapi.GetMacAddress(DefaultIPv4Gateway, LocalIPv4Exit);
                     if (DefaultIPv4GatewayChecked != null)

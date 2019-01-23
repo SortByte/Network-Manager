@@ -44,6 +44,30 @@ namespace WinLib.Extensions
             TValue ignored;
             return dictionary.TryRemove(key, out ignored);
         }
+
+        /// <summary>
+        /// Don't use on large collections; iterations must not be affected by temporarily missing items, lock otherwise
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bag"></param>
+        /// <param name="item"></param>
+        public static void Remove<T>(this ConcurrentBag<T> bag, T item)
+        {
+            List<T> outItems = new List<T>();
+            lock (bag)
+            {
+                while (!bag.IsEmpty)
+                {
+                    bag.TryTake(out T outItem);
+                    if (outItem.Equals(item))
+                        break;
+                    outItems.Add(outItem);
+                }
+                foreach (T outItem in outItems)
+                    bag.Add(outItem);
+            }
+        }
+
         /// <summary>
         /// If you use this extension on a dictionary to add entries, don't mix it with other methods (like TryAdd) in multi-threading environment
         /// </summary>

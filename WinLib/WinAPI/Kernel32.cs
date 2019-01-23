@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace WinLib.WinAPI
 {
@@ -12,6 +13,7 @@ namespace WinLib.WinAPI
     {
         public static List<string> DeviceNames = new List<string>();
         public static List<string> DriveNames = new List<string>();
+        public delegate bool ConsoleCtrlHandlerDelegate(int sig);
 
         [DllImportAttribute("Kernel32.dll")]
         public static extern uint GetLastError();
@@ -39,6 +41,9 @@ namespace WinLib.WinAPI
         private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+        [DllImport("Kernel32")]
+        public static extern bool SetConsoleCtrlHandler(ConsoleCtrlHandlerDelegate handler, bool add);
+
 
         public static string GetLastErrorMessage(uint errorCode)
         {
@@ -143,5 +148,31 @@ namespace WinLib.WinAPI
 
         public static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
 
-    }
+        public enum HRESULT : uint
+        {
+            [Description("Operation successful")]
+            S_OK = 0x00000000,
+            [Description("Operation aborted")]
+            E_ABORT = 0x80004004,
+            [Description("General access denied error")]
+            E_ACCESSDENIED = 0x80070005,
+            [Description("Unspecified failure")]
+            E_FAIL = 0x80004005,
+            [Description("Handle that is not valid")]
+            E_HANDLE = 0x80070006,
+            [Description("One or more arguments are not valid")]
+            E_INVALIDARG = 0x80070057,
+            [Description("No such interface supported")]
+            E_NOINTERFACE = 0x80004002,
+            [Description("Not implemented")]
+            E_NOTIMPL = 0x80004001,
+            [Description("Failed to allocate necessary memory")]
+            E_OUTOFMEMORY = 0x8007000E,
+            [Description("Pointer that is not valid")]
+            E_POINTER = 0x80004003,
+            [Description("Unexpected failure")]
+            E_UNEXPECTED = 0x8000FFFF
+        }
+
+}
 }

@@ -148,8 +148,8 @@ namespace Network_Manager.Gadget
                     AddLabel("upBit" + nic.Guid, "0 b/s", xOffset + 23 + 75, 38 + 90 + y * interfaceHeight, 70, Color.Lime, ContentAlignment.MiddleRight);
                     AddGraph("graph" + nic.Guid, xOffset+23, 38 + 110 + y * interfaceHeight);
                     AddLabel("totalLabel" + nic.Guid, "Total:", xOffset + 23 + 55, 38 + 150 + y * interfaceHeight, 50);
-                    AddLabel("totalDown" + nic.Guid, Unit.AutoScale(nic.IPv4BytesReceived, "B"), xOffset + 23, 38 + 160 + y * interfaceHeight, 70, Color.Yellow);
-                    AddLabel("totalUp" + nic.Guid, Unit.AutoScale(nic.IPv4BytesSent, "B"), xOffset + 23 + 75, 38 + 160 + y * interfaceHeight, 70, Color.Lime, ContentAlignment.MiddleRight);
+                    AddLabel("totalDown" + nic.Guid, Unit.AutoScale(nic.TotalReceivedBytes(), "B"), xOffset + 23, 38 + 160 + y * interfaceHeight, 70, Color.Yellow);
+                    AddLabel("totalUp" + nic.Guid, Unit.AutoScale(nic.TotalSentdBytes(), "B"), xOffset + 23 + 75, 38 + 160 + y * interfaceHeight, 70, Color.Lime, ContentAlignment.MiddleRight);
                     toolTip.SetToolTip(Controls["localIP" + nic.Guid], "Click to copy to clipboard");
                     toolTip.SetToolTip(Controls["publicIP" + nic.Guid], "Click to copy to clipboard");
                     toolTip.SetToolTip(Controls["downByte" + nic.Guid], "Avg:" + Unit.AutoScale(nic.IPv4InSpeedAvg20, "B/s"));
@@ -508,8 +508,8 @@ namespace Network_Manager.Gadget
                         this.Controls["downBit" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4InSpeed * 8, "b");
                         this.Controls["upByte" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeed, "B");
                         this.Controls["upBit" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4OutSpeed * 8, "b");
-                        this.Controls["totalDown" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4BytesReceived, "B");
-                        this.Controls["totalUp" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.IPv4BytesSent, "B");
+                        this.Controls["totalDown" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.TotalReceivedBytes(), "B");
+                        this.Controls["totalUp" + nic.Guid].Text = WinLib.Network.Unit.AutoScale(nic.TotalSentdBytes(), "B");
                         Chart chart = ((Chart)this.Controls["graph" + nic.Guid]);
                         chart.Series[0].Points.RemoveAt(0);
                         chart.Series[0].Points.AddY(nic.IPv4InSpeed);

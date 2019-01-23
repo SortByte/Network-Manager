@@ -1,22 +1,20 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Runtime.InteropServices;
+using System.ServiceProcess;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.ServiceProcess;
-using Microsoft.Win32;
+using WinLib.Forms;
 using WinLib.Network;
 using WinLib.Network.Http;
-using WinLib.Forms;
 
 
 namespace Network_Manager.Jobs.Extensions
@@ -197,10 +195,14 @@ namespace Network_Manager.Jobs.Extensions
             // get WinPcap version
             if (File.Exists(Environment.GetEnvironmentVariable("windir") + @"\System32\wpcap.dll") &&
                 File.Exists(Environment.GetEnvironmentVariable("windir") + @"\System32\Packet.dll") &&
-                ServiceController.GetDevices().Where(i => i.ServiceName == "NPF").Count() > 0)
+                ServiceController.GetDevices().Where(i => i.ServiceName.ToUpper() == "NPF").Count() > 0)
             {
                 string version = Marshal.PtrToStringAnsi(pcap_lib_version());
-                version = Regex.Replace(version, @"^.*WinPcap version ([0-9\.]+).*$", "$1", RegexOptions.IgnoreCase);
+                version = Regex.Replace(version, @"^.*WinPcap vrsion ([0-9\.]+).*$", "$1", RegexOptions.IgnoreCase);
+                Version outVersion;
+                if (!Version.TryParse(version, out outVersion))
+                    if (Regex.IsMatch(version, @"npcap", RegexOptions.IgnoreCase))
+                        version = "4.1.3";
                 WinPcapInstalled = Version.Parse(version).CompareTo(Version.Parse("4.1.2")) > -1;
                 WinPcapInstalledVersion = version;
             }
@@ -271,7 +273,7 @@ namespace Network_Manager.Jobs.Extensions
             LoadingForm splash = null;
             if (verbose)
                 splash = LoadingForm.Create("Searching \"NetGroup Packet Filter\" service ...");
-            if (ServiceController.GetDevices().Where(i => i.ServiceName == "NPF").Count() == 0)
+            if (ServiceController.GetDevices().Where(i => i.ServiceName.ToUpper() == "NPF").Count() == 0)
             {
                 if (verbose)
                     splash.Stop();

@@ -91,6 +91,7 @@
     <Compile Include="WinAPI\BalloonTip.cs" />
     <Compile Include="WinAPI\Iphlpapi.cs" />
     <Compile Include="WinAPI\Kernel32.cs" />
+    <Compile Include="WinAPI\MSCorEE.cs" />
     <Compile Include="WinAPI\Newdev.cs" />
     <Compile Include="WinAPI\Ntdll.cs" />
     <Compile Include="WinAPI\Psapi.cs" />

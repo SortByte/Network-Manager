@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Drawing;
 using WinLib.Network;
+using static Network_Manager.Config;
 
 namespace Network_Manager
 {
@@ -165,6 +166,24 @@ namespace Network_Manager
             {
                 this.Name = name;
             }
+        }
+
+        public static long TotalReceivedBytes(this WinLib.Network.NetworkInterface networkInterface)
+        {
+            InterfaceDataUsage interfaceDataUsage = Config.DataUsage.FirstOrDefault(i => i.InterfaceGuid == networkInterface.Guid);
+            if (interfaceDataUsage != null)
+                return interfaceDataUsage.PreviousSessionsReceivedBytes + networkInterface.IPv4BytesReceived;
+            else
+                return networkInterface.IPv4BytesReceived;
+        }
+
+        public static long TotalSentdBytes(this WinLib.Network.NetworkInterface networkInterface)
+        {
+            InterfaceDataUsage interfaceDataUsage = Config.DataUsage.FirstOrDefault(i => i.InterfaceGuid == networkInterface.Guid);
+            if (interfaceDataUsage != null)
+                return interfaceDataUsage.PreviousSessionsSentBytes + networkInterface.IPv4BytesSent;
+            else
+                return networkInterface.IPv4BytesSent;
         }
     }
 }

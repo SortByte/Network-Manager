@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using WinLib.Network;
 using WinLib.WinAPI;
 using System.Xml;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace Network_Manager
 {
@@ -22,9 +24,14 @@ namespace Network_Manager
         public List<InterfaceProfile> InterfaceProfiles = new List<InterfaceProfile>();
         public SavedRouteList SavedRoutes = new SavedRouteList();
         public LoadBalancerConfig LoadBalancer = new LoadBalancerConfig();
-
+        [XmlIgnore]
+        public ConcurrentBag<InterfaceDataUsage> DataUsage = new ConcurrentBag<InterfaceDataUsage>();
+        [XmlElement("DataUsage")]
+        public InterfaceDataUsage[] DataUsageXml { get { return DataUsage.ToArray(); } set {
+                DataUsage = value != null ? new ConcurrentBag<InterfaceDataUsage>(value) : new ConcurrentBag<InterfaceDataUsage>(); } }
+        [field: NonSerialized]
+        object saveLock = new object();
         
-
         public class GadgetConfig
         {
             public bool Debug = false;
@@ -64,6 +71,7 @@ namespace Network_Manager
             public NetworkInterface.RouterDiscovery IPv6RouterDiscoveryEnabled = NetworkInterface.RouterDiscovery.Unchanged;
             public int IPv6Mtu = -1;
             public int InterfaceMetric = -1;
+            public InterfaceDataUsage InterfaceDataUsage = null;
             public LoadingMode LoadMode = LoadingMode.ReplaceModified;
 
             public enum LoadingMode
@@ -420,21 +428,93 @@ namespace Network_Manager
             public List<SavedRouteNode> Nodes = new List<SavedRouteNode>();
         }
 
+        public class InterfaceDataUsage
+        {
+            public Guid InterfaceGuid;
+            public bool Track = false;
+            public long PreviousSessionsReceivedBytes = 0;
+            public long PreviousSessionsSentBytes = 0;
+            public long CurrentSessionReceivedBytes = 0;
+            public long CurrentSessionSentBytes = 0;
+            public ResetIntervals ResetInterval = ResetIntervals.Never;
+            [XmlIgnore]
+            public TimeSpan MomentOfTheDayForReset = TimeSpan.MinValue;
+            [XmlElement("MomentOfTheDayForReset")]
+            public long MomentOfTheDayForResetXml { get { return MomentOfTheDayForReset.Ticks; } set { MomentOfTheDayForReset = new TimeSpan(value); } }
+            public DayOfWeek DayOfTheWeekForReset = DayOfWeek.Sunday;
+            public int DayOfTheMonthForReset = 1;
+            public DateTime LastReset = DateTime.MinValue;
+            [XmlIgnore]
+            public DateTime LastSignificantFlow = DateTime.MinValue;
+            [XmlIgnore]
+            public bool SignificantFlow = false;
+
+
+            public enum ResetIntervals
+            {
+                Never,
+                Daily,
+                Weekly,
+                Monthly
+            }
+
+            public void Update(NetworkInterface networkInterface)
+            {
+                if (Track)
+                {
+                    // new connection
+                    if (CurrentSessionReceivedBytes > networkInterface.IPv4BytesReceived || CurrentSessionSentBytes > networkInterface.IPv4BytesSent)
+                    {
+                        Interlocked.Add(ref PreviousSessionsReceivedBytes, CurrentSessionReceivedBytes);
+                        Interlocked.Add(ref PreviousSessionsSentBytes, CurrentSessionSentBytes);
+                        CurrentSessionReceivedBytes = networkInterface.IPv4BytesReceived;
+                        CurrentSessionSentBytes = networkInterface.IPv4BytesSent;
+                        SignificantFlow = true;
+                        LastSignificantFlow = DateTime.Now;
+                    }
+                    if ((networkInterface.IPv4BytesReceived > CurrentSessionReceivedBytes + 1024 * 1024 || networkInterface.IPv4BytesSent > CurrentSessionSentBytes + 1024 * 1024) && DateTime.Now > LastSignificantFlow.AddMinutes(1) ||
+                        DateTime.Now > LastSignificantFlow.AddMinutes(10))
+                    {
+                        CurrentSessionReceivedBytes = networkInterface.IPv4BytesReceived;
+                        CurrentSessionSentBytes = networkInterface.IPv4BytesSent;
+                        SignificantFlow = true;
+                        LastSignificantFlow = DateTime.Now;
+                    }
+                    // reset
+                    if (ResetInterval == ResetIntervals.Daily && (DateTime.Now.TimeOfDay >= MomentOfTheDayForReset && LastReset < DateTime.Now.Subtract(DateTime.Now.TimeOfDay).Add(MomentOfTheDayForReset) || LastReset <= DateTime.Now.Subtract(DateTime.Now.TimeOfDay).Add(MomentOfTheDayForReset).AddDays(-1)) ||
+                        ResetInterval == ResetIntervals.Weekly && (DateTime.Now.DayOfWeek >= DayOfTheWeekForReset && LastReset < DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek).AddDays((int)DayOfTheWeekForReset).Subtract(DateTime.Now.TimeOfDay) || LastReset <= DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek).AddDays((int)DayOfTheWeekForReset).AddDays(-7).Subtract(DateTime.Now.TimeOfDay)) ||
+                        ResetInterval == ResetIntervals.Monthly && (DateTime.Now.Day >= DayOfTheMonthForReset && LastReset < DateTime.Now.AddDays(-DateTime.Now.Day).AddDays(DayOfTheMonthForReset).Subtract(DateTime.Now.TimeOfDay) || LastReset <= DateTime.Now.AddDays(-DateTime.Now.Day).AddDays(DayOfTheMonthForReset).AddMonths(-1).Subtract(DateTime.Now.TimeOfDay)))
+                    {
+                        SignificantFlow = true;
+                        Interlocked.Exchange(ref PreviousSessionsReceivedBytes, 0);
+                        Interlocked.Exchange(ref PreviousSessionsSentBytes, 0);
+                        LastReset = DateTime.Now;
+                    }
+                }
+            }
+        }
+
         public void Save()
         {
-            XmlSerializer writer = new XmlSerializer(typeof(Config));
-            StreamWriter file = new StreamWriter("Network_Manager.xml.tmp");
-            XmlWriter xmlWriter = XmlWriter.Create(file);
-            writer.Serialize(file, this);
-            file.Close();
-            if (File.Exists("Network_Manager.xml"))
-                File.Delete("Network_Manager.xml");
-            File.Move("Network_Manager.xml.tmp", "Network_Manager.xml");
+            lock (saveLock)
+            {
+                XmlSerializer writer = new XmlSerializer(typeof(Config));
+                StreamWriter file = new StreamWriter("Network_Manager.xml.tmp");
+                XmlWriter xmlWriter = XmlWriter.Create(file);
+                lock (DataUsage)
+                    writer.Serialize(file, this);
+                file.Close();
+                if (File.Exists("Network_Manager.xml"))
+                    File.Delete("Network_Manager.xml");
+                File.Move("Network_Manager.xml.tmp", "Network_Manager.xml");
+            }
         }
 
         public static void Load()
         {
             Config currentConfig;
+            if (!File.Exists("Network_Manager.xml") && File.Exists("Network_Manager.xml.tmp"))
+                File.Move("Network_Manager.xml.tmp", "Network_Manager.xml");
             if (File.Exists("Network_Manager.xml"))
             {
                 try
