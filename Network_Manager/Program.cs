@@ -110,6 +110,23 @@ namespace Network_Manager
             Trace.WriteLine(Process.GetCurrentProcess().MainModule.FileVersionInfo.ProductName + " has started");
             Trace.Unindent();
             Refresh();
+            List<Config.SavedRouteItem> savedRoutes = new List<Config.SavedRouteItem>();
+            foreach (Config.SavedRouteNode node in Global.Config.SavedRoutes.Nodes)
+                if (node is Config.SavedRouteGroup)
+                    savedRoutes.AddRange(Global.Config.SavedRoutes.GetRoutes(node, true));
+            int savedRoutesAutoLoadFailures = 0;
+            foreach (Config.SavedRouteItem route in savedRoutes)
+                try
+                {
+                    route.Load();
+                }
+                catch (Exception ex)
+                {
+                    savedRoutesAutoLoadFailures++;
+                    Global.WriteLog($"Failed to load saved route {route.Name} at startup: {ex.Message}");
+                }
+            if (savedRoutesAutoLoadFailures > 0)
+                Global.TrayIcon.ShowBalloonTip(5000, "Saved routes auto load", $"{savedRoutesAutoLoadFailures} saved route(s) failed to auto load on startup", ToolTipIcon.Error);
             Application.Run();
             //try
             //{

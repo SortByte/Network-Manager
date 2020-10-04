@@ -87,11 +87,11 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
                             continue;
                         // skip disconnected interfaces
                         if (Global.NetworkInterfaces.Values.Where((i) => i.Index == route.InterfaceIndex).Count() == 0 &&
-                            route.InterfaceIndex != 1)
+                            route.InterfaceIndex != NetworkInterface.Loopback.Index)
                             continue;
                         // calculate route metric
                         if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1)
-                            if (route.InterfaceIndex != 1)
+                            if (route.InterfaceIndex != NetworkInterface.Loopback.Index)
                                 route.Metric += Global.NetworkInterfaces.Values.Where((i) => i.Index == route.InterfaceIndex).FirstOrDefault().InterfaceMetric;
                             else
                                 route.Metric += NetworkInterface.Loopback.InterfaceMetric;

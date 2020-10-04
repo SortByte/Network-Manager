@@ -196,7 +196,11 @@ namespace Network_Manager
                     if (selectedNode.ImageIndex == 0)
                     {
                         if (destination.Find((i) => i.Name == selectedNode.Text && i.GetType() == node.GetType()) != null)
-                            destination.Find((i) => i.Name == selectedNode.Text && i.GetType() == node.GetType()).Name = node.Name;
+                        {
+                            SavedRouteGroup group = (SavedRouteGroup)destination.Find((i) => i.Name == selectedNode.Text && i.GetType() == node.GetType());
+                            group.Name = node.Name;
+                            group.AutoLoadOnStartup = ((SavedRouteGroup)node).AutoLoadOnStartup;
+                        }
                         path.Remove(path.Last());
                     }
                     else
@@ -387,13 +391,17 @@ namespace Network_Manager
             /// Recursively receives the routes from a node into a list
             /// </summary>
             /// <param name="node"></param>
+            /// <param name="autoLoadOnly"></param>
             /// <returns></returns>
-            public List<SavedRouteItem> GetRoutes(SavedRouteNode node)
+            public List<SavedRouteItem> GetRoutes(SavedRouteNode node, bool autoLoadOnly = false)
             {
                 List<SavedRouteItem> routes = new List<SavedRouteItem>();
                 if (node is SavedRouteGroup)
                     foreach (SavedRouteNode subNode in ((SavedRouteGroup)node).Nodes)
-                        routes.AddRange(GetRoutes(subNode));
+                    {
+                        if (((SavedRouteGroup)node).AutoLoadOnStartup || !autoLoadOnly || subNode is SavedRouteGroup)
+                            routes.AddRange(GetRoutes(subNode, autoLoadOnly));
+                    }
                 else if (node is SavedRouteItem)
                     routes.Add((SavedRouteItem)node);
                 return routes;
@@ -421,11 +429,65 @@ namespace Network_Manager
             public Guid InterfaceGuid;
             public ushort Metric;
             public int IPVersion;
+
+            /// <summary>
+            /// Load in FIB
+            /// </summary>
+            /// <param name="nic">Override saved egress interface</param>
+            /// <param name="gateway">Override saved gateway</param>
+            /// <param name="metric">Override saved metric</param>
+            public void Load(NetworkInterface nic = null, string gateway = null, int metric = -1)
+            {
+                if (nic == null)
+                {
+                    if (Global.NetworkInterfaces.ContainsKey(this.InterfaceGuid))
+                        nic = Global.NetworkInterfaces[this.InterfaceGuid];
+                    else if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1 &&
+                        NetworkInterface.Loopback.Guid == this.InterfaceGuid)
+                        nic = NetworkInterface.Loopback;
+                }
+                if (gateway == null)
+                    gateway = Gateway;
+                if (metric < 0)
+                    metric = Metric;
+                // if on-link set type to direct for XP
+                Iphlpapi.MIB_IPFORWARD_TYPE type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_INDIRECT;
+                if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
+                {
+                    if (this.IPVersion == 4)
+                    {
+                        if (nic.IPv4Address.Where((i) => i.Address == gateway).Count() > 0)
+                            type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
+                    }
+                    else
+                    {
+                        if (nic.IPv6Address.All.Where((i) => i.Address == gateway).Count() > 0)
+                            type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
+                    }
+                    if (gateway == "0.0.0.0" || gateway == "::")
+                        type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
+                }
+                // correction for Vista->XP transitioned saved route
+                if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
+                {
+                    if (IPAddress.TryParse(gateway, out IPAddress ipAddress))
+                        if (IPAddress.Parse(gateway).GetAddressBytes().Max() == 0)
+                            if (this.IPVersion == 4)
+                                gateway = nic.IPv4Address.First().Address;
+                            else
+                                gateway = nic.IPv6Address.All.First().Address;
+                    if (metric == 0)
+                        metric = 1;
+                }
+                Iphlpapi.DeleteRoute(this.Destination, this.Prefix, gateway, nic.Index.ToString());
+                Iphlpapi.AddRoute(this.Destination, this.Prefix, gateway, nic.Index.ToString(), metric.ToString(), type);
+            }
         }
 
         public class SavedRouteGroup : SavedRouteNode
         {
             public List<SavedRouteNode> Nodes = new List<SavedRouteNode>();
+            public bool AutoLoadOnStartup = false;
         }
 
         public class InterfaceDataUsage

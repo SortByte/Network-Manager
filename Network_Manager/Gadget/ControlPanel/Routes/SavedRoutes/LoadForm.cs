@@ -564,70 +564,43 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
                     ValidateRoute(ref loadRoutes[j].Destination, ref loadRoutes[j].Prefix, ref loadRoutes[j].Gateway, loadRoutes[j].IPVersion))
                 {
                     Config.SavedRouteItem savedRoute = loadRoutes[j];
-                    int ifIndex = 0;
+                    NetworkInterface nic = null;
+                    string gateway = savedRoute.Gateway;
                     if (Global.NetworkInterfaces.ContainsKey(savedRoute.InterfaceGuid))
-                        ifIndex = Global.NetworkInterfaces[savedRoute.InterfaceGuid].Index;
+                        nic = Global.NetworkInterfaces[savedRoute.InterfaceGuid];
                     else if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1 &&
                         NetworkInterface.Loopback.Guid == savedRoute.InterfaceGuid)
-                        ifIndex = 1;
+                        nic = NetworkInterface.Loopback;
                     // load defaults
-                    if (defaultInterfaceMode.SelectedIndex == 0 && ifIndex == 0 ||
+                    if (defaultInterfaceMode.SelectedIndex == 0 && nic == null ||
                         defaultInterfaceMode.SelectedIndex == 1)
                     {
+                        int ifIndex = 0;
+
                         if (loadRoutes[j].IPVersion == 4)
                         {
                             ifIndex = int.Parse(Regex.Replace(defaultIPv4Interface.Text, @"^(\d+) .*$", "$1"));
                             if (defaultIPv4GatewayMode.SelectedIndex != 3)
-                                loadRoutes[j].Gateway = defaultIPv4Gateway.Text;
+                                gateway = defaultIPv4Gateway.Text;
                         }
                         else
                         {
                             ifIndex = int.Parse(Regex.Replace(defaultIPv6Interface.Text, @"^(\d+) .*$", "$1"));
                             if (defaultIPv6GatewayMode.SelectedIndex != 3)
-                                loadRoutes[j].Gateway = defaultIPv6Gateway.Text;
+                                gateway = defaultIPv6Gateway.Text;
                         }
-                    }
-                    // if on-link set type to direct for XP
-                    Iphlpapi.MIB_IPFORWARD_TYPE type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_INDIRECT;
-                    NetworkInterface nic;
-                    if (ifIndex == 1)
-                        nic = NetworkInterface.Loopback;
-                    else
-                        nic = Global.NetworkInterfaces.Values.Where((i) => i.Index == ifIndex).First();
-                    if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
-                    {
-
-                        if (savedRoute.IPVersion == 4)
+                        nic = Global.NetworkInterfaces.FirstOrDefault(i => i.Value.Index == ifIndex).Value;
+                        if (nic == null && Environment.OSVersion.Version.CompareTo(new Version("6.0")) > -1 &&
+                                NetworkInterface.Loopback.Index == ifIndex)
+                            nic = NetworkInterface.Loopback;
+                        if (updateSavedRoutesCheckBox.Checked == true)
                         {
-                            if (nic.IPv4Address.Where((i) => i.Address == savedRoute.Gateway).Count() > 0)
-                                type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
+                            loadRoutes[j].InterfaceGuid = nic.Guid;
+                            loadRoutes[j].Gateway = gateway;
+                            Global.Config.Save();
                         }
-                        else
-                        {
-                            if (nic.IPv6Address.All.Where((i) => i.Address == savedRoute.Gateway).Count() > 0)
-                                type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
-                        }
-                        if (savedRoute.Gateway == "0.0.0.0" || savedRoute.Gateway == "::")
-                            type = Iphlpapi.MIB_IPFORWARD_TYPE.MIB_IPROUTE_TYPE_DIRECT;
                     }
-                    // correction for Vista->XP transitioned saved route
-                    if (Environment.OSVersion.Version.CompareTo(new Version("6.0")) < 0)
-                    {
-                        if (IPAddress.TryParse(savedRoute.Gateway, out ipAddress))
-                            if (IPAddress.Parse(savedRoute.Gateway).GetAddressBytes().Max() == 0)
-                                if (savedRoute.IPVersion == 4)
-                                    savedRoute.Gateway = nic.IPv4Address.First().Address;
-                                else
-                                    savedRoute.Gateway = nic.IPv6Address.All.First().Address;
-                        if (savedRoute.Metric == 0)
-                            savedRoute.Metric = 1;
-                    }
-                    Iphlpapi.DeleteRoute(savedRoute.Destination, savedRoute.Prefix, savedRoute.Gateway, ifIndex.ToString());
-                    Iphlpapi.AddRoute(savedRoute.Destination, savedRoute.Prefix, savedRoute.Gateway, ifIndex.ToString(), savedRoute.Metric.ToString(), type);
-                    if (updateSavedRoutesCheckBox.Checked == true)
-                    {
-                        // TODO: update saved route with new interface + gw
-                    }
+                    savedRoute.Load(nic, gateway);
                 }
                 else
                 {

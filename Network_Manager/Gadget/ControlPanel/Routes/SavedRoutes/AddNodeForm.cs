@@ -321,6 +321,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             }
             Config.SavedRouteGroup group = new Config.SavedRouteGroup();
             group.Name = textBox1.Text;
+            group.AutoLoadOnStartup = checkBox1.Checked;
             int result = Global.Config.SavedRoutes.AddNode(treeView, group, false);
             if (result == 1)
             {

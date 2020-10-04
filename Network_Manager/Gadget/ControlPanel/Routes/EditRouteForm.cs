@@ -41,7 +41,9 @@ namespace Network_Manager.Gadget.ControlPanel.Routes
             route.Destination = destination;
             route.Prefix = prefix;
             route.Gateway = gateway;
-            route.InterfaceGuid = Global.NetworkInterfaces.First(i => i.Value.Index == int.Parse(interfaceIndex)).Value.Guid;
+            route.InterfaceGuid = Global.NetworkInterfaces.FirstOrDefault(i => i.Value.Index == int.Parse(interfaceIndex)).Value?.Guid ?? new Guid();
+            if (interfaceIndex == NetworkInterface.Loopback.Index.ToString())
+                route.InterfaceGuid = NetworkInterface.Loopback.Guid;
             treeView = Global.Config.SavedRoutes.Find(route);
             if (treeView.SelectedNode != treeView.Nodes[0])
             {

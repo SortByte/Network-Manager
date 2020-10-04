@@ -21,9 +21,11 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             this.rename = rename;
             if (rename)
             {
-                Text = "Rename Saved Route Group";
-                button1.Text = "Rename";
-                textBox1.Text = treeView.SelectedNode.Text;
+                Text = "Edit Saved Route Group";
+                button1.Text = "Save";
+                Config.SavedRouteNode editNode = Global.Config.SavedRoutes.GetSelectedNode(treeView);
+                textBox1.Text = editNode.Name;
+                checkBox1.Checked = ((Config.SavedRouteGroup)editNode).AutoLoadOnStartup;
             }
             else
             {
@@ -42,6 +44,7 @@ namespace Network_Manager.Gadget.ControlPanel.Routes.SavedRoutes
             }
             Config.SavedRouteGroup group = new Config.SavedRouteGroup();
             group.Name = textBox1.Text;
+            group.AutoLoadOnStartup = checkBox1.Checked;
             int result = Global.Config.SavedRoutes.AddNode(treeView, group, rename);
             if (result == 1)
             {
